@@ -85,7 +85,7 @@ class TaobaoProductPuller
           sku_pro["properties_name"].to_s.split(";").each do |pro_str|
             pid, nid, name, value = pro_str.split(":")
             property = Tb::Property.find_or_create_by(shop_id: shop.id, name: name)
-            value =  Tb::PropertyValue.find_or_create_by(shop_id: shop.id, property_id: property.id, name: name)
+            value =  Tb::PropertyValue.find_or_create_by(shop_id: shop.id, property_id: property.id, name: value)
             Tb::SkuProperty.find_or_create_by(sku_id: sku.id, property_value_id: value.id)
           end
         end

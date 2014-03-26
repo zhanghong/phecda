@@ -1,0 +1,49 @@
+<%= form_for(@sys_category) do |f| %>
+  <% if @sys_category.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@sys_category.errors.count, "error") %> prohibited this sys_category from being saved:</h2>
+
+      <ul>
+      <% @sys_category.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %><br>
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :account_id %><br>
+    <%= f.number_field :account_id %>
+  </div>
+  <div class="field">
+    <%= f.label :status %><br>
+    <%= f.text_field :status %>
+  </div>
+  <div class="field">
+    <%= f.label :parent_id %><br>
+    <%= f.number_field :parent_id %>
+  </div>
+  <div class="field">
+    <%= f.label :lft %><br>
+    <%= f.number_field :lft %>
+  </div>
+  <div class="field">
+    <%= f.label :rgt %><br>
+    <%= f.number_field :rgt %>
+  </div>
+  <div class="field">
+    <%= f.label :depth %><br>
+    <%= f.number_field :depth %>
+  </div>
+  <div class="field">
+    <%= f.label :use_days %><br>
+    <%= f.number_field :use_days %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

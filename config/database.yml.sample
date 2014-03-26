@@ -1,0 +1,18 @@
+default: &default
+  adapter: mysql2
+  encoding: utf8
+  database:
+  pool: 5
+  username:
+  password:
+
+development:
+  <<: *default
+
+solo_development:
+  adapter: mysql2
+  encoding: utf8
+  database:
+  pool: 5
+  username:
+  password:

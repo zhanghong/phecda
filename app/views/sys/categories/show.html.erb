@@ -1,0 +1,44 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @sys_category.name %>
+</p>
+
+<p>
+  <strong>Account:</strong>
+  <%= @sys_category.account_id %>
+</p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @sys_category.status %>
+</p>
+
+<p>
+  <strong>Parent:</strong>
+  <%= @sys_category.parent_id %>
+</p>
+
+<p>
+  <strong>Lft:</strong>
+  <%= @sys_category.lft %>
+</p>
+
+<p>
+  <strong>Rgt:</strong>
+  <%= @sys_category.rgt %>
+</p>
+
+<p>
+  <strong>Depth:</strong>
+  <%= @sys_category.depth %>
+</p>
+
+<p>
+  <strong>Use days:</strong>
+  <%= @sys_category.use_days %>
+</p>
+
+<%= link_to 'Edit', edit_sys_category_path(@sys_category) %> |
+<%= link_to 'Back', sys_categories_path %>

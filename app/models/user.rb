@@ -28,12 +28,20 @@
 class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable,
+  devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
-  validates :name,
-            :presence => true,
-            :uniqueness => true,
-            :length => {:within => 3..16}
+  # validates :name,
+  #           :presence => true,
+  #           :uniqueness => true,
+  #           :length => {:within => 3..16}
 
   ROLES = %w[super_admin admin]
+
+  def self.current=(user)
+    Thread.current[:current_user] = user
+  end
+
+  def self.current
+    Thread.current[:current_user]
+  end
 end

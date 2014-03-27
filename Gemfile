@@ -16,6 +16,7 @@ gem 'omniauth'
 gem 'omniauth-oauth2'
 # gem 'omniauth-weibo-oauth2'
 gem 'taobao_fu_reload', "~> 1.1.2"
+gem "simple_form"
 gem 'devise'
 gem 'cancan'
 gem 'awesome_nested_set'
@@ -26,10 +27,20 @@ group :doc do
  gem 'sdoc', require: false
 end
 
-group :development, :test do
-  gem "rspec"
+group :development do
+  gem "rspec-rails"
+end
+
+group :test do
+  # http://railsapps.github.io/tutorial-rails-devise-rspec-cucumber.html
+  #Capybara
   gem "rspec-rails"
   gem "factory_girl_rails"
+  gem "cucumber-rails"
+  gem "capybara"
+  gem "database_cleaner"
+  gem "email_spec"
+  # gem "cucumber-rails", :require => false
   #gem "mocha"
   #gem "rcov"
 end

@@ -29,5 +29,17 @@ module Phecda
     config.active_record.default_timezone = :local
     config.i18n.default_locale = :'zh-CN'
     config.assets.paths << "#{Rails.root}/app/assets/fonts"
+
+    config.filter_parameters += [:password, :password_confirmation]
+
+    config.generators do |g|
+      g.test_framework :rspec, fixture: true
+      g.fixture_replacement :factory_girl, dir: 'spec/factories'
+      g.view_specs false
+      g.helper_specs false
+      g.stylesheets = false
+      g.javascripts = false
+      g.helper = false
+    end
   end
 end

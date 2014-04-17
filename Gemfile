@@ -11,7 +11,7 @@ gem 'turbolinks'
 gem 'jbuilder', '~> 1.2'
 gem 'json'
 gem 'crack'
-gem 'httparty'
+gem 'excon'
 gem 'omniauth'
 gem 'omniauth-oauth2'
 # gem 'omniauth-weibo-oauth2'
@@ -35,8 +35,7 @@ group :test do
   # http://railsapps.github.io/tutorial-rails-devise-rspec-cucumber.html
   #Capybara
   gem "rspec-rails"
-  gem "factory_girl_rails"
-  gem "cucumber-rails"
+  gem "factory_girl_rails", "~> 4.4.1"
   gem "capybara"
   gem "database_cleaner"
   gem "email_spec"

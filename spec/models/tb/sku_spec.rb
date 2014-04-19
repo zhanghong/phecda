@@ -3,7 +3,7 @@ require 'spec_helper'
 
 describe Tb::Sku do
   before do
-    @brandy_product_1_sku_1 = create(:brandy_product_1_sku_1)
+    #
   end
 
   context "belongs_to association" do

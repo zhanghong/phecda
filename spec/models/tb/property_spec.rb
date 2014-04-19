@@ -3,7 +3,7 @@ require 'spec_helper'
 
 describe Tb::Property do
   before do
-    @brandy_property_1 = create(:brandy_property_1)
+    #
   end
 
   context "belongs_to association" do

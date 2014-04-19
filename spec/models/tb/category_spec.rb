@@ -3,7 +3,7 @@ require 'spec_helper'
 
 describe Tb::Category do
   before do
-    @brandy_cat_1 = create(:brandy_cat_1)
+    #
   end
 
   context "belongs_to association" do

@@ -3,7 +3,7 @@ require 'spec_helper'
 
 describe Tb::AppToken do
   before do
-    @brandy_store_token = create(:brandy_store_token)
+    #
   end
 
   context "belongs_to association" do

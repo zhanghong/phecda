@@ -3,7 +3,7 @@ require 'spec_helper'
 
 describe Tb::PropertyValue do
   before do
-    @brandy_weight_70 = create(:brandy_weight_70)
+    #
   end
 
   context "belongs_to association" do

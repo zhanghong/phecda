@@ -14,7 +14,7 @@ describe Tb::Product do
 
   context "has_many association" do
     [:skus].each do |name|
-      it { should have_many(name) }
+      it { should have_many(name).dependent(:destroy) }
     end
   end
 end

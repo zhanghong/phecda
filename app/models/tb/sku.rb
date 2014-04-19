@@ -9,5 +9,5 @@
 class Tb::Sku < ActiveRecord::Base
 	belongs_to	:shop,	class_name: "Tb::Shop"
 	belongs_to	:product,	class_name: "Tb::Product"
-	has_many		:sku_properties,	class_name: "Tb::SkuProperty"
+	has_many		:sku_properties,	class_name: "Tb::SkuProperty", dependent: :destroy
 end

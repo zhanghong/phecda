@@ -92,10 +92,16 @@ class TaobaoProductPuller
       else
         puts "no skus num_iid:#{num_iid}"
       end
-    rescue
+    rescue Exception=>e
       puts "______________________"
       puts "shop: #{shop.id}, num_iid: #{num_iid}"
       p response
+      if Rails.env != "production"
+        puts e.message
+        e.backtrace.each do |l|
+          puts l
+        end
+      end
       puts "______________________"
     end
   end

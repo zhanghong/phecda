@@ -14,7 +14,7 @@ describe Tb::PropertyValue do
 
   context "has_many association" do
     [:sku_properties].each do |name|
-      it { should have_many(name) }
+      it { should have_many(name).dependent(:destroy) }
     end
   end
 end

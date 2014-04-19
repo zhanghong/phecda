@@ -14,7 +14,7 @@ describe Tb::Category do
 
   context "has_many association" do
     [:products].each do |name|
-      it { should have_many(name) }
+      it { should have_many(name).dependent(:destroy) }
     end
   end
 end

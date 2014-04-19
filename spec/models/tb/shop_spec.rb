@@ -15,7 +15,7 @@ describe Tb::Shop do
 
   context "has_many association" do
     [:app_tokens, :categories, :products, :skus, :properties, :property_values].each do |name|
-      it { should have_many(name) }
+      it { should have_many(name).dependent(:destroy) }
     end
   end
 

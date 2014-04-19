@@ -56,5 +56,5 @@
 class Tb::Product < ActiveRecord::Base
 	belongs_to	:shop,	class_name: "Tb::Shop"
 	belongs_to	:category,	class_name: "Tb::Category"
-	has_many		:skus,			class_name: "Tb::Sku"
+	has_many		:skus,			class_name: "Tb::Sku", dependent: :destroy
 end

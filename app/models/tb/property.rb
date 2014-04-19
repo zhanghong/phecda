@@ -11,5 +11,5 @@
 # add_index "tb_properties", ["shop_id", "status"], name: "idx_by_shop_id_and_status", using: :btree
 class Tb::Property < ActiveRecord::Base
 	belongs_to	:shop,	class_name: "Tb::Shop"
-	has_many		:values,	class_name: "Tb::PropertyValue"
+	has_many		:values,	class_name: "Tb::PropertyValue", dependent: :destroy
 end

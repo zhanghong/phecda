@@ -24,7 +24,7 @@ class Tb::Shop < ActiveRecord::Base
   has_many    :properties,  class_name: "Tb::Property",   foreign_key: "shop_id"
   has_many    :property_values,  class_name: "Tb::PropertyValue",   foreign_key: "shop_id"
 
-  def self.create_by_oauth(auth_hash)
+  def self.create_by_omniauth(auth_hash)
     token_info = auth_hash["credentials"].merge(auth_hash["extra"]["raw_info"])
     mappings = {"token" => "access_token", "taobao_user_id" => "user_id", "taobao_user_nick" => "nick"}
     token_info.keys.each do |k|
@@ -32,7 +32,7 @@ class Tb::Shop < ActiveRecord::Base
     end
     token_info["expires_at"] = Time.at(token_info["expires_at"].to_i)
 
-    shop = find_or_initialize_by(user_id: token_info["user_id"], nick: token_info[:nick])
+    shop = find_or_initialize_by(app_id: 1, user_id: token_info["user_id"], nick: token_info[:nick])
     shop.update(auth_type: "oauth2")
 
     app_token = Tb::AppToken.find_or_create_by(shop_id: shop.id)

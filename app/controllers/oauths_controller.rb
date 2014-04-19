@@ -1,7 +1,13 @@
 #class OauthsController < Devise::OmniauthCallbacksController
 class OauthsController < ApplicationController
+  skip_before_filter  :authorize_resource
+
 	def taobao
-    Tb::Shop.create_by_oauth(auth_hash)
+    if auth_hash
+      Tb::Shop.create_by_omniauth(auth_hash)
+    else
+      Tb::Shop.create_by_authorization_code(params[:code])
+    end
 		render text: "hello callback"
 	end
 protected

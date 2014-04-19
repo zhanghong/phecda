@@ -1,13 +1,13 @@
 # encoding: utf-8
 require 'spec_helper'
 
-describe Tb::SkuProperty do
+describe Tb::AppToken do
   before do
-    @brandy_sku_1_weight_70 = create(:brandy_sku_1_weight_70)
+    @brandy_store_token = create(:brandy_store_token)
   end
 
   context "belongs_to association" do
-    [:sku, :property_value].each do |name|
+    [:shop].each do |name|
       it { should belong_to(name) }
     end
   end

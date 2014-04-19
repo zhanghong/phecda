@@ -17,10 +17,10 @@
 # end
 class Tb::Shop < ActiveRecord::Base
   belongs_to  :account
-  has_many    :app_token, class_name: "Tb::AppToken",  foreign_key: "shop_id"
+  has_many    :app_tokens, class_name: "Tb::AppToken",  foreign_key: "shop_id"
   has_many    :categories,  class_name: "Tb::Category",   foreign_key: "shop_id"
   has_many    :products,  class_name: "Tb::Product",   foreign_key: "shop_id"
-  has_many    :sku,  class_name: "Tb::Product",   foreign_key: "shop_id"
+  has_many    :skus,  class_name: "Tb::Product",   foreign_key: "shop_id"
   has_many    :properties,  class_name: "Tb::Property",   foreign_key: "shop_id"
   has_many    :property_values,  class_name: "Tb::PropertyValue",   foreign_key: "shop_id"
 

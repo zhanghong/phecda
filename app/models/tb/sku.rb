@@ -5,9 +5,7 @@
 #   t.datetime "created_at"
 #   t.datetime "updated_at"
 # end
-
 # add_index "tb_skus", ["shop_id", "product_id"], name: "idx_by_shop_id_and_product_id", using: :btree
-
 class Tb::Sku < ActiveRecord::Base
 	belongs_to	:shop,	class_name: "Tb::Shop"
 	belongs_to	:product,	class_name: "Tb::Product"

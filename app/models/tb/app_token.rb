@@ -23,5 +23,4 @@
 # add_index "tb_app_tokens", ["shop_id"], name: "idx_by_shop_id", using: :btree
 class Tb::AppToken < ActiveRecord::Base
   belongs_to  :shop, class_name: "Tb::Shop",  foreign_key: "shop_id"
-  belongs_to  :app, class_name: "Tb::App",  foreign_key: "app_id"
 end

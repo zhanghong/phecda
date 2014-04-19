@@ -12,4 +12,5 @@
 class Tb::PropertyValue < ActiveRecord::Base
 	belongs_to	:shop,	class_name: "Tb::Shop"
 	belongs_to	:property,	class_name: "Tb::Property"
+  has_many    :sku_properties,  class_name: "Tb::SkuProperty"
 end

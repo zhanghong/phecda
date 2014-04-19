@@ -7,4 +7,5 @@
 #   t.datetime "updated_at"
 # end
 class Account < ActiveRecord::Base
+  has_many  :tb_shops,  class_name: "Tb::Shop"
 end

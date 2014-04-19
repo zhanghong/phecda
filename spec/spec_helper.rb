@@ -56,8 +56,8 @@ RSpec.configure do |config|
   # end
 end
 
-def excon_mock_with(filename)
-  body = open(File.join(Rails.root, 'spec/mock_data', "#{filename.to_s}")).read
+def excon_mock_with(local_path)
+  body = open(File.join(Rails.root, 'spec/mock_data', local_path)).read
   Excon.defaults[:mock] = true
   Excon.stub({}, {:body => body, :status => 200})
 end

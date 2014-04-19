@@ -12,18 +12,17 @@ module Tb::Query
   	end
   end
 
-  def self.oauth_https_get(options, shop_id = nil)
-  	if shop_app = Tb::AppToken.where(shop_id: shop_id).first
-  		sorted_params = {
-        access_token: shop_app.access_token,
-        format:      'json',
-        v:           '2.0',
-        timestamp:   Time.now.strftime("%Y-%m-%d %H:%M:%S")
-      }.merge!(options)
+  # 使用免签接口查询
+  def self.oauth_https_get(options, app_token)
+		sorted_params = {
+      access_token: app_token.access_token,
+      format:      'json',
+      v:           '2.0',
+      timestamp:   Time.now.strftime("%Y-%m-%d %H:%M:%S")
+    }.merge!(options)
 
-      response = Excon.get(Settings.tb_base_url, :query => sorted_params)
-      JSON.parse(response.body, :quirks_mode => true)
-  	end
+    response = Excon.get(Settings.tb_base_url, :query => sorted_params)
+    JSON.parse(response.body, :quirks_mode => true)
   end
 
   # 获取taobao shop 免签信息

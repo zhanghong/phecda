@@ -19,6 +19,7 @@
 #   t.datetime "expires_at"
 #   t.boolean  "expires"
 #   t.integer  "app_id"
+#   t.string   "auth_type",     limit: 10, default: ""
 # end
 # add_index "tb_app_tokens", ["shop_id"], name: "idx_by_shop_id", using: :btree
 class Tb::AppToken < ActiveRecord::Base

@@ -3,21 +3,33 @@ require 'spec_helper'
 
 describe TaobaoProductPuller do
   before do
-    @brandy_store_token = create(:brandy_store_token)
-    @brandy_store = @brandy_store_token.shop
+    @tb_app_token = create(:tb_app_token)
   end
 
-  context "valid user name" do
-    it "test webmock" do
-      excon_mock_with("tb_onsale_items.json")
-      num_iid = "11130944"
-      response = Tb::Query.get({
-                      method: 'taobao.item.get',
-                      fields: 'num,detail_url,title,sku.properties_name,sku.properties,sku.quantity, sku.sku_id, outer_id, product_id, pic_url,cid,price',
-                      num_iid: num_iid,
-                      nick: @brandy_store.nick
-                    }, @brandy_store.id)
-      p response
+  context "sync taobao shop categories" do
+    it "update old and save new categories" do
+      tb_category = build(:tb_category)
+      tb_category.update(shop_id: @tb_app_token.shop_id)
+      excon_mock_with("tb_categories/list.json")
+      TaobaoProductPuller.pull_shop_categories(@tb_app_token.shop)
+
+      tb_category = Tb::Category.find(tb_category.id)
+      categories = Tb::Category.all
+      cat_names = categories.map(&:name)
+      cat_names.size.should   eq(3)
+      expect(cat_names).to match_array(["热销", "精品", "精品-特价"])
+    end
+
+    it "save as a new shop" do
+      tb_category = create(:tb_category)
+      excon_mock_with("tb_categories/list.json")
+      TaobaoProductPuller.pull_shop_categories(@tb_app_token.shop)
+
+      tb_category = Tb::Category.find(tb_category.id)
+      categories = Tb::Category.all
+      cat_names = categories.map(&:name)
+      cat_names.size.should   eq(4)
+      expect(cat_names).to match_array(["cat_1", "热销", "精品", "精品-特价"])
     end
   end
 end

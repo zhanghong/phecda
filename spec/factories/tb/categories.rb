@@ -4,6 +4,7 @@
 FactoryGirl.define do
   factory :tb_category, class: Tb::Category do
     name "cat_1"
+    cid  "849445619"
     association :shop, factory: :tb_shop
   end
 end

@@ -15,17 +15,17 @@ class TaobaoProductPuller
           cat[k] = CGI.unescape(cat[k]) if cat[k].is_a?(String)
           cat[mappings[k]] = cat.delete(k) if mappings[k]
         end
-        tb_category = Tb::Category.find_or_initialize_by(shop_id: shop.id, name: cat["name"])
+        tb_category = Tb::Category.find_or_initialize_by(shop_id: shop.id, cid: cat["cid"])
         tb_category.update(cat)
       end
-      puts "response " * 8
-      p response
-      puts "response " * 8
+      # puts "response " * 8
+      # p response
+      # puts "response " * 8
     rescue
-      puts "______________________"
-      puts "shop: #{shop.id}"
-      p response
-      puts "______________________"
+      # puts "______________________"
+      # puts "shop: #{shop.id}"
+      # p response
+      # puts "______________________"
     end
   end
 

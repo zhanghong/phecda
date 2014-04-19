@@ -14,7 +14,6 @@ gem 'crack'
 gem 'excon'
 gem 'omniauth'
 gem 'omniauth-oauth2'
-# gem 'omniauth-weibo-oauth2'
 gem 'taobao_fu_reload', "~> 1.1.2"
 gem "simple_form"
 gem 'devise'

@@ -36,7 +36,11 @@ class Tb::Shop < ActiveRecord::Base
     shop = find_or_create_by(user_id: token_info["user_id"], nick: token_info["nick"])
 
     app_token = Tb::AppToken.find_or_create_by(shop_id: shop.id, app_id: 1)
-    app_token.update(token_info)
+    update_attrs = {}
+    token_info.each do |k, v|
+      update_attrs[k] = v
+    end
+    app_token.update(update_attrs)
 
     shop.pull_taobao_info
   end

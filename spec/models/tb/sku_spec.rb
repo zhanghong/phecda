@@ -13,6 +13,10 @@ describe Tb::Sku do
   end
 
   context "has_many association" do
+    [:property_values].each do |name|
+      it { should have_many(name)}
+    end
+
     [:sku_properties].each do |name|
       it { should have_many(name).dependent(:destroy) }
     end

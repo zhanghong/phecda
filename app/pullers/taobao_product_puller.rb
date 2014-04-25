@@ -29,42 +29,6 @@ class TaobaoProductPuller
     end
   end
 
-  def self.pull_onsale_items(shop)
-    return unless shop.is_a?(Tb::Shop)
-    page_no, page_size = 1, 50
-    total_page = nil
-    begin
-      while true
-        puts "pgae_no:#{page_no}"
-        num_iids = []
-        response = Tb::Query.get({
-                          method: 'taobao.items.onsale.get',
-                          fields: 'num_iid',
-                          nick: shop.nick,
-                          page_no: page_no,
-                          page_size: page_size
-                        }, shop.id)
-        items = response['items_onsale_get_response']['items']['item']
-        total_results = response['items_onsale_get_response']['total_results'].to_i
-        total_page = (response['items_onsale_get_response']['total_results'].to_f/page_size).ceil
-        items.each do |item|
-          num_iids << item['num_iid']
-        end
-        break if page_no >= total_page
-        page_no += 1
-      end
-    rescue
-      puts "______________________"
-      puts "shop: #{shop.id}"
-      p response
-      puts "______________________"
-    end
-
-    num_iids.each do |num_iid|
-      pull_detail_item(shop, num_iid)
-    end
-  end
-
   def self.pull_detail_item(shop, num_iid)
     begin
       response = Tb::Query.get({
@@ -90,19 +54,55 @@ class TaobaoProductPuller
           end
         end
       else
-        puts "no skus num_iid:#{num_iid}"
+        #puts "no skus num_iid:#{num_iid}"
       end
     rescue Exception=>e
-      puts "______________________"
-      puts "shop: #{shop.id}, num_iid: #{num_iid}"
-      p response
-      if Rails.env != "production"
-        puts e.message
-        e.backtrace.each do |l|
-          puts l
+      # puts "______________________"
+      # puts "shop: #{shop.id}, num_iid: #{num_iid}"
+      # p response
+      # if Rails.env != "production"
+      #   puts e.message
+      #   e.backtrace.each do |l|
+      #     puts l
+      #   end
+      # end
+      # puts "______________________"
+    end
+  end
+
+  def self.pull_all_onsale_items(shop)
+    return unless shop.is_a?(Tb::Shop)
+    page_no, page_size = 1, 50
+    total_page = nil
+    begin
+      while true
+        puts "pgae_no:#{page_no}"
+        num_iids = []
+        response = Tb::Query.get({
+                          method: 'taobao.items.onsale.get',
+                          fields: 'num_iid',
+                          nick: shop.nick,
+                          page_no: page_no,
+                          page_size: page_size
+                        }, shop.id)
+        items = response['items_onsale_get_response']['items']['item']
+        total_results = response['items_onsale_get_response']['total_results'].to_i
+        total_page = (response['items_onsale_get_response']['total_results'].to_f/page_size).ceil
+        items.each do |item|
+          num_iids << item['num_iid']
         end
+        break if page_no >= total_page
+        page_no += 1
       end
-      puts "______________________"
+    rescue
+      # puts "______________________"
+      # puts "shop: #{shop.id}"
+      # p response
+      # puts "______________________"
+    end
+
+    num_iids.each do |num_iid|
+      pull_detail_item(shop, num_iid)
     end
   end
 end

@@ -9,6 +9,6 @@
 
 # add_index "sys_property_values", ["account_id", "property_id"], name: "idx_by_account_id_and_property_id", using: :btree
 class Sys::PropertyValue < ActiveRecord::Base
-	belongs_to	:account
+	belongs_to	:shop
 	belongs_to	:propery,		class_name: "Sys::Property"
 end

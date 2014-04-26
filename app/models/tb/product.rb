@@ -57,4 +57,32 @@ class Tb::Product < ActiveRecord::Base
 	belongs_to	:shop,	class_name: "Tb::Shop"
 	belongs_to	:category,	class_name: "Tb::Category"
 	has_many		:skus,			class_name: "Tb::Sku", dependent: :destroy
+
+  def sync_taobao_skus(item_skus)
+    current_sku_ids = []
+    if item_skus && item_skus["sku"]
+      item_skus["sku"].each do |sku_pro|
+        sku = Tb::Sku.find_or_initialize_by(shop_id: shop.id, product_id: self.id, ts_id: sku_pro["sku_id"])
+        sku.update(quantity: sku_pro["quantity"])
+        sku_pro["properties_name"].to_s.split(";").each do |pro_str|
+          pid, nid, name, value = pro_str.split(":")
+          property = Tb::Property.find_or_create_by(shop_id: shop.id, name: name)
+          value =  Tb::PropertyValue.find_or_create_by(shop_id: shop.id, property_id: property.id, name: value)
+          Tb::SkuProperty.find_or_create_by(sku_id: sku.id, property_value_id: value.id)
+        end
+        current_sku_ids << sku.id
+      end
+      self.skus.where(["id NOT IN (?)", current_sku_ids]).destroy_all
+    else
+      self.skus.where(is_hide: false).destroy_all
+      create_hide_sku
+    end
+  end
+
+private
+  def create_hide_sku
+    if self.skus.blank?
+      self.skus.create(shop_id: self.shop_id, is_hide: true)
+    end
+  end
 end

@@ -40,12 +40,12 @@ describe TaobaoProductPuller do
       TaobaoProductPuller.pull_detail_item(@shop, "36824405663")
 
       item = Tb::Product.first
-      item.title.should eq("Q121 新款A字裙 一步百褶短裙 包臀弹力 糖果色")
+      item.title.should eq("有SKU测试商品")
       item.cid.should   eq("1623")
       item.num.should   eq(1699)
       item.outer_id.should  eq("Q121")
       item.price.should     eq(15.50)
-      item.product_id.should  eq("0")
+      item.product_id.should  eq("248515521")
 
       skus = item.skus
       skus.count.should   eq(2)
@@ -84,7 +84,7 @@ describe TaobaoProductPuller do
       end
     end
 
-    it "多次同步同一个商品" do
+    it "多次同步同一个有SKU商品" do
       excon_mock_with("tb_items/36824405663_has_skus.json")
       TaobaoProductPuller.pull_detail_item(@shop, "36824405663")
       TaobaoProductPuller.pull_detail_item(@shop, "36824405663")
@@ -94,6 +94,42 @@ describe TaobaoProductPuller do
       Tb::Property.count.should   eq(2)
       Tb::PropertyValue.count.should    eq(3)
       Tb::SkuProperty.count.should      eq(4)
+    end
+
+    it "同步一个没有SKU的淘宝商品" do
+      excon_mock_with("tb_items/36853266568_no_skus.json")
+      TaobaoProductPuller.pull_detail_item(@shop, "36853266568")
+
+      item = Tb::Product.first
+      item.title.should eq("无SKU测试商品")
+      item.cid.should   eq("54697546")
+      item.num.should   eq(13)
+      item.outer_id.should  eq("Q1304")
+      item.price.should     eq(58.00)
+      item.product_id.should  eq("248515584")
+
+      skus = item.skus
+      skus.count.should   eq(1)
+      sku = skus.first
+      sku.quantity.should   eq(0)
+      sku.ts_id.should      eq("")
+      sku.is_hide.should    be_true
+
+      Tb::Property.count.should   eq(0)
+      Tb::PropertyValue.count.should    eq(0)
+      Tb::SkuProperty.count.should      eq(0)
+    end
+
+    it "多次同步同一个没有SKU的淘宝商品" do
+      excon_mock_with("tb_items/36853266568_no_skus.json")
+      TaobaoProductPuller.pull_detail_item(@shop, "36853266568")
+      TaobaoProductPuller.pull_detail_item(@shop, "36853266568")
+
+      Tb::Product.count.should  eq(1)
+      Tb::Sku.count.should  eq(1)
+      Tb::Property.count.should   eq(0)
+      Tb::PropertyValue.count.should    eq(0)
+      Tb::SkuProperty.count.should      eq(0)
     end
   end
 

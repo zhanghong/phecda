@@ -6,6 +6,7 @@
 #   t.datetime "updated_at"
 #   t.integer  "quantity",              default: 0
 #   t.string   "ts_id",      limit: 30, default: ""
+#   t.boolean  "is_hide",               default: false
 # end
 # add_index "tb_skus", ["shop_id", "product_id"], name: "idx_by_shop_id_and_product_id", using: :btree
 class Tb::Sku < ActiveRecord::Base

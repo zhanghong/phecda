@@ -1,0 +1,17 @@
+default: &default
+  app_key: ""
+  secret_key: ""
+  callback_url: ""
+  base_url: "https://eco.taobao.com/router/rest"
+  token_url: "https://oauth.taobao.com/token"
+  is_sandbox: false
+  use_curl: false
+
+development:
+  <<: *default
+
+test:
+  <<: *default
+
+production:
+  <<: *default

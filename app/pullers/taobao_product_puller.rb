@@ -76,7 +76,6 @@ class TaobaoProductPuller
     total_page = nil
     begin
       while true
-        puts "pgae_no:#{page_no}"
         num_iids = []
         response = Tb::Query.get({
                           method: 'taobao.items.onsale.get',
@@ -91,6 +90,9 @@ class TaobaoProductPuller
         items.each do |item|
           num_iids << item['num_iid']
         end
+        num_iids.each do |num_iid|
+          pull_detail_item(shop, num_iid)
+        end
         break if page_no >= total_page
         page_no += 1
       end
@@ -99,10 +101,6 @@ class TaobaoProductPuller
       # puts "shop: #{shop.id}"
       # p response
       # puts "______________________"
-    end
-
-    num_iids.each do |num_iid|
-      pull_detail_item(shop, num_iid)
     end
   end
 end

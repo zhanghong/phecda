@@ -61,3 +61,8 @@ def excon_mock_with(local_path)
   Excon.defaults[:mock] = true
   Excon.stub({}, {:body => body, :status => 200})
 end
+
+def sub_time
+  now = Time.now.beginning_of_day
+  Time.stub(:now) { now }
+end

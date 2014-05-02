@@ -41,7 +41,7 @@ describe TaobaoProductPuller do
 
       item = Tb::Product.first
       item.title.should eq("有SKU测试商品")
-      item.cid.should   eq("1623")
+      item.cid.should   eq("50021623")
       item.num.should   eq(1699)
       item.outer_id.should  eq("Q121")
       item.price.should     eq(15.50)

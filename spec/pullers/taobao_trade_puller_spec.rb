@@ -15,6 +15,7 @@ describe TaobaoTradePuller do
       trade = Tb::Trade.find_by_tid("609496759312345")
 
       trade.should_not  be_nil
+      trade.shop_id.should    eq(@shop.id)
       trade.alipay_id.should  eq("20880023045312344")
       trade.alipay_no.should  eq("2014041011001001710054812345")
       trade.buyer_nick.should eq("测试buyer")
@@ -43,6 +44,8 @@ describe TaobaoTradePuller do
     it "更新一个淘宝订单" do
       tb_order = create(:tb_order)
       tb_trade = tb_order.trade
+      tb_trade.shop  = @shop
+      tb_trade.save
       tb_trade.tid.should     eq("609496759312345")
 
       excon_mock_with("tb_trades/pay_detail.json")
@@ -50,6 +53,7 @@ describe TaobaoTradePuller do
 
       Tb::Trade.count.should  eq(1)
       trade = Tb::Trade.find_by_tid("609496759312345")
+      trade.shop_id.should    eq(@shop.id)
       trade.alipay_id.should  eq("20880023045312344")
       trade.alipay_no.should  eq("2014041011001001710054812345")
       trade.buyer_nick.should eq("测试buyer")

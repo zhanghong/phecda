@@ -1,5 +1,9 @@
 require 'spec_helper'
 
 describe Tb::Order do
-  pending "add some examples to (or delete) #{__FILE__}"
+  context "belongs_to association" do
+    [:trade].each do |name|
+      it { should belong_to(name) }
+    end
+  end
 end

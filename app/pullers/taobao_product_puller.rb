@@ -42,20 +42,7 @@ class TaobaoProductPuller
       item_skus = item.delete("skus")
       tb_product = Tb::Product.find_or_initialize_by(shop_id: shop.id, num_iid: num_iid)
       tb_product.update(item)
-      if item_skus && item_skus["sku"]
-        item_skus["sku"].each do |sku_pro|
-          sku = Tb::Sku.find_or_initialize_by(shop_id: shop.id, product_id: tb_product.id, ts_id: sku_pro["sku_id"])
-          sku.update(quantity: sku_pro["quantity"])
-          sku_pro["properties_name"].to_s.split(";").each do |pro_str|
-            pid, nid, name, value = pro_str.split(":")
-            property = Tb::Property.find_or_create_by(shop_id: shop.id, name: name)
-            value =  Tb::PropertyValue.find_or_create_by(shop_id: shop.id, property_id: property.id, name: value)
-            Tb::SkuProperty.find_or_create_by(sku_id: sku.id, property_value_id: value.id)
-          end
-        end
-      else
-        #puts "no skus num_iid:#{num_iid}"
-      end
+      tb_product.sync_taobao_skus(item_skus)
     rescue Exception=>e
       # puts "______________________"
       # puts "shop: #{shop.id}, num_iid: #{num_iid}"

@@ -89,16 +89,70 @@ def rewrite_local_yml(source_file_path)
 end
 
 
-# 重写所有测试文件
-# rake rewrite_all_server_file --trace RAILS_ENV=production
-task	:rewrite_all_server_file => :environment do
+# 重写淘宝订单详细API返回值
+# rake rewrite_tb_trade_server_file --trace RAILS_ENV=production
+task	:rewrite_tb_trade_server_file => :environment do
   root_path = File.join(Rails.root, "spec/mock_data/tb_trades/server")
   load_file(root_path, "server")
 end
 
-# 重写单个测试文件 
-# rake rewrite_all_local_file --trace RAILS_ENV=production
-task  :rewrite_all_local_file => :environment do
+# 根据淘宝订单详细API返回值重写本地yml
+# rake rewrite_tb_trade_local_file --trace RAILS_ENV=production
+task  :rewrite_tb_trade_local_file => :environment do
   root_path = File.join(Rails.root, "spec/mock_data/tb_trades/server")
   load_file(root_path, "local")
+end
+
+# 根据淘宝单品详细API返回值重写本地yml
+# rake rewrite_tb_product_local_file --trace RAILS_ENV=production
+task  :rewrite_tb_product_local_file => :environment do
+  YAML::ENGINE.yamler = 'psych'
+
+  root_path = File.join(Rails.root, "spec/mock_data/tb_items/server")
+  integer_fields = %w(num price quantity)
+  Dir.foreach(root_path) do |file|
+    if file != "." && file != ".."
+      source_file_path = File.join(root_path, file)
+      target_file_path = source_file_path.gsub("server", "local")
+
+      yml_data = YAML::load_file(source_file_path)
+      item = yml_data["item_get_response"]["item"]
+      
+      skus = []
+      sku_items = item.delete("skus")["sku"] rescue []
+      if sku_items.present?
+        sku_items.each do |sku_item|
+          sku = {
+                  ts_id: sku_item["sku_id"].to_s,
+                  quantity: sku_item["quantity"].to_i
+                  
+                }
+          properties = []
+          sku_item["properties_name"].split(";").each do |pro_item|
+            arr = pro_item.split(":")
+            properties << {name: arr[2], value: arr[3]}
+          end
+          sku[:properties] = properties
+          skus << sku
+        end
+      else
+        skus << {
+                  ts_id: File.basename(source_file_path, ".yml").split("_").last,
+                  is_hide: true
+                  
+                }
+      end
+
+      item.each do |key, value|
+        item[key] = if integer_fields.include?(key)
+                      value.to_i
+                    else
+                      value.to_s
+                    end
+      end
+      item["skus"] = skus
+
+      File.open(target_file_path, "w"){|f| f.puts item.to_yaml}
+    end
+  end
 end

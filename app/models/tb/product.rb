@@ -82,7 +82,7 @@ class Tb::Product < ActiveRecord::Base
 private
   def create_hide_sku
     if self.skus.blank?
-      self.skus.create(shop_id: self.shop_id, is_hide: true)
+      self.skus.create(shop_id: self.shop_id, ts_id: num_iid, is_hide: true)
     end
   end
 end

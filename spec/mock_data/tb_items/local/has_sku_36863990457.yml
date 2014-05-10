@@ -1,0 +1,64 @@
+---
+cid: '50008897'
+detail_url: http://36863990457_detail_url
+num: 263
+pic_url: http://36863990457_img.jpg
+price: 898
+title: has_sku_36863990457
+skus:
+- :ts_id: '39103945398'
+  :quantity: 47
+  :properties:
+  - :name: 颜色分类
+    :value: 浅灰色
+  - :name: 尺码
+    :value: S
+- :ts_id: '39103945399'
+  :quantity: 48
+  :properties:
+  - :name: 颜色分类
+    :value: 浅灰色
+  - :name: 尺码
+    :value: M
+- :ts_id: '39103945400'
+  :quantity: 49
+  :properties:
+  - :name: 颜色分类
+    :value: 浅灰色
+  - :name: 尺码
+    :value: L
+- :ts_id: '39103945401'
+  :quantity: 0
+  :properties:
+  - :name: 颜色分类
+    :value: 浅灰色
+  - :name: 尺码
+    :value: XL
+- :ts_id: '39103945402'
+  :quantity: 43
+  :properties:
+  - :name: 颜色分类
+    :value: 黑色
+  - :name: 尺码
+    :value: S
+- :ts_id: '39103945403'
+  :quantity: 42
+  :properties:
+  - :name: 颜色分类
+    :value: 黑色
+  - :name: 尺码
+    :value: M
+- :ts_id: '39103945404'
+  :quantity: 34
+  :properties:
+  - :name: 颜色分类
+    :value: 黑色
+  - :name: 尺码
+    :value: L
+- :ts_id: '39103945405'
+  :quantity: 0
+  :properties:
+  - :name: 颜色分类
+    :value: 黑色
+  - :name: 尺码
+    :value: XL

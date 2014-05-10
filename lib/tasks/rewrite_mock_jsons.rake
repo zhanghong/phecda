@@ -1,4 +1,5 @@
 # encoding : utf-8 -*-
+#http://galeki.is-programmer.com/posts/32636.html
 
 def load_file(path, rewite_type = "")
   Dir.foreach(path) do |file|
@@ -32,6 +33,7 @@ end
 
 def json_to_yml(json_path)
   if File.extname(json_path) == ".json"
+    YAML::ENGINE.yamler = 'psych'
     body = File.read(json_path)
     json = JSON.parse(body)
     yml_path = json_path.gsub(".json", ".yml")
@@ -42,13 +44,14 @@ end
 # 重写所有测试文件
 # rake rewrite_all_mock_data type="" --trace RAILS_ENV=production
 task	:rewrite_all_mock_data => :environment do
-  root_path = File.join(Rails.root, "spec/mock_data")
+  root_path = File.join(Rails.root, "spec/mock_data/tmp")
   load_file(root_path, ENV["type"])
 end
 
 # 重写单个测试文件 
 # rake rewrite_mock_file file="" type="" --trace RAILS_ENV=production
+# rake rewrite_mock_file file="tb_categories/list.yml" type="json" --trace RAILS_ENV=production
 task  :rewrite_mock_file => :environment do
-  file_path = File.join(Rails.root, "spec/mock_data", file)
+  file_path = File.join(Rails.root, "spec/mock_data", ENV["file"])
   rewrite_type_file(file_path, ENV["type"])
 end

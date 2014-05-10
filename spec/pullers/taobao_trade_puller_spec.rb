@@ -1,16 +1,17 @@
 # encoding: utf-8
 require 'spec_helper'
 
-def new_valid_trade_fullinfo(file_name)
+def valid_trade_fullinfo(file_name)
   local_file_path = "tb_trades/local/#{file_name}"
   tid = File.basename(file_name, ".yml").split("_").last
 
   trade_infos = read_yaml(local_file_path)
   order_items = trade_infos.delete("orders")
 
-  trade = Tb::Trade.find_by_tid(tid)
-  trade.should_not  be_nil
-  trade.shop_id.should    eq(@shop.id)
+  trades = Tb::Trade.where(shop_id: @shop.id, tid: tid)
+  trades.count.should   eq(1)
+
+  trade = trades.first
   trade_infos.each do |attr_name, value|
     #puts "trade_name: #{attr_name}"
     if tb_trade_time_attrs.include?(attr_name)
@@ -85,7 +86,7 @@ describe TaobaoTradePuller do
         excon_mock_with("tb_trades/server/#{yml_file_name}")
         TaobaoTradePuller.refresh_trade(@shop, tid)
 
-        new_valid_trade_fullinfo(yml_file_name)
+        valid_trade_fullinfo(yml_file_name)
       end
 
       it "更新淘宝订单 #{pull_item[:name]}" do
@@ -100,7 +101,7 @@ describe TaobaoTradePuller do
 
         excon_mock_with("tb_trades/server/#{yml_file_name}")
         TaobaoTradePuller.refresh_trade(@shop, tid)
-        new_valid_trade_fullinfo(yml_file_name)
+        valid_trade_fullinfo(yml_file_name)
       end
     end
   end

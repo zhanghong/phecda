@@ -32,35 +32,6 @@ def new_valid_trade_fullinfo(file_name)
   end
 end
 
-def valid_trade_fullinfo(tid, status_name)
-  trade_yml_file = "tb_trades/tb_trade_#{status_name}_#{tid}.yml"
-  trade_infos = read_yaml(trade_yml_file)
-  order_items = trade_infos.delete("orders")
-
-  trade = Tb::Trade.find_by_tid(tid)
-  trade.should_not  be_nil
-  trade.shop_id.should    eq(@shop.id)
-  trade_infos.each do |attr_name, value|
-    #puts "trade_name: #{attr_name}"
-    if tb_trade_time_attrs.include?(attr_name)
-      value = Time.parse(value)
-    end
-    trade.send(attr_name).should   eq(value)
-  end
-
-  trade.orders.size.should  eq(order_items.size)
-  order_items.each do |order_item|
-    order = trade.orders.where(oid: order_item["oid"]).first
-    order_item.each do |attr_name, value|
-      #puts "order_name: #{attr_name}"
-      if tb_order_time_attrs.include?(attr_name)
-        value = Time.parse(value)
-      end
-      order.send(attr_name).should  eq(value)
-    end
-  end
-end
-
 describe TaobaoTradePuller do
   before do
     @tb_app_token = create(:tb_app_token)

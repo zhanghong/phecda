@@ -33,6 +33,13 @@ def valid_trade_fullinfo(file_name)
   end
 end
 
+def valid_list_page(item_file_names)
+  ["has_sku_tc_642384977212123.yml", "no_sku_wbcg_640112743476108.yml"]
+  item_file_names.each do |file_name|
+    valid_trade_fullinfo(file_name)
+  end
+end
+
 describe TaobaoTradePuller do
   before do
     @tb_app_token = create(:tb_app_token)
@@ -103,6 +110,70 @@ describe TaobaoTradePuller do
         TaobaoTradePuller.refresh_trade(@shop, tid)
         valid_trade_fullinfo(yml_file_name)
       end
+    end
+  end
+
+  context "按下单时间增量查询卖家已卖出的交易数据" do
+    
+    it "单次抓取" do
+      Excon.defaults[:mock] = true
+      sub_time
+
+      start_modified = (Time.now - 1.month).beginning_of_day.to_s(:db)
+      end_modified = Time.now.to_s(:db)
+      1.upto(2) do |page_no|
+        sold_params = {
+          access_token: @tb_app_token.access_token,
+          format: "json",
+          v: "2.0",
+          timestamp: Time.now.localtime.to_s(:db),
+          method: 'taobao.trades.sold.increment.get',
+          fields: TaobaoTradePuller.taobao_trade_get_fields,
+          type: TaobaoTradePuller.sync_taobao_trade_type,
+          start_modified: start_modified,
+          end_modified: end_modified,
+          page_no: 0,
+          page_size: 100,
+          use_has_next: true
+        }
+        
+        yml_data = read_yaml("tb_trades/server/trades_sold_increment_page_#{page_no}.yml")
+        Excon.stub({:query => sold_params.merge(page_no: page_no)}, {:body => yml_data.to_json, :status => 200})
+      end
+      TaobaoTradePuller.increment_get_sold(@shop)
+      item_files = ["has_sku_tc_642384977212123.yml", "no_sku_wbcg_640112743476108.yml"]
+      valid_list_page(item_files)
+    end
+
+    it "多次抓取" do
+      Excon.defaults[:mock] = true
+      sub_time
+
+      start_modified = (Time.now - 1.month).beginning_of_day.to_s(:db)
+      end_modified = Time.now.to_s(:db)
+      1.upto(2) do |page_no|
+        sold_params = {
+          access_token: @tb_app_token.access_token,
+          format: "json",
+          v: "2.0",
+          timestamp: Time.now.localtime.to_s(:db),
+          method: 'taobao.trades.sold.increment.get',
+          fields: TaobaoTradePuller.taobao_trade_get_fields,
+          type: TaobaoTradePuller.sync_taobao_trade_type,
+          start_modified: start_modified,
+          end_modified: end_modified,
+          page_no: page_no,
+          page_size: 100,
+          use_has_next: true
+        }
+        
+        yml_data = read_yaml("tb_trades/server/trades_sold_increment_page_#{page_no}.yml")
+        Excon.stub({:query => sold_params.merge(page_no: page_no)}, {:body => yml_data.to_json, :status => 200})
+      end
+      TaobaoTradePuller.increment_get_sold(@shop)
+      TaobaoTradePuller.increment_get_sold(@shop)
+      item_files = ["has_sku_tc_642384977212123.yml", "no_sku_wbcg_640112743476108.yml"]
+      valid_list_page(item_files)
     end
   end
 end

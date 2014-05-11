@@ -14,11 +14,13 @@ module Tb::Query
 
   # 使用免签接口查询
   def self.oauth_https_get(options, app_token)
+    # 如果不使用localtime, 一个测试里面如果多次 mock stub会变成utc time
+    timestamp = Time.now.localtime.to_s(:db)
 		sorted_params = {
       access_token: app_token.access_token,
       format:      'json',
       v:           '2.0',
-      timestamp:   Time.now.strftime("%Y-%m-%d %H:%M:%S")
+      timestamp:   timestamp
     }.merge!(options)
 
     response = Excon.get(Settings.tb_base_url, :query => sorted_params)

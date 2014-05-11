@@ -13,105 +13,91 @@ class TaobaoTradePuller
       end
     end
 
-    def get_sold_by_created(shop, start_at, end_at)
+    # def get_sold_by_created(shop, start_at, end_at)
+    #   unless start_at.is_a?(Time)
+    #     last_trade = Tb::Trade.where(shop_id: shop.id).order("created DESC").first
+    #     if last_trade.blank?
+    #       start_at = (Time.now + 1.month).beginning_of_day
+    #     else
+    #       start_at = last_trade.created - 1.month
+    #     end
+    #   end
+    #   end_at = Time.now if end_at.blank?
+
+    #   page_no = 1
+    #   while true do
+    #     response = Tb::Query.get({
+    #       method: 'taobao.trades.sold.get',
+    #       fields: taobao_trade_get_fields,
+    #       type: sync_taobao_trade_type,
+    #       start_created: start_at.strftime("%Y-%m-%d %H:%M:%S"),
+    #       end_created: end_at.strftime("%Y-%m-%d %H:%M:%S"),
+    #       page_no: page_no,
+    #       page_size: 100,
+    #       use_has_next: true}, shop.id
+    #       )
+    #     break if response['trades_sold_get_response'].blank?
+    #     next unless response['trades_sold_get_response']['trades']
+    #     response['trades_sold_get_response']['trades']['trade'].each do |rs_trade|
+    #       create_or_update_taobao_trade(rs_trade.merge({shop_id: shop.id}))
+    #     end
+
+    #     break unless response['trades_sold_get_response']['has_next']
+    #     page_no += 1
+    #   end
+    # end
+
+    def increment_get_sold(shop, start_at = nil, end_at = nil)
       unless start_at.is_a?(Time)
         last_trade = Tb::Trade.where(shop_id: shop.id).order("created DESC").first
         if last_trade.blank?
-          start_at = (Time.now + 1.month).beginning_of_day
+          start_at = (Time.now - 1.month).beginning_of_day
         else
           start_at = last_trade.created - 1.month
         end
       end
       end_at = Time.now if end_at.blank?
 
-      page_no = 1
-      while true do
-        response = TaobaoQuery.get({
-          method: 'taobao.trades.sold.get',
-          fields: taobao_trade_get_fields,
-          start_created: start_at.strftime("%Y-%m-%d %H:%M:%S"),
-          end_created: end_at.strftime("%Y-%m-%d %H:%M:%S"),
-          page_no: page_no,
-          page_size: 100,
-          use_has_next: true}, trade_source_id
-          )
-        break if response['trades_sold_get_response'].blank?
-        next unless response['trades_sold_get_response']['trades']
-        response['trades_sold_get_response']['trades']['trade'].each do |rs_trade|
-          create_or_update_taobao_trade(rs_trade.merge({shop_id: shop.id}))
-        end
-
-        break unless response['trades_sold_get_response']['has_next']
-        page_no += 1
-      end
-    end
-
-    def get_sold(shop, start_at, end_at)
-      unless start_at.is_a?(Time)
-        last_trade = Tb::Trade.where(shop_id: shop.id).order("created DESC").first
-        if last_trade.blank?
-          start_at = (Time.now + 1.month).beginning_of_day
-        else
-          start_at = last_trade.created - 1.month
-        end
-      end
-      end_at = Time.now if end_at.blank?
+      start_at_time = start_at.to_s(:db)
+      ended_at_time = end_at.to_s(:db)
 
       page_no = 1
       while true do
-        response = TaobaoQuery.get({
-          method: 'taobao.trades.sold.get',
-          fields: taobao_trade_get_fields,
-          type: sync_taobao_trade_type,
-          start_created: start_at.strftime("%Y-%m-%d %H:%M:%S"),
-          end_created: end_at.strftime("%Y-%m-%d %H:%M:%S"),
-          page_no: page_no,
-          page_size: 100,
-          use_has_next: true}, trade_source_id
+        response = Tb::Query.get({
+            method: 'taobao.trades.sold.increment.get',
+            fields: taobao_trade_get_fields,
+            type: sync_taobao_trade_type,
+            start_modified: start_at_time,
+            end_modified: ended_at_time,
+            page_no: page_no,
+            page_size: 100,
+            use_has_next: true
+            }, shop.id
           )
-        break if response['trades_sold_get_response'].blank?
-        next unless response['trades_sold_get_response']['trades']
-        response['trades_sold_get_response']['trades']['trade'].each do |rs_trade|
-          create_or_update_taobao_trade(rs_trade.merge({shop_id: shop.id}))
-        end
 
-        break unless response['trades_sold_get_response']['has_next']
-        page_no += 1
-      end
-    end
-
-    def increment_get_sold(shop, start_at, end_at)
-      unless start_at.is_a?(Time)
-        last_trade = Tb::Trade.where(shop_id: shop.id).order("created DESC").first
-        if last_trade.blank?
-          start_at = (Time.now + 1.month).beginning_of_day
-        else
-          start_at = last_trade.created - 1.month
-        end
-      end
-      end_at = Time.now if end_at.blank?
-
-      page_no = 1
-      while true do
-        response = TaobaoQuery.get({
-          method: 'taobao.trades.sold.increment.get',
-          fields: taobao_trade_get_fields,
-          type: sync_taobao_trade_type,
-          start_modified: start_at.strftime("%Y-%m-%d %H:%M:%S"),
-          end_modified: end_at.strftime("%Y-%m-%d %H:%M:%S"),
-          page_no: page_no,
-          page_size: 100,
-          use_has_next: true}, trade_source_id
-          )
-        break if response['trades_sold_get_response'].blank?
-        next unless response['trades_sold_get_response']['trades']
+        break if response['trades_sold_increment_get_response'].blank?
+        next unless response['trades_sold_increment_get_response']['trades']
         response['trades_sold_increment_get_response']['trades']['trade'].each do |rs_trade|
           create_or_update_taobao_trade(rs_trade.merge({shop_id: shop.id}))
         end
-
-        break unless response['trades_sold_get_response']['has_next']
+        break unless response['trades_sold_increment_get_response']['has_next']
         page_no += 1
       end
+    end
+
+    def taobao_trade_get_fields
+      %w(tid status title point_fee  total_fee credit_card_fee
+        commission_fee payment post_fee received_payment cod_fee cod_status trade_from trade_memo created   
+        end_time modified pay_time consign_time shipping_type alipay_id alipay_no
+        buyer_alipay_no buyer_nick buyer_area buyer_email buyer_message buyer_memo 
+        seller_nick seller_memo receiver_name receiver_state receiver_city receiver_district receiver_address
+        receiver_zip receiver_mobile receiver_phone buyer_obtain_point_fee real_point_fee is_lgtype
+        is_brand_sale is_force_wlb is_daixiao orders 
+        ).join(", ")
+    end
+
+    def sync_taobao_trade_type
+      'fixed,auction,guarantee_trade,step,independent_simple_trade,independent_shop_trade,auto_delivery,ec,cod,game_equipment,shopex_trade,netcn_trade,external_trade,instant_trade,b2c_cod,hotel_trade,super_market_trade,super_market_cod_trade,taohua,waimai,nopaid,eticket,tmall_i18n'
     end
   private
     def create_or_update_taobao_trade(response_trade)
@@ -136,21 +122,6 @@ class TaobaoTradePuller
                 pic_path seller_nick snapshot_url timeout_action_time buyer_rate seller_rate)
 
       response_hash.delete_if{|k, v| excepts.include?(k)}
-    end
-
-    def taobao_trade_get_fields
-      %w(tid status title point_fee  total_fee credit_card_fee
-        commission_fee payment post_fee received_payment cod_fee cod_status trade_from trade_memo created   
-        end_time modified pay_time consign_time shipping_type alipay_id alipay_no
-        buyer_alipay_no buyer_nick buyer_area buyer_email buyer_message buyer_memo 
-        seller_nick seller_memo receiver_name receiver_state receiver_city receiver_district receiver_address
-        receiver_zip receiver_mobile receiver_phone buyer_obtain_point_fee real_point_fee is_lgtype
-        is_brand_sale is_force_wlb is_daixiao orders 
-        ).join(", ")
-    end
-
-    def sync_taobao_trade_type
-      'fixed,auction,guarantee_trade,step,independent_simple_trade,independent_shop_trade,auto_delivery,ec,cod,game_equipment,shopex_trade,netcn_trade,external_trade,instant_trade,b2c_cod,hotel_trade,super_market_trade,super_market_cod_trade,taohua,waimai,nopaid,eticket,tmall_i18n'
     end
   end
 end

@@ -103,6 +103,33 @@ task  :rewrite_tb_trade_local_file => :environment do
   load_file(root_path, "local")
 end
 
+# 用淘宝订单详细页生成列表页数据
+# rake rewrite_tb_trade_items_to_list root_name="" file_names="" has_next=true --trace RAILS_ENV=production
+# rake rewrite_tb_trade_items_to_list root_name="trades_sold_increment_get_response" file_names="no_sku_wbcg_640112743476108.yml" has_next=false page=2 --trace RAILS_ENV=production
+# rake rewrite_tb_trade_items_to_list root_name="trades_sold_increment_get_response" file_names="has_sku_tc_642384977212123.yml" has_next=true page=1 --trace RAILS_ENV=production
+task  :rewrite_tb_trade_items_to_list => :environment do
+  YAML::ENGINE.yamler = 'psych'
+  trades = []
+  ENV["file_names"].split(",").each do |file_name|
+    file_path = File.join(Rails.root, "spec/mock_data/tb_trades/server", file_name)
+    yml_data = YAML::load_file(file_path)
+    trades << yml_data["trade_fullinfo_get_response"]["trade"]
+  end
+
+  list_data = {
+      ENV["root_name"] => {
+        "has_next" => (ENV["has_next"] == "true"),
+        "trades" => {
+          "trade" => trades
+        }
+      }
+    }
+
+  list_file_name = ENV["root_name"].split("_").slice(0, 3).join("_") + "_page_#{ENV["page"].to_i}.yml"
+  list_file_path = File.join(Rails.root, "spec/mock_data/tb_trades/server", list_file_name)
+  File.open(list_file_path, "w"){|f| f.puts list_data.to_yaml}
+end
+
 # 根据淘宝单品详细API返回值重写本地yml
 # rake rewrite_tb_product_local_file --trace RAILS_ENV=production
 task  :rewrite_tb_product_local_file => :environment do

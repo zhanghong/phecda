@@ -34,7 +34,7 @@ module Tb::Query
   		grant_type: "authorization_code",
   		client_id: Settings.tb_app_key,
   		client_secret: Settings.tb_secret_key,
-  		redirect_uri: "http://erp.zhanghong.com/auth/taobao/callback"
+  		redirect_uri: "http://erp.henry.com/auth/taobao/callback"
   	}
 
     response = Excon.post(Settings.tb_token_url, :query => sorted_params)

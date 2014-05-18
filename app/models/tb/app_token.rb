@@ -2,7 +2,7 @@
 # create_table "tb_app_tokens", force: true do |t|
 #   t.integer  "shop_id"
 #   t.string   "user_id",       limit: 20, default: ""
-#   t.string   "nick",          limit: 30
+#   t.string   "nick",          limit: 100
 #   t.string   "access_token"
 #   t.string   "token_type",    limit: 30
 #   t.integer  "expires_in"
@@ -27,8 +27,8 @@ class Tb::AppToken < ActiveRecord::Base
   belongs_to  :shop,  class_name: "Tb::Shop",   foreign_key: "shop_id"
   belongs_to  :app,   class_name: "Tb::App",    foreign_key: "app_id"
 
-  def check_or_refresh!
-    if can_refresh?
+  def refresh
+    if need_refresh?
       params = {
                 client_id: app.key_id,
                 client_secret: app.secret,
@@ -47,7 +47,7 @@ class Tb::AppToken < ActiveRecord::Base
   end
 
 private
-  def can_refresh?
-    true
+  def need_refresh?
+    refreshed_at.nil? || w2_expires_in.nil? || (r2_expires_in < Time.now - last_refresh_at)
   end
 end

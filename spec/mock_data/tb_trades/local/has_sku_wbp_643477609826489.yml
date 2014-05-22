@@ -1,0 +1,74 @@
+---
+alipay_id: '2088002069151505'
+alipay_no: '2014050611001001500067046242'
+buyer_nick: sw_buyer
+buyer_obtain_point_fee: 0
+cod_fee: 0.0
+cod_status: NEW_CREATED
+commission_fee: 0.0
+created: '2014-05-06 21:48:22'
+is_brand_sale: false
+is_force_wlb: false
+is_lgtype: false
+modified: '2014-05-06 21:48:22'
+payment: 311.0
+point_fee: 0
+post_fee: 11.0
+real_point_fee: 0
+received_payment: 0.0
+receiver_address: 宝泉岭
+receiver_city: 鹤岗市
+receiver_district: 萝北县
+receiver_mobile: '13687654321'
+receiver_name: 张XX
+receiver_phone: ''
+receiver_state: 黑龙江省
+receiver_zip: '154200'
+seller_nick: brandy_store
+shipping_type: express
+status: WAIT_BUYER_PAY
+tid: '643477609826489'
+total_fee: 1366.0
+orders:
+- adjust_fee: 0.0
+  cid: '162201'
+  discount_fee: 343.0
+  is_daixiao: false
+  is_oversold: false
+  num: 1
+  num_iid: '36817355732'
+  oid: '643477609836489'
+  order_from: WAP
+  outer_iid: TB9W79WH21
+  part_mjz_discount: 17.85
+  payment: 125.0
+  price: 468.0
+  refund_status: NO_REFUND
+  seller_type: B
+  sku_id: '38869638698'
+  sku_properties_name: 颜色分类:01黑色;尺寸:M
+  status: WAIT_BUYER_PAY
+  store_code: IC
+  title: has_sku_36817355732
+  total_fee: 125.0
+- adjust_fee: 0.0
+  cid: '50008897'
+  discount_fee: 673.0
+  is_daixiao: false
+  is_oversold: false
+  num: 1
+  num_iid: '36863990457'
+  oid: '643477609846489'
+  order_from: WAP
+  outer_iid: TF6WX2WB01
+  part_mjz_discount: 32.15
+  payment: 225.0
+  price: 898.0
+  refund_status: NO_REFUND
+  seller_type: B
+  sku_id: '39103945402'
+  sku_properties_name: 颜色分类:黑色;尺码:S
+  status: WAIT_BUYER_PAY
+  store_code: IC
+  title: has_sku_36863990457
+  total_fee: 225.0

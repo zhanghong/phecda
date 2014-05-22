@@ -1,0 +1,71 @@
+---
+alipay_id: '2088102015511257'
+alipay_no: '2014050411001001250065912737'
+buyer_nick: gr_buyer
+buyer_obtain_point_fee: 0
+cod_fee: 0.0
+cod_status: NEW_CREATED
+commission_fee: 0.0
+created: '2014-05-04 18:38:49'
+is_brand_sale: false
+is_force_wlb: false
+is_lgtype: false
+modified: '2014-05-04 18:39:39'
+pay_time: '2014-05-04 18:39:39'
+payment: 910.0
+point_fee: 0
+post_fee: 9.0
+real_point_fee: 0
+received_payment: 0.0
+receiver_address: 南翔镇宝翔路
+receiver_city: 上海市
+receiver_district: 嘉定区
+receiver_mobile: '13012345678'
+receiver_name: 签收姓名
+receiver_phone: ''
+receiver_state: 上海
+receiver_zip: '201800'
+seller_nick: brandy_store
+shipping_type: express
+status: WAIT_SELLER_SEND_GOODS
+tid: '639909797276123'
+total_fee: 1010.0
+orders:
+- adjust_fee: 0.0
+  cid: '50026904'
+  discount_fee: 798.0
+  is_daixiao: false
+  is_oversold: false
+  num: 1
+  num_iid: '13346953735'
+  oid: '639909797286123'
+  order_from: TAOBAO
+  outer_iid: T6IPE6-5006
+  part_mjz_discount: 50.0
+  payment: 448.0
+  price: 1296.0
+  refund_status: NO_REFUND
+  seller_type: B
+  status: WAIT_SELLER_SEND_GOODS
+  store_code: IC
+  title: no_sku_13346953735
+  total_fee: 498.0
+- adjust_fee: 0.0
+  cid: '50026858'
+  discount_fee: 592.0
+  is_daixiao: false
+  is_oversold: false
+  num: 4
+  num_iid: '35051372439'
+  oid: '640942570314092'
+  order_from: WAP
+  outer_iid: '126100501'
+  part_mjz_discount: 50.0
+  payment: 462.0
+  price: 276.0
+  refund_status: NO_REFUND
+  seller_type: B
+  status: WAIT_BUYER_PAY
+  store_code: IC
+  title: no_sku_35051372439
+  total_fee: 512.0

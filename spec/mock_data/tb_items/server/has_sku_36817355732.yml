@@ -1,0 +1,43 @@
+---
+item_get_response:
+  item:
+    cid: 162201
+    detail_url: http://36817355732_detail_url
+    num: 79
+    pic_url: http://36817355732_img.jpg
+    price: '468.00'
+    skus:
+      sku:
+      - properties: 1627207:28341;20518:28357
+        properties_name: 1627207:28341:颜色分类:黑色;20518:28357:尺寸:66厘米（2尺）
+        quantity: 8
+        sku_id: 38869638697
+      - properties: 1627207:28341;20518:28359
+        properties_name: 1627207:28341:颜色分类:黑色;20518:28359:尺寸:70厘米（2尺1）
+        quantity: 12
+        sku_id: 38869638698
+      - properties: 1627207:28341;20518:28361
+        properties_name: 1627207:28341:颜色分类:黑色;20518:28361:尺寸:74厘米（2尺2）
+        quantity: 13
+        sku_id: 38869638699
+      - properties: 1627207:28341;20518:28362
+        properties_name: 1627207:28341:颜色分类:黑色;20518:28362:尺寸:76厘米（2尺3）
+        quantity: 3
+        sku_id: 38869638700
+      - properties: 1627207:3232480;20518:28357
+        properties_name: 1627207:3232480:颜色分类:粉红色;20518:28357:尺寸:66厘米（2尺）
+        quantity: 3
+        sku_id: 38869638703
+      - properties: 1627207:3232480;20518:28359
+        properties_name: 1627207:3232480:颜色分类:粉红色;20518:28359:尺寸:70厘米（2尺1）
+        quantity: 15
+        sku_id: 38869638704
+      - properties: 1627207:3232480;20518:28361
+        properties_name: 1627207:3232480:颜色分类:粉红色;20518:28361:尺寸:74厘米（2尺2）
+        quantity: 16
+        sku_id: 38869638705
+      - properties: 1627207:3232480;20518:28362
+        properties_name: 1627207:3232480:颜色分类:粉红色;20518:28362:尺寸:76厘米（2尺3）
+        quantity: 9
+        sku_id: 38869638706
+    title: has_sku_36817355732

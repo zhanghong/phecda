@@ -2,5 +2,19 @@
 require 'spec_helper'
 
 describe Tb::Product do
-  pending "add some examples to (or delete) #{__FILE__}"
+  before do
+    #
+  end
+
+  context "belongs_to association" do
+    [:shop, :category].each do |name|
+      it { should belong_to(name) }
+    end
+  end
+
+  context "has_many association" do
+    [:skus].each do |name|
+      it { should have_many(name).dependent(:destroy) }
+    end
+  end
 end

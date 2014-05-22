@@ -2,6 +2,8 @@
 # Read about factories at https://github.com/thoughtbot/factory_girl
 
 FactoryGirl.define do
-  factory Tb::Property do
+  factory :tb_property, class: Tb::Property do
+    association :shop, factory: :tb_shop
+    name "weight"
   end
 end

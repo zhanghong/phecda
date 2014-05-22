@@ -2,5 +2,13 @@
 require 'spec_helper'
 
 describe Tb::SkuProperty do
-  pending "add some examples to (or delete) #{__FILE__}"
+  before do
+    #
+  end
+
+  context "belongs_to association" do
+    [:sku, :property_value].each do |name|
+      it { should belong_to(name) }
+    end
+  end
 end

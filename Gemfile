@@ -38,6 +38,7 @@ group :test do
   gem "capybara"
   gem "database_cleaner"
   gem "email_spec"
+  gem "shoulda-matchers"
   # gem "cucumber-rails", :require => false
   #gem "mocha"
   #gem "rcov"

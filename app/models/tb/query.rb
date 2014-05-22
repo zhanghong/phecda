@@ -12,18 +12,19 @@ module Tb::Query
   	end
   end
 
-  def self.oauth_https_get(options, shop_id = nil)
-  	if shop_app = Tb::AppToken.where(shop_id: shop_id).first
-  		sorted_params = {
-        access_token: shop_app.access_token,
-        format:      'json',
-        v:           '2.0',
-        timestamp:   Time.now.strftime("%Y-%m-%d %H:%M:%S")
-      }.merge!(options)
+  # 使用免签接口查询
+  def self.oauth_https_get(options, app_token)
+    # 如果不使用localtime, 一个测试里面如果多次 mock stub会变成utc time
+    timestamp = Time.now.localtime.to_s(:db)
+		sorted_params = {
+      access_token: app_token.access_token,
+      format:      'json',
+      v:           '2.0',
+      timestamp:   timestamp
+    }.merge!(options)
 
-      response = Excon.get(Settings.tb_base_url, :query => sorted_params)
-      JSON.parse(response.body, :quirks_mode => true)
-  	end
+    response = Excon.get(Settings.tb_base_url, :query => sorted_params)
+    JSON.parse(response.body, :quirks_mode => true)
   end
 
   # 获取taobao shop 免签信息
@@ -33,7 +34,7 @@ module Tb::Query
   		grant_type: "authorization_code",
   		client_id: Settings.tb_app_key,
   		client_secret: Settings.tb_secret_key,
-  		redirect_uri: "http://erp.zhanghong.com/auth/taobao/callback"
+  		redirect_uri: "http://erp.henry.com/auth/taobao/callback"
   	}
 
     response = Excon.post(Settings.tb_token_url, :query => sorted_params)

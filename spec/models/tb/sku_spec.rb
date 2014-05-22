@@ -2,5 +2,23 @@
 require 'spec_helper'
 
 describe Tb::Sku do
-  pending "add some examples to (or delete) #{__FILE__}"
+  before do
+    #
+  end
+
+  context "belongs_to association" do
+    [:shop, :product].each do |name|
+      it { should belong_to(name) }
+    end
+  end
+
+  context "has_many association" do
+    [:property_values].each do |name|
+      it { should have_many(name)}
+    end
+
+    [:sku_properties].each do |name|
+      it { should have_many(name).dependent(:destroy) }
+    end
+  end
 end

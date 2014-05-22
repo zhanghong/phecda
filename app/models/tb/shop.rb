@@ -4,7 +4,6 @@
 #   t.string   "cid",            limit: 50,  default: ""
 #   t.string   "nick",           limit: 100, default: ""
 #   t.string   "title",          limit: 100, default: ""
-#   t.string   "auth_type",      limit: 10,  default: ""
 #   t.string   "desc",                       default: ""
 #   t.string   "bulletin",                   default: ""
 #   t.string   "pic_path",                   default: ""
@@ -17,13 +16,14 @@
 # end
 class Tb::Shop < ActiveRecord::Base
   belongs_to  :account
-  has_many    :app_token, class_name: "Tb::AppToken",  foreign_key: "shop_id"
-  has_many    :categories,  class_name: "Tb::Category",   foreign_key: "shop_id"
-  has_many    :products,  class_name: "Tb::Product",   foreign_key: "shop_id"
-  has_many    :sku,  class_name: "Tb::Product",   foreign_key: "shop_id"
-  has_many    :properties,  class_name: "Tb::Property",   foreign_key: "shop_id"
-  has_many    :property_values,  class_name: "Tb::PropertyValue",   foreign_key: "shop_id"
+  has_many    :app_tokens, class_name: "Tb::AppToken",  foreign_key: "shop_id", dependent: :destroy
+  has_many    :categories,  class_name: "Tb::Category",   foreign_key: "shop_id", dependent: :destroy
+  has_many    :products,  class_name: "Tb::Product",   foreign_key: "shop_id", dependent: :destroy
+  has_many    :skus,  class_name: "Tb::Product",   foreign_key: "shop_id", dependent: :destroy
+  has_many    :properties,  class_name: "Tb::Property",   foreign_key: "shop_id", dependent: :destroy
+  has_many    :property_values,  class_name: "Tb::PropertyValue",   foreign_key: "shop_id", dependent: :destroy
 
+  # no rspec test
   def self.create_by_omniauth(auth_hash)
     token_info = auth_hash["credentials"].merge(auth_hash["extra"]["raw_info"])
     mappings = {"token" => "access_token", "taobao_user_id" => "user_id", "taobao_user_nick" => "nick"}
@@ -31,35 +31,18 @@ class Tb::Shop < ActiveRecord::Base
       token_info[mappings[k]] = token_info.delete(k) if mappings[k]
     end
     token_info["expires_at"] = Time.at(token_info["expires_at"].to_i)
+    token_info["auth_type"] = "oauth2"
 
-    shop = find_or_initialize_by(app_id: 1, user_id: token_info["user_id"], nick: token_info[:nick])
-    shop.update(auth_type: "oauth2")
+    shop = find_or_create_by(user_id: token_info["user_id"], nick: token_info["nick"])
 
-    app_token = Tb::AppToken.find_or_create_by(shop_id: shop.id)
+    app_token = Tb::AppToken.find_or_create_by(shop_id: shop.id, app_id: 1)
+    update_attrs = {}
     token_info.each do |k, v|
-      app_token.send("#{k}=", v)
+      update_attrs[k] = v
     end
-    app_token.save
+    app_token.update(update_attrs)
 
     shop.pull_taobao_info
-  end
-
-  # shop免签授权
-  def self.create_by_authorization_code(code)
-    res = Tb::Query.get_oauth_token(code)
-    if res["error"]
-      return false
-    else
-      nick = CGI.unescape(res["taobao_user_nick"])
-      shop = find_or_initialize_by(nick: nick)
-      shop.update({
-        user_id: res["taobao_user_id"],
-        auth_type: "oauth2"
-        })
-      shop.save_access_token(res)
-      shop.pull_taobao_info
-    end
-    return true
   end
 
   # 同步shop店铺信息
@@ -69,7 +52,6 @@ class Tb::Shop < ActiveRecord::Base
 					  		fields: "sid,cid,title,desc,bulletin,pic_path,created,modified",
 					  		nick: nick
 					  	}, id)
-
   	res_shop = response["shop_get_response"]["shop"]
     mappings = {"created" => "tb_created_at", "modified" => "tb_modified_at"}
     res_shop.keys.each do |k|
@@ -77,17 +59,35 @@ class Tb::Shop < ActiveRecord::Base
       res_shop[mappings[k]] = res_shop.delete(k) if mappings[k]
     end
   	self.update(res_shop)
+    self
   end
 
-  # 保存shop的免签信息
-  def save_access_token(res)
-    app_token = Tb::AppToken.find_or_create_by(shop_id: id)
+  # # shop免签授权
+  # def self.create_by_authorization_code(code)
+  #   res = Tb::Query.get_oauth_token(code)
+  #   if res["error"]
+  #     return false
+  #   else
+  #     nick = CGI.unescape(res["taobao_user_nick"])
+  #     shop = find_or_initialize_by(nick: nick)
+  #     shop.update({
+  #       user_id: res["taobao_user_id"],
+  #       auth_type: "oauth2"
+  #       })
+  #     shop.save_access_token(res)
+  #     shop.pull_taobao_info
+  #   end
+  #   return true
+  # end
 
-    mappings = {"taobao_user_id" => "user_id", "taobao_user_nick" => "nick"}
-    res.keys.each do |k|
-      res[k] = CGI.unescape(res[k]) if res[k].is_a?(String)
-      res[mappings[k]] = res.delete(k) if mappings[k]
-    end
-    app_token.update(res)
-  end
+  # # 保存shop的免签信息
+  # def save_access_token(res)
+  #   app_token = Tb::AppToken.find_or_create_by(shop_id: id)
+  #   mappings = {"taobao_user_id" => "user_id", "taobao_user_nick" => "nick"}
+  #   res.keys.each do |k|
+  #     res[k] = CGI.unescape(res[k]) if res[k].is_a?(String)
+  #     res[mappings[k]] = res.delete(k) if mappings[k]
+  #   end
+  #   app_token.update(res)
+  # end
 end

@@ -2,7 +2,7 @@
 # create_table "tb_app_tokens", force: true do |t|
 #   t.integer  "shop_id"
 #   t.string   "user_id",       limit: 20, default: ""
-#   t.string   "nick",          limit: 30
+#   t.string   "nick",          limit: 100
 #   t.string   "access_token"
 #   t.string   "token_type",    limit: 30
 #   t.integer  "expires_in"
@@ -19,9 +19,35 @@
 #   t.datetime "expires_at"
 #   t.boolean  "expires"
 #   t.integer  "app_id"
+#   t.string   "auth_type",     limit: 10, default: ""
+#   t.datetime "refreshed_at"
 # end
 # add_index "tb_app_tokens", ["shop_id"], name: "idx_by_shop_id", using: :btree
 class Tb::AppToken < ActiveRecord::Base
-  belongs_to  :shop, class_name: "Tb::Shop",  foreign_key: "shop_id"
-  belongs_to  :app, class_name: "Tb::App",  foreign_key: "app_id"
+  belongs_to  :shop,  class_name: "Tb::Shop",   foreign_key: "shop_id"
+  belongs_to  :app,   class_name: "Tb::App",    foreign_key: "app_id"
+
+  def refresh
+    if need_refresh?
+      params = {
+                client_id: app.key_id,
+                client_secret: app.secret,
+                grant_type: 'refresh_token',
+                refresh_token: refresh_token
+              }
+      response = Excon.post(Settings.tb_token_url, :query => params)
+      app_token = JSON.parse(response.body, :quirks_mode => true)
+      mappings = {"taobao_user_id" => "user_id", "taobao_user_nick" => "nick"}
+      app_token.keys.each do |k|
+        app_token[mappings[k]] = app_token.delete(k) if mappings[k]
+      end
+      app_token[:refreshed_at] = Time.now
+      update(app_token)
+    end
+  end
+
+private
+  def need_refresh?
+    refreshed_at.nil? || w2_expires_in.nil? || (r2_expires_in < Time.now - last_refresh_at)
+  end
 end

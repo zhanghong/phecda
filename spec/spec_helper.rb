@@ -56,8 +56,29 @@ RSpec.configure do |config|
   # end
 end
 
-def excon_mock_with(filename)
-  body = open(File.join(Rails.root, 'spec/mock_data', "#{filename.to_s}")).read
+def tb_trade_time_attrs
+  %w(created end_time modified consign_time pay_time)
+end
+
+def tb_order_time_attrs
+  %w(consign_time)
+end
+
+def read_yaml(local_path)
+  YAML::load_file(File.join(Rails.root, 'spec/mock_data', local_path))
+end
+
+def excon_mock_with(local_path)
+  yml_data = read_yaml(local_path)
   Excon.defaults[:mock] = true
-  Excon.stub({}, {:body => body, :status => 200})
+  Excon.stub({}, {:body => yml_data.to_json, :status => 200})
+
+  # body = open(File.join(Rails.root, 'spec/mock_data', local_path)).read
+  # Excon.defaults[:mock] = true
+  # Excon.stub({}, {:body => body, :status => 200})
+end
+
+def sub_time
+  now = Time.now.beginning_of_day
+  Time.stub(:now) { now }
 end

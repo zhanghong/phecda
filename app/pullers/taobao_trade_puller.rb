@@ -78,9 +78,9 @@ class TaobaoTradePuller
               }, shop.id
             )
 
-          puts "-------- " * 8
-          p response
-          puts "-------- " * 8
+          # puts "-------- " * 8
+          # p response
+          # puts "-------- " * 8
           break if response['trades_sold_increment_get_response'].blank?
           next unless response['trades_sold_increment_get_response']['trades']
           response['trades_sold_increment_get_response']['trades']['trade'].each do |rs_trade|
@@ -96,12 +96,12 @@ class TaobaoTradePuller
 
     def taobao_trade_get_fields
       %w(tid status title point_fee  total_fee credit_card_fee
-        commission_fee payment post_fee received_payment cod_fee cod_status trade_from trade_memo created   
+        commission_fee payment post_fee received_payment cod_fee cod_status trade_from trade_memo created
         end_time modified pay_time consign_time shipping_type alipay_id alipay_no
-        buyer_alipay_no buyer_nick buyer_area buyer_email buyer_message buyer_memo 
+        buyer_alipay_no buyer_nick buyer_area buyer_email buyer_message buyer_memo
         seller_nick seller_memo receiver_name receiver_state receiver_city receiver_district receiver_address
         receiver_zip receiver_mobile receiver_phone buyer_obtain_point_fee real_point_fee is_lgtype
-        is_brand_sale is_force_wlb is_daixiao orders 
+        is_brand_sale is_force_wlb is_daixiao orders
         ).join(", ")
     end
 
@@ -112,7 +112,7 @@ class TaobaoTradePuller
     def create_or_update_taobao_trade(response_trade)
       rs_orders = response_trade.delete('orders')["order"]
       tb_trade = Tb::Trade.find_or_initialize_by(tid: response_trade["tid"])
-      
+
       if tb_trade.new_record?
         rs_orders.each do |o|
           tb_trade.orders.build(init_taobao_order(o))
@@ -127,7 +127,7 @@ class TaobaoTradePuller
     end
 
     def init_taobao_order(response_hash)
-      excepts = %w(is_service_order bind_oid ticket_outer_id ticket_expdate_key is_www 
+      excepts = %w(is_service_order bind_oid ticket_outer_id ticket_expdate_key is_www
                 pic_path seller_nick snapshot_url timeout_action_time buyer_rate seller_rate)
 
       response_hash.delete_if{|k, v| excepts.include?(k)}

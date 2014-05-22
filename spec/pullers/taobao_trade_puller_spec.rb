@@ -114,13 +114,13 @@ describe TaobaoTradePuller do
   end
 
   context "按下单时间增量查询卖家已卖出的交易数据" do
-    
+
     it "单次抓取" do
       Excon.defaults[:mock] = true
       sub_time
 
-      start_modified = (Time.now - 1.month).beginning_of_day.to_s(:db)
-      end_modified = Time.now.to_s(:db)
+      start_modified = Time.now.beginning_of_day.to_s(:db)
+      end_modified = Time.now.end_of_day.to_s(:db)
       1.upto(2) do |page_no|
         sold_params = {
           access_token: @tb_app_token.access_token,
@@ -136,7 +136,7 @@ describe TaobaoTradePuller do
           page_size: 100,
           use_has_next: true
         }
-        
+
         yml_data = read_yaml("tb_trades/server/trades_sold_increment_page_#{page_no}.yml")
         Excon.stub({:query => sold_params.merge(page_no: page_no)}, {:body => yml_data.to_json, :status => 200})
       end
@@ -149,8 +149,8 @@ describe TaobaoTradePuller do
       Excon.defaults[:mock] = true
       sub_time
 
-      start_modified = (Time.now - 1.month).beginning_of_day.to_s(:db)
-      end_modified = Time.now.to_s(:db)
+      start_modified = Time.now.beginning_of_day.to_s(:db)
+      end_modified = Time.now.end_of_day.to_s(:db)
       1.upto(2) do |page_no|
         sold_params = {
           access_token: @tb_app_token.access_token,
@@ -166,7 +166,7 @@ describe TaobaoTradePuller do
           page_size: 100,
           use_has_next: true
         }
-        
+
         yml_data = read_yaml("tb_trades/server/trades_sold_increment_page_#{page_no}.yml")
         Excon.stub({:query => sold_params.merge(page_no: page_no)}, {:body => yml_data.to_json, :status => 200})
       end

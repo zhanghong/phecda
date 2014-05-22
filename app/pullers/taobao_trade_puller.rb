@@ -48,6 +48,8 @@ class TaobaoTradePuller
     # end
 
     def increment_get_sold(shop, start_at = nil, end_at = nil)
+      current_time = Time.now
+
       unless start_at.is_a?(Time)
         last_trade = Tb::Trade.where(shop_id: shop.id).order("created DESC").first
         if last_trade.blank?
@@ -56,32 +58,39 @@ class TaobaoTradePuller
           start_at = last_trade.created - 1.month
         end
       end
-      end_at = Time.now if end_at.blank?
+      end_at = current_time if end_at.blank?
 
-      start_at_time = start_at.to_s(:db)
-      ended_at_time = end_at.to_s(:db)
+      while start_at <= Time.now
+        start_at_time = start_at.to_s(:db)
+        ended_at_time = start_at.end_of_day.to_s(:db)
 
-      page_no = 1
-      while true do
-        response = Tb::Query.get({
-            method: 'taobao.trades.sold.increment.get',
-            fields: taobao_trade_get_fields,
-            type: sync_taobao_trade_type,
-            start_modified: start_at_time,
-            end_modified: ended_at_time,
-            page_no: page_no,
-            page_size: 100,
-            use_has_next: true
-            }, shop.id
-          )
+        page_no = 1
+        while true do
+          response = Tb::Query.get({
+              method: 'taobao.trades.sold.increment.get',
+              fields: taobao_trade_get_fields,
+              type: sync_taobao_trade_type,
+              start_modified: start_at_time,
+              end_modified: ended_at_time,
+              page_no: page_no,
+              page_size: 100,
+              use_has_next: true
+              }, shop.id
+            )
 
-        break if response['trades_sold_increment_get_response'].blank?
-        next unless response['trades_sold_increment_get_response']['trades']
-        response['trades_sold_increment_get_response']['trades']['trade'].each do |rs_trade|
-          create_or_update_taobao_trade(rs_trade.merge({shop_id: shop.id}))
+          puts "-------- " * 8
+          p response
+          puts "-------- " * 8
+          break if response['trades_sold_increment_get_response'].blank?
+          next unless response['trades_sold_increment_get_response']['trades']
+          response['trades_sold_increment_get_response']['trades']['trade'].each do |rs_trade|
+            create_or_update_taobao_trade(rs_trade.merge({shop_id: shop.id}))
+          end
+          break unless response['trades_sold_increment_get_response']['has_next']
+          page_no += 1
         end
-        break unless response['trades_sold_increment_get_response']['has_next']
-        page_no += 1
+
+        start_at += 1.days
       end
     end
 

@@ -1,4 +1,6 @@
 Phecda::Application.routes.draw do
+  resources :accounts
+
   root :to => 'home#index'
   devise_for :users
   get '/auth/taobao/callback' => 'oauths#taobao'

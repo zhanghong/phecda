@@ -15,6 +15,11 @@
 #= require bootstrap-datepicker.min
 #= require nprogress
 #= require nprogress-turbolinks
+#= require underscore
+#= require backbone
+#= require railsy_backbone.sync
+#= require railsy_backbone.datalink
+#= require backbone/phecda
 
 NProgress.configure
   showSpinner: false

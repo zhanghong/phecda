@@ -35,6 +35,7 @@ gem "date_validator", "~> 0.7.0"
 gem "sidekiq", "~> 2.13.0"
 gem "sidekiq-unique-jobs", "~> 2.6.7"
 gem "remotipart", "~> 1.2"
+gem "railsy_backbone"
 require "yaml"
 
 group :doc do

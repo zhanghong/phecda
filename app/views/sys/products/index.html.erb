@@ -1,0 +1,8 @@
+<div id="sys_products"></div>
+<script type="text/javascript">
+  $(function() {
+    // Blog is the app name
+    window.router = new Phecda.Routers.SysProductsRouter({sys_products: <%= @sys_products.to_json.html_safe -%>});
+    Backbone.history.start();
+  });
+</script>

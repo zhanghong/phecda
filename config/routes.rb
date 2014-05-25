@@ -1,4 +1,6 @@
 Phecda::Application.routes.draw do
+  resources :trades
+
   resources :accounts
 
   root :to => 'home#index'

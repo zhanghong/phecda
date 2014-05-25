@@ -14,8 +14,7 @@
 #   t.string   "user_id",        limit: 20,  default: ""
 #   t.string   "sid",            limit: 20,  default: ""
 # end
-class Tb::Shop < ActiveRecord::Base
-  belongs_to  :account
+class Tb::Shop < Shop
   has_many    :app_tokens, class_name: "Tb::AppToken",  foreign_key: "shop_id", dependent: :destroy
   has_many    :categories,  class_name: "Tb::Category",   foreign_key: "shop_id", dependent: :destroy
   has_many    :products,  class_name: "Tb::Product",   foreign_key: "shop_id", dependent: :destroy

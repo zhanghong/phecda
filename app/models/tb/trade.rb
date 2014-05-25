@@ -61,7 +61,7 @@
 #   t.datetime "created_at"
 #   t.datetime "updated_at"
 # end
-class Tb::Trade < ActiveRecord::Base
+class Tb::Trade < Trade
   belongs_to  :shop,    class_name: "Tb::Shop"
   has_many    :orders,  class_name: "Tb::Order", dependent: :destroy
 end

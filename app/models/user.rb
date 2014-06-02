@@ -22,6 +22,7 @@
 #   t.datetime "locked_at"
 #   t.datetime "created_at"
 #   t.datetime "updated_at"
+#   t.boolean  "is_superadmin",                     default: false
 # end
 # add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
 # add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
@@ -35,8 +36,6 @@ class User < ActiveRecord::Base
             :uniqueness => true,
             :length => {:within => 3..16}
 
-  ROLES = %w[super_admin admin]
-
   def self.current=(user)
     Thread.current[:current_user] = user
   end
@@ -44,4 +43,16 @@ class User < ActiveRecord::Base
   def self.current
     Thread.current[:current_user]
   end
+
+  def self.add_shop_to_superadmins(shop)
+    where(is_superadmin: true).all.each do |user|
+      user.shops << shop
+    end
+  end
+
+  def is_superadmin?
+    is_superadmin == true
+  end
+private
+
 end

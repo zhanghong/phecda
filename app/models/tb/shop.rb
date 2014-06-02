@@ -1,6 +1,5 @@
 # encoding : utf-8 -*-
-# create_table "tb_shops", force: true do |t|
-#   t.integer  "account_id",     limit: 8,   default: 0
+# create_table "shops", force: true do |t|
 #   t.string   "cid",            limit: 50,  default: ""
 #   t.string   "nick",           limit: 100, default: ""
 #   t.string   "title",          limit: 100, default: ""
@@ -11,11 +10,10 @@
 #   t.datetime "tb_modified_at"
 #   t.datetime "created_at"
 #   t.datetime "updated_at"
-#   t.string   "user_id",        limit: 20,  default: ""
 #   t.string   "sid",            limit: 20,  default: ""
+#   t.string   "type",           limit: 30,  default: ""
 # end
-class Tb::Shop < ActiveRecord::Base
-  belongs_to  :account
+class Tb::Shop < Shop
   has_many    :app_tokens, class_name: "Tb::AppToken",  foreign_key: "shop_id", dependent: :destroy
   has_many    :categories,  class_name: "Tb::Category",   foreign_key: "shop_id", dependent: :destroy
   has_many    :products,  class_name: "Tb::Product",   foreign_key: "shop_id", dependent: :destroy

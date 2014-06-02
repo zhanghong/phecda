@@ -57,7 +57,6 @@
 #   t.datetime "updated_at"
 #   t.string   "type",                   limit: 30,                         default: ""
 # end
-class Tb::Trade < Trade
-  belongs_to  :shop,    class_name: "Tb::Shop"
-  has_many    :orders,  class_name: "Tb::Order", dependent: :destroy
+class Trade < ActiveRecord::Base
+  
 end

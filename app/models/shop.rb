@@ -18,6 +18,13 @@ class Shop < ActiveRecord::Base
 
   after_save  :add_to_superadmin
 
+  def self.current=(shop)
+    Thread.current[:current_shop] = shop
+  end
+
+  def self.current
+    Thread.current[:current_shop]
+  end
 
 private
   def add_to_superadmin

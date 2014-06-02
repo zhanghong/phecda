@@ -1,15 +1,38 @@
-<h2>Sign in</h2>
+<div id="login-box" class="login-box visible widget-box no-border">
+  <div class="widget-body">
+    <div class="widget-main">
+      <h4 class="header blue lighter bigger">
+        <i class="icon-coffee green"></i>
+        登录系统
+      </h4>
 
-<%= simple_form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
-  <div class="form-inputs">
-    <%= f.input :email, :required => false, :autofocus => true %>
-    <%= f.input :password, :required => false %>
-    <%= f.input :remember_me, :as => :boolean if devise_mapping.rememberable? %>
-  </div>
+      <div class="space-6"></div>
 
-  <div class="form-actions">
-    <%= f.button :submit, "Sign in" %>
-  </div>
-<% end %>
+      <%= simple_form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
+        <fieldset>
+          <label class="block clearfix">
+            <span class="block input-icon input-icon-right">
+              <input type="text" class="form-control" placeholder="Useremail" name="user[email]" />
+              <i class="icon-user"></i>
+            </span>
+          </label>
 
-<%= render "devise/shared/links" %>
+          <label class="block clearfix">
+            <span class="block input-icon input-icon-right">
+              <input type="password" class="form-control" placeholder="Password" name="user[password]" />
+              <i class="icon-lock"></i>
+            </span>
+          </label>
+
+          <div class="space"></div>
+
+          <div class="clearfix">
+          <%= f.button :submit, "登 录", class: "width-35 pull-right btn btn-sm btn-primary" %>
+          </div>
+
+          <div class="space-4"></div>
+        </fieldset>
+      <%- end -%>
+    </div><!-- /widget-main -->
+  </div><!-- /widget-body -->
+</div><!-- /login-box -->

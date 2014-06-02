@@ -52,6 +52,12 @@ class User < ActiveRecord::Base
     end
   end
 
+  def self.find_for_authentication(conditions)
+    name_or_email = conditions.delete(:email)
+    where(conditions).where(["name = :value OR email = :value",
+                      {:value => name_or_email }]).first
+  end
+
   def is_superadmin?
     is_superadmin == true
   end

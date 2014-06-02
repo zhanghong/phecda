@@ -14,5 +14,13 @@
 #   t.string   "type",           limit: 30,  default: ""
 # end
 class Shop < ActiveRecord::Base
-  
+  has_and_belongs_to_many :users, join_table: "users_shops", foreign_key: "shop_id"
+
+  after_save  :add_to_superadmin
+
+
+private
+  def add_to_superadmin
+    User.add_shop_to_superadmins(self)
+  end
 end

@@ -36,6 +36,8 @@ class User < ActiveRecord::Base
             :uniqueness => true,
             :length => {:within => 3..16}
 
+  has_and_belongs_to_many :shops, join_table: "users_shops",  association_foreign_key: "shop_id"
+
   def self.current=(user)
     Thread.current[:current_user] = user
   end

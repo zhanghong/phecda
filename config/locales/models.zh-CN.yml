@@ -21,3 +21,9 @@ zh-CN:
         synced_at: 同步时间
         tb_created_at: （淘宝）发布时间
         desc: 商品描述
+      tb/sku:
+        ts_id: 淘宝ID
+        propertites_values: 属性
+        quantity: 数量
+        local_name: 本地商品名
+        local_quantity: 本地商品数量

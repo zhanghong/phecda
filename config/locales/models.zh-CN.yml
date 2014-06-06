@@ -1,0 +1,23 @@
+zh-CN:
+  activerecord:
+    models:
+      user: "用户"
+      shop: "店铺"
+      trade: "订单"
+    attributes:
+      user:
+        name: 登录名
+      tb/product:
+        num_iid: 商品编码
+        title: 商品名
+        outer_id: 外部编码
+        num: 商品数量
+        price: 商品价格
+        post_fee: 平邮费用
+        express_fee: 快递费用
+        ems_fee: ems费用
+        has_discount_name: 支持会员打折
+        sync_name: 同步状态
+        synced_at: 同步时间
+        tb_created_at: （淘宝）发布时间
+        desc: 商品描述

@@ -1,0 +1,33 @@
+<%= form_for(@tb_product) do |f| %>
+  <% if @tb_product.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@tb_product.errors.count, "error") %> prohibited this tb_product from being saved:</h2>
+
+      <ul>
+      <% @tb_product.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :index %><br>
+    <%= f.text_field :index %>
+  </div>
+  <div class="field">
+    <%= f.label :show %><br>
+    <%= f.text_field :show %>
+  </div>
+  <div class="field">
+    <%= f.label :edit %><br>
+    <%= f.text_field :edit %>
+  </div>
+  <div class="field">
+    <%= f.label :update %><br>
+    <%= f.text_field :update %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

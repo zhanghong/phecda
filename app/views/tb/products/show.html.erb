@@ -1,0 +1,67 @@
+<div class="page-header">
+  <h1>
+    <%= @tb_product.title %>
+  </h1>
+</div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="tabbable">
+        <ul class="nav nav-tabs" id="myTab">
+          <li class="active">
+            <a data-toggle="tab" href="#base-info">基本信息</a>
+          </li>
+
+          <li>
+            <a data-toggle="tab" href="#sku-list">商品SKU</a>
+          </li>
+          <li>
+            <a data-toggle="tab" href="#sync-histories">同步记录</a>
+          </li>
+        </ul>
+
+        <div class="tab-content">
+          <!-- base info -->
+          <div id="base-info" class="tab-pane in active">
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="form-horizontal">
+                  <% Tb::Product.shown_attributes.each do |attr_name| %>
+                    <div class="form-group">
+                      <label class="col-xs-3 control-label">
+                        <%= Tb::Product.human_attribute_name(attr_name) %>：
+                      </label>
+                      <div class="col-xs-6">
+                        <% case attr_name
+                          when "price", "post_fee", "express_fee", "ems_fee" %>
+                          <%= format_price(@tb_product.send(attr_name)) %>
+                        <%- when "tb_created_at" -%>
+                          <%= format_time(@tb_product.send(attr_name)) %>
+                        <%- else -%>
+                          <%= @tb_product.send(attr_name) %>
+                        <%- end -%>
+                      </div>
+                    </div>
+                  <%- end -%>
+                </div>
+              </div>
+
+              <div class="col-sm-6">
+                <%= image_tag(@tb_product.pic_url, width: 300, height: 400) %>
+              </div><!-- /span -->
+            </div>
+          </div>
+          <!-- base info -->
+
+          <div id="sku-list" class="tab-pane">
+            <p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid.</p>
+          </div>
+
+          <div id="sync-histories" class="tab-pane">
+            <p>Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack lo-fi farm-to-table readymade.</p>
+          </div>
+        </div>
+      </div>
+    </div><!-- /span -->
+
+  </div>

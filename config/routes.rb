@@ -4,6 +4,10 @@ Phecda::Application.routes.draw do
   devise_for :users
   resources :trades
 
+  namespace :tb do
+    resources :products,  only: [:index, :show, :edit, :update]
+  end
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

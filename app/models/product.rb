@@ -54,81 +54,14 @@
 #   t.boolean  "is_sync",                                                      default: false
 #   t.datetime "synced_at"
 # end
+
 # add_index "products", ["shop_id", "category_id"], name: "idx_by_shop_id_and_category_id", using: :btree
 # add_index "products", ["shop_id", "title"], name: "idx_by_shop_id_and_title", using: :btree
-class Tb::Product < Product
-	belongs_to	:shop,	class_name: "Tb::Shop"
-	belongs_to	:category,	class_name: "Tb::Category"
-	has_many		:skus,			class_name: "Tb::Sku", dependent: :destroy
-
-  default_scope {where(shop_id: Tb::Shop.current.id)}
-
+class Product < ActiveRecord::Base
   def self.find_mine(params)
     conditions = [[]]
 
-    [:num_iid, :title, :outer_id].each do |attr|
-      conditions[0] << "#{attr} LIKE ?"
-      conditions << "%#{params[attr]}%"
-    end
-
     conditions[0] = conditions[0].join(" AND ")
     where(conditions).order(id: :desc)
-  end
-
-  def self.shown_attributes
-    %w(num_iid title outer_id num price post_fee 
-      express_fee ems_fee has_discount_name 
-      sync_name synced_at tb_created_at desc)
-  end
-
-  def sync_taobao_skus(item_skus)
-    current_sku_ids = []
-    if item_skus && item_skus["sku"]
-      item_skus["sku"].each do |sku_pro|
-        sku = Tb::Sku.find_or_initialize_by(shop_id: shop.id, product_id: self.id, ts_id: sku_pro["sku_id"])
-        sku.update(quantity: sku_pro["quantity"])
-        sku_pro["properties_name"].to_s.split(";").each do |pro_str|
-          pid, nid, name, value = pro_str.split(":")
-          property = Tb::Property.find_or_create_by(shop_id: shop.id, name: name)
-          value =  Tb::PropertyValue.find_or_create_by(shop_id: shop.id, property_id: property.id, name: value)
-          Tb::SkuProperty.find_or_create_by(sku_id: sku.id, property_value_id: value.id)
-        end
-        current_sku_ids << sku.id
-      end
-      self.skus.where(["id NOT IN (?)", current_sku_ids]).destroy_all
-    else
-      self.skus.where(is_hide: false).destroy_all
-      create_hide_sku
-    end
-  end
-
-  def sku_count
-    skus.count
-  end
-
-  def binding_info
-    "未绑定"
-  end
-
-  def sync_name
-    if self.is_sync == true
-      "已同步"
-    else
-      "未同步"
-    end
-  end
-
-  def has_discount_name
-    if self.has_discount == true
-      "有"
-    else
-      "否"
-    end
-  end
-private
-  def create_hide_sku
-    if self.skus.blank?
-      self.skus.create(shop_id: self.shop_id, ts_id: num_iid, is_hide: true)
-    end
   end
 end

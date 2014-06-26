@@ -14,4 +14,8 @@ class Tb::PropertyValue < ActiveRecord::Base
 	belongs_to	:property,	class_name: "Tb::Property"
   has_many    :sku_properties,  class_name: "Tb::SkuProperty", dependent: :destroy
   has_many    :skus,      class_name: "Tb::Sku", through: :sku_properties
+
+  def fullname
+    "#{self.property.name}:#{self.name}"
+  end
 end

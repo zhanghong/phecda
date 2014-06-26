@@ -14,4 +14,17 @@ class Tb::Sku < ActiveRecord::Base
 	belongs_to	:product,	class_name: "Tb::Product"
 	has_many		:sku_properties,	class_name: "Tb::SkuProperty", dependent: :destroy
   has_many    :property_values, class_name: "Tb::PropertyValue", through: :sku_properties
+
+  def propertites_values
+    # propertites_values.join(";")
+    ""
+  end
+
+  def local_name
+    ""
+  end
+
+  def local_quantity
+    ""
+  end
 end

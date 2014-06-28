@@ -1,14 +1,14 @@
 # encoding : utf-8 -*-
 # create_table "users", force: true do |t|
-#   t.string   "name",                   limit: 20, default: "", null: false
-#   t.string   "mobile",                 limit: 13, default: "", null: false
-#   t.string   "email",                  limit: 40, default: "", null: false
-#   t.string   "encrypted_password",                default: "", null: false
-#   t.string   "role",                   limit: 15, default: "", null: false
+#   t.string   "name",                   limit: 20, default: "",    null: false
+#   t.string   "mobile",                 limit: 13, default: "",    null: false
+#   t.string   "email",                  limit: 40, default: "",    null: false
+#   t.string   "encrypted_password",                default: "",    null: false
+#   t.string   "role",                   limit: 15, default: "",    null: false
 #   t.string   "reset_password_token"
 #   t.datetime "reset_password_sent_at"
 #   t.datetime "remember_created_at"
-#   t.integer  "sign_in_count",                     default: 0,  null: false
+#   t.integer  "sign_in_count",                     default: 0,     null: false
 #   t.datetime "current_sign_in_at"
 #   t.datetime "last_sign_in_at"
 #   t.string   "current_sign_in_ip"
@@ -17,7 +17,7 @@
 #   t.datetime "confirmed_at"
 #   t.datetime "confirmation_sent_at"
 #   t.string   "unconfirmed_email"
-#   t.integer  "failed_attempts",                   default: 0,  null: false
+#   t.integer  "failed_attempts",                   default: 0,     null: false
 #   t.string   "unlock_token"
 #   t.datetime "locked_at"
 #   t.datetime "created_at"
@@ -36,7 +36,7 @@ class User < ActiveRecord::Base
             :uniqueness => true,
             :length => {:within => 3..16}
 
-  has_and_belongs_to_many :shops, join_table: "users_shops",  association_foreign_key: "shop_id"
+  has_and_belongs_to_many :accounts, join_table: "users_accounts"#,  association_foreign_key: "account_id"
 
   def self.current=(user)
     Thread.current[:current_user] = user

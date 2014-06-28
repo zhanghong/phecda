@@ -1,0 +1,22 @@
+<% sys_categories.each do |sys_category| %>
+  <tr>
+    <% Sys::Category.list_shown_attributes.each do |attr_name| %>
+      <td>
+        <% case attr_name
+          when "" %>
+          <%= link_to(sys_category.send(attr_name), sys_category) %>
+        <%- else -%>
+          <%= sys_category.send(attr_name) %>
+        <%- end -%>
+      </td>
+    <%- end -%>
+    <td>
+      <%= link_to "查看", sys_category_path(sys_category), class: "btn btn-xs btn-success" %>
+      <%= link_to "编辑", edit_sys_category_path(sys_category), class: "btn btn-xs btn-primary" %>
+      <%= link_to "删除 ", sys_category_path(sys_category), class: "btn btn-xs btn-danger", method: :delete, data: { confirm: '您确定要删除吗？'} %>
+    </td>
+  </tr>
+  <%- if sys_category.children_count > 0 -%>
+    <%= render("categories_list", sys_categories: sys_category.children) %>
+  <%- end -%>
+<% end %>

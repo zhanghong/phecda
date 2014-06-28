@@ -35,19 +35,30 @@
 
   <ul class="nav nav-list">
     <li>
-      <a href="index.html">
-        <i class="icon-dashboard"></i>
-        <span class="menu-text"> Dashboard </span>
-      </a>
-    </li>
-
-    <li>
       <%= link_to tb_products_path do %>
         <i class="icon-text-width"></i>
         <span class="menu-text">淘宝商品</span>
       <%- end -%>
     </li>
-
+    <li>
+      <%= link_to sys_products_path do %>
+        <i class="icon-text-width"></i>
+        <span class="menu-text">本地商品</span>
+      <%- end -%>
+    </li>
+    <li>
+      <%= link_to sys_properties_path do %>
+        <i class="icon-text-width"></i>
+        <span class="menu-text">商品属性</span>
+      <%- end -%>
+    </li>
+    <li>
+      <%= link_to sys_categories_path do %>
+        <i class="icon-text-width"></i>
+        <span class="menu-text">商品分类</span>
+      <%- end -%>
+    </li>
+    <!-- 
     <li>
       <a href="#" class="dropdown-toggle">
         <i class="icon-desktop"></i>
@@ -91,7 +102,7 @@
             Nestable Lists
           </a>
         </li>
-
+        
         <li>
           <a href="#" class="dropdown-toggle">
             <i class="icon-double-angle-right"></i>
@@ -329,7 +340,8 @@
           </a>
         </li>
       </ul>
-    </li>
+    </li> 
+    -->
   </ul><!-- /.nav-list -->
 
   <div class="sidebar-collapse" id="sidebar-collapse">

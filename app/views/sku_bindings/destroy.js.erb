@@ -1,0 +1,7 @@
+<%- if @sys_sku.present? -%>
+  $("#sys_sku_<%= @sys_sku.id %>").replaceWith("<%=escape_javascript(render(partial: "sys/skus/sys_sku", locals: {sys_sku: @sys_sku}))%>")
+<%- elsif @sku.present? -%>
+  <%- if params[:partial_type] == "tb_sku" -%>
+    $("#tb_sku_<%= @sku.id %>").replaceWith("<%=escape_javascript(render(partial: "tb/skus/tb_sku", locals: {tb_sku: @sku}))%>")
+  <%- end -%>
+<%- end -%>

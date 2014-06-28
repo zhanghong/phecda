@@ -1,0 +1,31 @@
+<h1>Listing sku_bindings</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Tb</th>
+      <th>Sys</th>
+      <th>Number</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @sku_bindings.each do |sku_binding| %>
+      <tr>
+        <td><%= sku_binding.tb_id %></td>
+        <td><%= sku_binding.sys_id %></td>
+        <td><%= sku_binding.number %></td>
+        <td><%= link_to 'Show', sku_binding %></td>
+        <td><%= link_to 'Edit', edit_sku_binding_path(sku_binding) %></td>
+        <td><%= link_to 'Destroy', sku_binding, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Sku binding', new_sku_binding_path %>

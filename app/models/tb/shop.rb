@@ -12,6 +12,7 @@
 #   t.datetime "updated_at"
 #   t.string   "sid",            limit: 20,  default: ""
 #   t.string   "type",           limit: 30,  default: ""
+#   t.integer  "account_id",                 default: 0
 # end
 class Tb::Shop < Shop
   has_many    :app_tokens, class_name: "Tb::AppToken",  foreign_key: "shop_id", dependent: :destroy

@@ -1,11 +1,22 @@
 Phecda::Application.routes.draw do
+  resources :sku_bindings
+
   root :to => 'home#index'
   get '/auth/taobao/callback' => 'oauths#taobao'
   devise_for :users
   resources :trades
+  resources :sku_bindings
 
   namespace :tb do
     resources :products,  only: [:index, :show, :edit, :update]
+    # resources :skus
+  end
+
+  namespace :sys do
+    resources :products
+    resources :properties
+    resources :categories
+    resources :skus
   end
 
   # The priority is based upon order of creation: first created -> highest priority.

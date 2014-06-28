@@ -1,0 +1,23 @@
+<table class="table table-striped table-bordered">
+  <tbody>
+    <%- Sys::Property.detail_shown_attributes.each do |attr_name| -%>
+      <tr>
+        <th width="130"><%= Sys::Property.human_attribute_name(attr_name)%></th>
+        <td>
+          <% case attr_name
+             when "values_name" %>
+             <%= @sys_property.send(attr_name).join("<br/>").html_safe %>
+          <%- else -%>
+            <%= @sys_property.send(attr_name) %>
+          <%- end -%>
+        </td>
+      </tr>
+    <%- end -%>
+  </tbody>
+</table>
+<div class="form-group">
+  <div class="col-sm-offset-2 col-sm-10">
+    <%= link_to "返回列表", sys_properties_path, class: "btn" %>&nbsp; &nbsp; &nbsp;
+    <%= link_to "编辑", edit_sys_property_path(@sys_property), class: "btn btn-primary" %>
+  </div>
+</div>

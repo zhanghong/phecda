@@ -19,6 +19,8 @@ zh-CN:
         has_discount_name: 支持会员打折
         sync_name: 同步状态
         synced_at: 同步时间
+        sku_count: SKU数量
+        binding_info: 绑定状态
         tb_created_at: （淘宝）发布时间
         desc: 商品描述
       tb/sku:
@@ -27,3 +29,53 @@ zh-CN:
         quantity: 数量
         local_name: 本地商品名
         local_quantity: 本地商品数量
+      sys/product:
+        title: 商品名
+        num: 商品数量
+        state_name: 状态
+        category: 分类
+        category_name: 分类名
+        price: 价格
+        description: 描述
+        user_name: 编辑用户
+        created_at: 创建时间
+        updated_at: 更新时间
+      sys/property:
+        name: 名称
+        status: 状态
+        status_name: 状态
+        values: 属性值
+        values_count: 属性值数量
+        values_name: 属性值
+        created_at: 创建时间
+        updated_at: 更新时间
+      sys/category:
+        name: 名称名
+        status: 状态
+        status_name: 状态
+        parent_name: 上级分类名
+        children_name: 下级分类名
+        properties_name: 属性名
+        created_at: 创建时间
+        updated_at: 更新时间
+      sys/sku:
+        name: SKU名
+        product_name: 商品名
+        number: 数量
+        price: 价格
+        property_values_ids: 属性
+        property_values_name: 属性
+        sku_bindings: 绑定SKU
+        created_and_updated: 操作时间
+        created_at: 创建时间
+        updated_at: 更新时间
+      sku_binding:
+        sku_id: 淘宝SKU
+        sku_name: 淘宝SKU
+        sys_sku_id: 本地SKU
+        sys_sku_name: 本地SKU
+        sys_sku_number: 绑定本地SKU数量
+        user_name: 编辑用户
+        created_at: 创建时间
+        updated_at: 更新时间
+        created_and_updated: 操作时间

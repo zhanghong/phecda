@@ -1,0 +1,31 @@
+<h1>Listing tb_skus</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Ts</th>
+      <th>Product</th>
+      <th>Quantity</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @tb_skus.each do |tb_sku| %>
+      <tr>
+        <td><%= tb_sku.ts_id %></td>
+        <td><%= tb_sku.product_id %></td>
+        <td><%= tb_sku.quantity %></td>
+        <td><%= link_to 'Show', tb_sku %></td>
+        <td><%= link_to 'Edit', edit_tb_sku_path(tb_sku) %></td>
+        <td><%= link_to 'Destroy', tb_sku, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Sku', new_tb_sku_path %>

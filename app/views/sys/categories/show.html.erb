@@ -1,44 +1,23 @@
-<p id="notice"><%= notice %></p>
-
-<p>
-  <strong>Name:</strong>
-  <%= @sys_category.name %>
-</p>
-
-<p>
-  <strong>Account:</strong>
-  <%= @sys_category.account_id %>
-</p>
-
-<p>
-  <strong>Status:</strong>
-  <%= @sys_category.status %>
-</p>
-
-<p>
-  <strong>Parent:</strong>
-  <%= @sys_category.parent_id %>
-</p>
-
-<p>
-  <strong>Lft:</strong>
-  <%= @sys_category.lft %>
-</p>
-
-<p>
-  <strong>Rgt:</strong>
-  <%= @sys_category.rgt %>
-</p>
-
-<p>
-  <strong>Depth:</strong>
-  <%= @sys_category.depth %>
-</p>
-
-<p>
-  <strong>Use days:</strong>
-  <%= @sys_category.use_days %>
-</p>
-
-<%= link_to 'Edit', edit_sys_category_path(@sys_category) %> |
-<%= link_to 'Back', sys_categories_path %>
+<table class="table table-striped table-bordered">
+  <tbody>
+    <%- Sys::Category.detail_shown_attributes.each do |attr_name| -%>
+      <tr>
+        <th width="130"><%= Sys::Category.human_attribute_name(attr_name)%></th>
+        <td>
+          <% case attr_name
+             when "children_name", "properties_name" %>
+             <%= @sys_category.send(attr_name).join("<br/>").html_safe %>
+          <%- else -%>
+            <%= @sys_category.send(attr_name) %>
+          <%- end -%>
+        </td>
+      </tr>
+    <%- end -%>
+  </tbody>
+</table>
+<div class="form-group">
+  <div class="col-sm-offset-2 col-sm-10">
+    <%= link_to "返回列表", sys_categories_path, class: "btn" %>&nbsp; &nbsp; &nbsp;
+    <%= link_to "编辑", edit_sys_category_path(@sys_category), class: "btn btn-primary" %>
+  </div>
+</div>

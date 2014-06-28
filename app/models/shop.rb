@@ -12,22 +12,9 @@
 #   t.datetime "updated_at"
 #   t.string   "sid",            limit: 20,  default: ""
 #   t.string   "type",           limit: 30,  default: ""
+#   t.integer  "account_id",                 default: 0
 # end
 class Shop < ActiveRecord::Base
-  has_and_belongs_to_many :users, join_table: "users_shops", foreign_key: "shop_id"
-
-  after_save  :add_to_superadmin
-
-  def self.current=(shop)
-    Thread.current[:current_shop] = shop
-  end
-
-  def self.current
-    Thread.current[:current_shop]
-  end
-
-private
-  def add_to_superadmin
-    User.add_shop_to_superadmins(self)
-  end
+  belongs_to  :account
+  has_many    :products
 end

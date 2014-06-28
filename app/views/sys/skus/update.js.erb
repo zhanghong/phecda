@@ -1,0 +1,2 @@
+$("#sys_sku_<%= @sys_sku.id %>").replaceWith("<%=escape_javascript(render(partial: "sys/skus/sys_sku", locals: {sys_sku: @sys_sku}))%>")
+$('#sku_form').modal('hide')

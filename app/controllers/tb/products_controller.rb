@@ -35,6 +35,7 @@ private
   # Use callbacks to share common setup or constraints between actions.
   def set_tb_product
     @tb_product = Tb::Product.find(params[:id])
+    redirect_to(tb_products_path) and return if @tb_product.blank?
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.

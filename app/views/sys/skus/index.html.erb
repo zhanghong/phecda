@@ -1,0 +1,29 @@
+<h1>Listing sys_skus</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Property values name</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @sys_skus.each do |sys_sku| %>
+      <tr>
+        <td><%= sys_sku.name %></td>
+        <td><%= sys_sku.property_values_name %></td>
+        <td><%= link_to 'Show', sys_sku %></td>
+        <td><%= link_to 'Edit', edit_sys_sku_path(sys_sku) %></td>
+        <td><%= link_to 'Destroy', sys_sku, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Sku', new_sys_sku_path %>

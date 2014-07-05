@@ -4,8 +4,9 @@
 #   t.integer  "property_value_id", default: 0
 #   t.datetime "created_at"
 #   t.datetime "updated_at"
+#   t.integer  "account_id",        default: 0
+#   t.integer  "user_id",           default: 0
 # end
-
 # add_index "sys_sku_property_values", ["sku_id", "property_value_id"], name: "idx_by_sku_id_and_property_id", using: :btree
 class Sys::SkuPropertyValue < ActiveRecord::Base
 	belongs_to	:sku,		class_name: "Sys::Sku"

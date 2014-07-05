@@ -1,0 +1,19 @@
+<table class="table table-striped table-bordered">
+  <tbody>
+    <%- Sys::Sku.detail_shown_attributes.each do |attr_name| -%>
+      <tr>
+        <th width="130"><%= Sys::Sku.human_attribute_name(attr_name)%></th>
+        <td>
+          <% case attr_name
+             when "price" %>
+             <%= format_price(@sys_sku.send(attr_name)) %>
+          <%- when "property_values_name" -%>
+            <%= @sys_sku.send(attr_name).join("<br/>").html_safe %>
+          <%- else -%>
+            <%= @sys_sku.send(attr_name) %>
+          <%- end -%>
+        </td>
+      </tr>
+    <%- end -%>
+  </tbody>
+</table>

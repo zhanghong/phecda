@@ -1,0 +1,9 @@
+<%- unless @sku_binding.changed? -%>
+  <%- case params[:partial_type] 
+    when "sys_sku" -%>
+    $("#sys_sku_<%= @sku_binding.sys_sku_id %>").replaceWith("<%=escape_javascript(render(partial: "sys/skus/sys_sku", locals: {sys_sku: @sku_binding.sys_sku}))%>")
+  <%- when "tb_sku" -%>
+    $("#tb_sku_<%= @sku_binding.sku_id %>").replaceWith("<%=escape_javascript(render(partial: "tb/skus/tb_sku", locals: {tb_sku: @sku_binding.sku}))%>")
+  <%- end -%>
+<%- end -%>
+$('#edit_sku_bindings').modal('hide')

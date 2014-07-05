@@ -6,6 +6,7 @@
 #= require jquery.easy-pie-chart.min
 #= require twitter/bootstrap
 #= require jquery.colorbox-min
+#= require chosen.jquery.min
 #= require bootstrap3-typeahead.min
 #= require bootstrap-editable.min
 #= require dropzone.min

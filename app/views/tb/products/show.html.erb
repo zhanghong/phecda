@@ -4,101 +4,98 @@
   </h1>
 </div>
 
-  <div class="row">
-    <div class="col-sm-12">
-      <div class="tabbable">
-        <ul class="nav nav-tabs" id="myTab">
-          <li class="active">
-            <a data-toggle="tab" href="#base-info">基本信息</a>
-          </li>
+<div class="row">
+  <div class="col-sm-12">
+    <div class="tabbable">
+      <ul class="nav nav-tabs" id="myTab">
+        <li class="active">
+          <a data-toggle="tab" href="#base-info">基本信息</a>
+        </li>
 
-          <li>
-            <a data-toggle="tab" href="#sku-list">商品SKU</a>
-          </li>
-          <li>
-            <a data-toggle="tab" href="#sync-histories">同步记录</a>
-          </li>
-        </ul>
+        <li>
+          <a data-toggle="tab" href="#sku-list">商品SKU</a>
+        </li>
+        <li>
+          <a data-toggle="tab" href="#sync-histories">同步记录</a>
+        </li>
+      </ul>
 
-        <div class="tab-content">
-          <!-- base info -->
-          <div id="base-info" class="tab-pane in active">
-            <div class="row">
-              <div class="col-sm-6">
-                <div class="form-horizontal">
-                  <% Tb::Product.shown_attributes.each do |attr_name| %>
-                    <div class="form-group">
-                      <label class="col-xs-3 control-label">
-                        <%= Tb::Product.human_attribute_name(attr_name) %>：
-                      </label>
-                      <div class="col-xs-6">
-                        <% case attr_name
-                          when "price", "post_fee", "express_fee", "ems_fee" %>
-                          <%= format_price(@tb_product.send(attr_name)) %>
-                        <%- when "tb_created_at" -%>
-                          <%= format_time(@tb_product.send(attr_name)) %>
-                        <%- else -%>
-                          <%= @tb_product.send(attr_name) %>
-                        <%- end -%>
-                      </div>
-                    </div>
-                  <%- end -%>
-                </div>
-              </div>
-
-              <div class="col-sm-6">
-                <%= image_tag(@tb_product.pic_url, width: 300, height: 400) %>
-              </div><!-- /span -->
-            </div>
-          </div>
-          <!-- base info -->
-
-          <div id="sku-list" class="tab-pane">
-            <%- if @skus.present? -%>
-              <table id="sample-table-1" class="table table-striped table-bordered table-hover">
-                <thead>
-                  <tr>
-                    <th class="center">
-                    </th>
-                    <% [:ts_id, :propertites_values, :quantity, :local_name, :local_quantity].each do |attr_name| %>
-                      <th>
-                      <%= Tb::Sku.human_attribute_name(attr_name) %>
-                      </th>
-                    <%- end -%>
-                    <th class="center">
-                    </th>
-                  </tr>
-                </thead>
-
-                <tbody>
-                  <% @skus.each do |tb_sku| %>
-                    <tr>
-                      <td class="center">
-                        <label>
-                          <%= check_box_tag "tb_product[id][]", tb_sku.id, false, class: "ace" %>
-                          <span class="lbl"></span>
-                        </label>
-                      </td>
-                      <% [:ts_id, :propertites_values, :quantity, :local_name, :local_quantity].each do |attr_name| %>
-                        <td>
-                          <%= tb_sku.send(attr_name) %>
-                        </td>
+      <div class="tab-content">
+        <!-- base info -->
+        <div id="base-info" class="tab-pane in active">
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-horizontal">
+                <% Tb::Product.shown_attributes.each do |attr_name| %>
+                  <div class="form-group">
+                    <label class="col-xs-3 control-label">
+                      <%= Tb::Product.human_attribute_name(attr_name) %>：
+                    </label>
+                    <div class="col-xs-6">
+                      <% case attr_name
+                        when "price", "post_fee", "express_fee", "ems_fee" %>
+                        <%= format_price(@tb_product.send(attr_name)) %>
+                      <%- else -%>
+                        <%= @tb_product.send(attr_name) %>
                       <%- end -%>
-                      <td></td>
-                    </tr>
-                  <% end %>
-                </tbody>
-              </table>
-            <%- else -%>
-              <p>该商品没有SKU</p>
-            <%- end -%>
-          </div>
+                    </div>
+                  </div>
+                <%- end -%>
+              </div>
+            </div>
 
-          <div id="sync-histories" class="tab-pane">
-            <p>待开发……</p>
+            <div class="col-sm-6">
+              <%= image_tag(@tb_product.pic_url, width: 300, height: 400) %>
+            </div><!-- /span -->
           </div>
         </div>
-      </div>
-    </div><!-- /span -->
+        <!-- base info -->
 
-  </div>
+        <div id="sku-list" class="tab-pane">
+          <%- if @skus.present? -%>
+            <table id="sample-table-1" class="table table-striped table-bordered table-hover">
+              <thead>
+                <tr>
+                  <% Tb::Sku.inner_list_attributes.each do |attr_name| %>
+                    <th>
+                    <%= Tb::Sku.human_attribute_name(attr_name) %>
+                    </th>
+                  <%- end -%>
+                </tr>
+              </thead>
+
+              <tbody>
+                <%= render(partial: "tb/skus/tb_sku", collection: @skus) %>
+              </tbody>
+            </table>
+          <%- else -%>
+            <p>该商品没有SKU</p>
+          <%- end -%>
+        </div>
+
+        <div id="sync-histories" class="tab-pane">
+          <p>待开发……</p>
+        </div>
+      </div>
+    </div>
+  </div><!-- /span -->
+</div>
+<div id="edit_sku_bindings" class="modal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content" id="edit_sku_bindings_content">
+      
+    </div>
+  </div><!-- PAGE CONTENT ENDS -->
+</div>
+<script type="text/javascript">
+  jQuery(function($) {
+    $(".chosen-select").chosen();
+    $('#modal-form').on('shown.bs.modal', function () {
+      $(this).find('.chosen-container').each(function(){
+        $(this).find('a:first-child').css('width' , '210px');
+        $(this).find('.chosen-drop').css('width' , '210px');
+        $(this).find('.chosen-search input').css('width' , '200px');
+      });
+    })
+  })
+</script>

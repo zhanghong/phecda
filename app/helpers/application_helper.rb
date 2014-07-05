@@ -1,12 +1,4 @@
 module ApplicationHelper
-  def format_time(time)
-    if time.is_a?(Time)
-      time.strftime("%Y-%m-%d %H:%M:%S")
-    else
-      ""
-    end
-  end
-
   def format_date(date)
     if date.is_a?(Date) || date.is_a?(Time)
       date.strftime("%Y-%m-%d")

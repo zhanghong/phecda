@@ -1,0 +1,7 @@
+<%- if @sku.present? -%>
+  <%= render 'sku_form' %>
+<%- elsif @sys_sku.present? -%>
+  <%= render 'sys_sku_form' %>
+<%- else -%>
+  <%= render 'form' %>
+<%- end -%>

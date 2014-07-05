@@ -1,8 +1,8 @@
 # encoding : utf-8 -*-
 # create_table "tb_app_tokens", force: true do |t|
 #   t.integer  "shop_id"
-#   t.string   "user_id",       limit: 20, default: ""
-#   t.string   "nick",          limit: 100
+#   t.string   "user_id",       limit: 20,  default: ""
+#   t.string   "nick",          limit: 100, default: ""
 #   t.string   "access_token"
 #   t.string   "token_type",    limit: 30
 #   t.integer  "expires_in"
@@ -19,7 +19,7 @@
 #   t.datetime "expires_at"
 #   t.boolean  "expires"
 #   t.integer  "app_id"
-#   t.string   "auth_type",     limit: 10, default: ""
+#   t.string   "auth_type",     limit: 10,  default: ""
 #   t.datetime "refreshed_at"
 # end
 # add_index "tb_app_tokens", ["shop_id"], name: "idx_by_shop_id", using: :btree

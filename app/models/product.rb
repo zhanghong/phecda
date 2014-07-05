@@ -53,11 +53,15 @@
 #   t.string   "type",                     limit: 30
 #   t.boolean  "is_sync",                                                      default: false
 #   t.datetime "synced_at"
+#   t.integer  "account_id",                                                   default: 0
+#   t.integer  "user_id",                                                      default: 0
 # end
 
 # add_index "products", ["shop_id", "category_id"], name: "idx_by_shop_id_and_category_id", using: :btree
 # add_index "products", ["shop_id", "title"], name: "idx_by_shop_id_and_title", using: :btree
 class Product < ActiveRecord::Base
+  default_scope {where(account_id: Account.current.id)}
+
   def self.find_mine(params)
     conditions = [[]]
 

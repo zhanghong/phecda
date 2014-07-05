@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Ts:</strong>
+  <%= @tb_sku.ts_id %>
+</p>
+
+<p>
+  <strong>Product:</strong>
+  <%= @tb_sku.product_id %>
+</p>
+
+<p>
+  <strong>Quantity:</strong>
+  <%= @tb_sku.quantity %>
+</p>
+
+<%= link_to 'Edit', edit_tb_sku_path(@tb_sku) %> |
+<%= link_to 'Back', tb_skus_path %>

@@ -57,22 +57,26 @@
 # add_index "products", ["shop_id", "category_id"], name: "idx_by_shop_id_and_category_id", using: :btree
 # add_index "products", ["shop_id", "title"], name: "idx_by_shop_id_and_title", using: :btree
 class Tb::Product < Product
+  belongs_to  :account, class_name: "Account"
 	belongs_to	:shop,	class_name: "Tb::Shop"
 	belongs_to	:category,	class_name: "Tb::Category"
 	has_many		:skus,			class_name: "Tb::Sku", dependent: :destroy
-
-  default_scope {where(shop_id: Tb::Shop.current.id)}
 
   def self.find_mine(params)
     conditions = [[]]
 
     [:num_iid, :title, :outer_id].each do |attr|
+      next if params[attr].blank?
       conditions[0] << "#{attr} LIKE ?"
       conditions << "%#{params[attr]}%"
     end
 
     conditions[0] = conditions[0].join(" AND ")
     where(conditions).order(id: :desc)
+  end
+
+  def self.list_shown_attributes
+    %w(num_iid title outer_id sku_count binding_info)
   end
 
   def self.shown_attributes
@@ -124,6 +128,10 @@ class Tb::Product < Product
     else
       "否"
     end
+  end
+
+  def clone_to_sys
+    Sys::Product.find_or_create_by(title: self.title, shop_id: self.account_id)
   end
 private
   def create_hide_sku

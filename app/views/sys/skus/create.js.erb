@@ -1,0 +1,4 @@
+<%- unless @sys_sku.new_record? -%>
+  $("#tbody_skus").append("<%=escape_javascript(render(partial: "sys/skus/sys_sku", locals: {sys_sku: @sys_sku}))%>")
+<%- end -%>
+$('#sku_form').modal('hide')

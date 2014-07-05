@@ -14,14 +14,55 @@
 #   t.integer  "sort_order"
 #   t.integer  "taobao_id",                    default: 0
 #   t.datetime "taobao_updated_at"
+#   t.datetime "deleted_at"
+#   t.integer  "children_count",               default: 0
+#   t.integer  "user_id",                      default: 0
 # end
 class Sys::Category < ActiveRecord::Base
+  has_and_belongs_to_many :properties, join_table: "sys_categories_properties", class_name: "Sys::Property"
   belongs_to  :account
+  scope :account_scope, -> {where(account_id: Account.current.id)}
+  scope :actived, -> {where(deleted_at: nil)}
+
+  acts_as_nested_set :counter_cache => :children_count
+
+  STATUS = [["启用", "actived"], ["隐藏", "hidden"]]
+
+  def self.find_mine(params)
+    conditions = [[]]
+
+    [:name].each do |attr|
+      next if params[attr].blank?
+      conditions[0] << "#{attr} LIKE ?"
+      conditions << "%#{params[attr]}%"
+    end
+
+    [:parent_id, :status].each do |attr|
+      next if params[attr].blank?
+      conditions[0] << "#{attr} = ?"
+      conditions << params[attr]
+    end
+
+    conditions[0] = conditions[0].join(" AND ")
+    account_scope.actived.where(conditions)
+  end
 
   def self.sync_to_taobao
     self.all.each do |category|
       category.sync_to_taobao
     end
+  end
+
+  def self.list_shown_attributes
+    %w(name status_name parent_name created_at updated_at)
+  end
+
+  def self.detail_shown_attributes
+    %w(name status_name created_at updated_at parent_name children_name properties_name)
+  end
+
+  def self.account_roots
+    account_scope.actived.roots
   end
 
   def sync_to_taobao
@@ -36,5 +77,40 @@ class Sys::Category < ActiveRecord::Base
     if seller_cat.present?
       self.update(taobao_id: seller_cat["cid"], taobao_updated_at: seller_cat["created"])
     end
+  end
+
+  def status_name
+    status_item = STATUS.find{|s| s.last == self.status}
+    if status_item
+      status_item.first
+    else
+      self.status
+    end
+  end
+
+  def parent_name
+    parent.try(:name)
+  end
+
+  def children_name
+    children.map(&:name)
+  end
+
+  def properties_name
+    properties.map(&:name)
+  end
+
+  def save_property_values(property_ids)
+    new_properties =  if property_ids.blank?
+                    []
+                  else
+                    Sys::Property.account_properties.where(id: property_ids)
+                  end
+    self.properties = new_properties
+  end
+
+  def destroy
+    self.properties = []
+    update_attributes(deleted_at: Time.now)
   end
 end

@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
   before_filter :authenticate_user!
   before_filter :configure_permitted_parameters, if: :devise_controller?
   before_filter :set_current_user
-  before_filter :current_shop
+  before_filter :current_account
   layout :layout_by_resource
   # authorize_resource :unless => :is_skip_controller?
 
@@ -31,9 +31,9 @@ protected
     User.current = current_user
   end
 
-  def current_shop
-    @current_shop ||= (session[:shop_id] && Shop.find(session[:shop_id])) || (current_user && current_user.shops.first)
-    Shop.current = @current_shop
+  def current_account
+    @current_account ||= (session[:account_id] && Account.find(session[:account_id])) || (current_user && current_user.accounts.first)
+    Account.current = @current_account
   end
 
   def layout_by_resource

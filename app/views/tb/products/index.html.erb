@@ -36,7 +36,7 @@
                 <span class="lbl"></span>
               </label>
             </th>
-            <% [:num_iid, :title, :outer_id, :sku_count, :binding_info].each do |attr_name| %>
+            <% Tb::Product.list_shown_attributes.each do |attr_name| %>
               <th>
               <%= Tb::Product.human_attribute_name(attr_name) %>
               </th>
@@ -56,9 +56,9 @@
                   <span class="lbl"></span>
                 </label>
               </td>
-              <% [:num_iid, :title, :outer_id, :sku_count, :binding_info].each do |attr_name| %>
+              <% Tb::Product.list_shown_attributes.each do |attr_name| %>
                 <% case attr_name
-                  when :num_iid, :title %>
+                  when "num_iid", "title" %>
                   <td><%= link_to(tb_product.send(attr_name), tb_product) %></td>
                 <%- else -%>
                   <td><%= tb_product.send(attr_name) %></td>

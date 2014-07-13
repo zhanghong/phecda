@@ -13,6 +13,7 @@
 # end
 # add_index "skus", ["account_id", "product_id"], name: "idx_by_shop_id_and_product_id", using: :btree
 class Tb::Sku < Sku
+  belongs_to  :product,         class_name: "Tb::Product"
 	has_many		:sku_properties,	class_name: "Tb::SekuProperty", dependent: :destroy
   has_many    :property_values, class_name: "Tb::PropertyValue", through: :sku_properties
   has_many    :sku_bindings

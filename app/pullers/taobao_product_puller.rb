@@ -41,7 +41,7 @@ class TaobaoProductPuller
 
         item = response['item_get_response']['item']
         item_skus = item.delete("skus")
-        tb_product = Tb::Product.find_or_initialize_by(shop_id: shop.id, num_iid: num_iid)
+        tb_product = Tb::Product.find_or_initialize_by(account_id: shop.account_id, shop_id: shop.id, num_iid: num_iid)
         tb_product.update(item)
         tb_product.sync_taobao_skus(item_skus)
       rescue Exception=>e

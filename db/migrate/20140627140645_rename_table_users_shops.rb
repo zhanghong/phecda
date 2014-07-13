@@ -1,6 +1,8 @@
 class RenameTableUsersShops < ActiveRecord::Migration
   def change
-    rename_table  :users_shops,   :users_accounts
-    rename_column :users_accounts,   :shop_id,   :account_id
+    create_table :users_accounts do |t|
+      t.integer   :user_id
+      t.integer   :account_id
+    end
   end
 end

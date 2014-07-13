@@ -41,9 +41,9 @@ group :doc do
  gem "sdoc", require: false
 end
 
-group :development do
-  gem "rspec-rails"
-end
+# group :development do
+#   gem "rspec-rails"
+# end
 
 group :test do
   # http://railsapps.github.io/tutorial-rails-devise-rspec-cucumber.html

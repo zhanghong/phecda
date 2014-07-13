@@ -60,7 +60,7 @@
 # add_index "products", ["shop_id", "category_id"], name: "idx_by_shop_id_and_category_id", using: :btree
 # add_index "products", ["shop_id", "title"], name: "idx_by_shop_id_and_title", using: :btree
 class Product < ActiveRecord::Base
-  default_scope {where(account_id: Account.current.id)}
+  scope :account_scope, -> {where(account_id: Account.current.id)}
 
   def self.find_mine(params)
     conditions = [[]]

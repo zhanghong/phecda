@@ -1,0 +1,29 @@
+<h1>Listing core_account_permissions</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Account</th>
+      <th>Permission</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @core_account_permissions.each do |core_account_permission| %>
+      <tr>
+        <td><%= core_account_permission.account_id %></td>
+        <td><%= core_account_permission.permission_id %></td>
+        <td><%= link_to 'Show', core_account_permission %></td>
+        <td><%= link_to 'Edit', edit_core_account_permission_path(core_account_permission) %></td>
+        <td><%= link_to 'Destroy', core_account_permission, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Account permission', new_core_account_permission_path %>

@@ -37,6 +37,8 @@ class User < ActiveRecord::Base
             :length => {:within => 3..16}
 
   has_and_belongs_to_many :accounts, join_table: "users_accounts"#,  association_foreign_key: "account_id"
+  has_many  :core_user_roles,   class_name: "Core::UserRoles",  dependent: :destroy
+  has_many  :roles,   through: :core_user_roles
 
   def self.current=(user)
     Thread.current[:current_user] = user
@@ -44,6 +46,14 @@ class User < ActiveRecord::Base
 
   def self.current
     Thread.current[:current_user]
+  end
+
+  def self.current_id
+    if self.current.nil?
+      -1
+    else
+      self.current.id
+    end
   end
 
   def self.add_shop_to_superadmins(shop)

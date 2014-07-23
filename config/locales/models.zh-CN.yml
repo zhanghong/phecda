@@ -29,6 +29,7 @@ zh-CN:
         quantity: 数量
         local_name: 本地商品名
         local_quantity: 本地商品数量
+        sku_bindings:  绑定本地SKU
       sys/product:
         title: 商品名
         num: 商品数量
@@ -37,7 +38,7 @@ zh-CN:
         category_name: 分类名
         price: 价格
         description: 描述
-        user_name: 编辑用户
+        updater_name: 编辑用户
         created_at: 创建时间
         updated_at: 更新时间
       sys/property:
@@ -79,3 +80,94 @@ zh-CN:
         created_at: 创建时间
         updated_at: 更新时间
         created_and_updated: 操作时间
+      core/account_permission:
+        permission_name: 权限名
+        updater_name: 更新用户
+        created_at: 创建时间
+        updated_at: 更新时间
+      core/area:
+        name: 名称
+        zipcode: 邮编
+        province_name: 省
+        city_name: 市
+        state_name: 区/县
+        updater_name: 更新用户
+        created_at: 创建时间
+        updated_at: 更新时间
+      core/logistic:
+        name: 物流商名
+        areas: 绑定区域
+        updater_name: 更新用户
+        created_at: 创建时间
+        updated_at: 更新时间
+      core/logistic_area:
+        logistic_name: 物流商名
+        logistic_id: 物流商名
+        area_id: 区域
+        area_zipcode: 邮编
+        area_province_name: 省
+        area_city_name: 市
+        area_state_name: 区/县
+        updater_name: 更新用户
+        created_at: 创建时间
+        updated_at: 更新时间
+      core/permission:
+        module_name: 模块名
+        group_name: 组
+        name: 权限名
+        subject_class: 类名
+        action: 方法名
+        ability_method: 验证方法
+        sort_num: 排序号
+        updater_name: 更新用户
+        created_at: 创建时间
+        updated_at: 更新时间
+      core/role:
+        name: 权限名
+        updater_name: 更新用户
+        created_at: 创建时间
+        updated_at: 更新时间
+      core/seller:
+        name: 经销商名
+        fullname: 经销商全名
+        stock: 仓库名
+        stock_name: 仓库名
+        mobile: 联系手机
+        phone: 联系电话
+        email: 联系邮箱
+        address: 地址
+        parent_name: 上级经销商名
+        areas: 绑定区域
+        updater_name: 更新用户
+        created_at: 创建时间
+        updated_at: 更新时间
+      core/seller_area:
+        seller_name: 经销商名
+        area_zipcode: 邮编
+        area_province_name: 省
+        area_city_name: 市
+        area_state_name: 区/县
+        updater_name: 更新用户
+        created_at: 创建时间
+        updated_at: 更新时间
+      core/stock:
+        name: 仓库名
+        seller_count: 经销商数量
+        product_count: 商品数量
+        updater_name: 更新用户
+        created_at: 创建时间
+        updated_at: 更新时间
+      core/stock_product:
+        product_name: 商品名
+        sku_name: SKU名
+        activite_num: 可用库存
+        actual_num: 实际库存
+        updater_name: 更新用户
+        created_at: 创建时间
+        updated_at: 更新时间
+      core/user_role:
+        user_name: 用户名
+        role_name: 权限名
+        updater_name: 更新用户
+        created_at: 创建时间
+        updated_at: 更新时间

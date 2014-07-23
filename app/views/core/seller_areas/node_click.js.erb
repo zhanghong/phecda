@@ -1,0 +1,4 @@
+<%- case params[:from] -%>
+<%- when "seller" -%>
+  $("#seller_area_list").html("<%=escape_javascript(render(partial: "core/seller_areas/list_for_sellers"))%>")
+<%- end -%>

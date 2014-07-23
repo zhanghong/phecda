@@ -61,11 +61,16 @@
 # add_index "products", ["shop_id", "title"], name: "idx_by_shop_id_and_title", using: :btree
 class Product < ActiveRecord::Base
   scope :account_scope, -> {where(account_id: Account.current.id)}
+  belongs_to  :updater
 
   def self.find_mine(params)
     conditions = [[]]
 
     conditions[0] = conditions[0].join(" AND ")
     where(conditions).order(id: :desc)
+  end
+
+  def updater_name
+    updater.name
   end
 end

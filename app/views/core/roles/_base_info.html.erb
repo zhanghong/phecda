@@ -1,0 +1,23 @@
+<div class="row">
+  <div class="col-sm-12 form-horizontal">
+    <% Core::Role.detail_shown_attributes.each do |attr_name| %>
+      <div class="form-group">
+        <label class="col-xs-3 control-label">
+          <%= Core::Role.human_attribute_name(attr_name) %>：
+        </label>
+        <div class="col-xs-6">
+          <%- case attr_name 
+              when "areas"
+            -%>
+          <%- else -%>
+            <%= @core_role.send(attr_name) %>
+          <%- end -%>
+        </div>
+      </div>
+    <%- end -%>
+  </div>
+  <!--
+  <div class="center">
+    <%#= link_to("修改", edit_core_seller_path(@core_seller), class: "btn btn-primary") %>
+  </div> -->
+</div>

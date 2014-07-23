@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Seller:</strong>
+  <%= @core_seller_area.seller_id %>
+</p>
+
+<p>
+  <strong>Area:</strong>
+  <%= @core_seller_area.area_id %>
+</p>
+
+<%= link_to 'Edit', edit_core_seller_area_path(@core_seller_area) %> |
+<%= link_to 'Back', core_seller_areas_path %>

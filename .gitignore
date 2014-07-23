@@ -11,4 +11,5 @@ tmp
 .rspec
 db/schema.rb
 public/assets/
+public/v3
 *.keep

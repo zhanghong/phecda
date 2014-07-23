@@ -1,0 +1,25 @@
+<%= form_for(@core_seller_area) do |f| %>
+  <% if @core_seller_area.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@core_seller_area.errors.count, "error") %> prohibited this core_seller_area from being saved:</h2>
+
+      <ul>
+      <% @core_seller_area.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :seller_id %><br>
+    <%= f.text_field :seller_id %>
+  </div>
+  <div class="field">
+    <%= f.label :area_id %><br>
+    <%= f.text_field :area_id %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

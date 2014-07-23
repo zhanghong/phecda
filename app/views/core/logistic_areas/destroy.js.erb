@@ -1,0 +1,6 @@
+<%- case params[:from] -%>
+<%- when "area" -%>
+  $("#logistic_area_list").html("<%=escape_javascript(render("core/logistic_areas/list_for_areas"))%>")
+<%- when "logistic" -%>
+  $("#logistic_area_list").html("<%=escape_javascript(render("core/logistic_areas/list_for_logistics"))%>")
+<%- end -%>

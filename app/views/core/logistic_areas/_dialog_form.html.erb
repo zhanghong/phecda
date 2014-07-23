@@ -1,0 +1,36 @@
+<div class="modal-header">
+  <button type="button" class="close" data-dismiss="modal">&times;</button>
+  <h4 class="blue bigger">
+    <% case params[:from] 
+      when "area"
+    -%>
+      绑定物流商
+    <%- when "logistic" -%>
+      绑定区域
+    <%- end -%>
+  </h4>
+</div>
+
+<div class="modal-body overflow-visible">
+  <div class="row">
+    <% case params[:from] 
+      when "area"
+    -%>
+      <%= render("core/logistic_areas/form_for_area") %>
+    <%- when "logistic" -%>
+
+    <%- end -%>
+  </div>
+</div>
+<script type="text/javascript">
+  jQuery(function($) {
+    $(".chosen-select").chosen();
+    $('.phecda-dialog-form').on('shown.bs.modal', function () {
+      $(this).find('.chosen-container').each(function(){
+        $(this).find('a:first-child').css('width' , '350px');
+        $(this).find('.chosen-drop').css('width' , '350px');
+        $(this).find('.chosen-search input').css('width' , '340px');
+      });
+    })
+  })
+</script>

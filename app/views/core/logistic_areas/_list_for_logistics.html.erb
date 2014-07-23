@@ -1,0 +1,19 @@
+<table class="table table-striped table-bordered table-hover">
+  <thead>
+    <tr>
+      <% Core::LogisticArea.inner_shown_attributes_for_core_logistic.each do |attr_name| %>
+        <th>
+          <%= Core::LogisticArea.human_attribute_name(attr_name) %>
+        </th>
+      <%- end -%>
+      <th class="center">
+          
+      </th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <%= render(partial: "core/logistic_areas/item_for_logistic", collection: @core_logistic_areas, as: :core_logistic_area) %>
+  </tbody>
+</table>
+<%= ajax_will_paginate(@core_logistic_areas, remote: true, params: {controller: "core/logistic_areas", action: "index", from: "logistic", logistic_id: (params[:logistic_id] || params[:id]), format: "js"}) %>

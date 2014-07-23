@@ -1,0 +1,61 @@
+<div class="row">
+  <div class="col-xs-12">
+    <div class="tab-pane active" id="stock_check">
+      <%= form_tag core_permissions_path, method: "GET", class: "well well-small form-horizontal font12" do %>
+        <fieldset class="form-inline mar_t5">
+          <div class="controls pull-left padding-right-5">
+            <label for="search_title"><%= Core::Permission.human_attribute_name(:name) %>：</label>
+            <input type="text" class="input-medium radius_no_tl" name="name" value='<%= params[:name] %>' placeholder="关键字...">
+          </div>
+          <div class="controls pull-left padding-right-5">
+            <%= submit_tag "搜索", class: "btn btn-xs btn-primary pull-right" %>
+          </div>
+        </fieldset>
+      <%- end -%>
+    </div>
+  </div>
+  <div class="col-xs-12">
+    <%= link_to("添加权限", new_core_permission_path, class: "btn btn-xs btn-warning") %>
+  </div>
+  <div class="col-xs-12">
+    <div class="table-responsive">
+      <table id="sample-table-1" class="table table-striped table-bordered table-hover">
+        <thead>
+          <tr>
+            <% Core::Permission.list_shown_attributes.each do |attr_name| %>
+              <th>
+                <%= Core::Permission.human_attribute_name(attr_name) %>
+              </th>
+            <%- end -%>
+            <th class="center">
+              
+            </th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% @core_permissions.each do |core_permission| %>
+            <tr>
+              <% Core::Permission.list_shown_attributes.each do |attr_name| %>
+                <td>
+                  <% case attr_name
+                    when "name" %>
+                    <%= link_to(core_permission.send(attr_name), core_permission) %>
+                  <%- else -%>
+                    <%= core_permission.send(attr_name) %>
+                  <%- end -%>
+                </td>
+              <%- end -%>
+              <td>
+                <%= link_to "查看", core_permission, class: "btn btn-xs btn-success" %>
+                <%= link_to "编辑", edit_core_permission_path(core_permission), class: "btn btn-xs btn-primary" %>
+                <%= link_to "删除 ", core_permission, class: "btn btn-xs btn-danger", method: :delete, data: { confirm: '您确定要删除吗？'} %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <%= will_paginate @core_permissions, renderer: BootstrapPagination::Rails %>
+    </div>
+  </div>
+</div>

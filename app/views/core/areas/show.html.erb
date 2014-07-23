@@ -1,0 +1,73 @@
+<div class="page-header">
+  <h1>
+    <%= @core_area.full_name %>
+  </h1>
+</div>
+
+<div class="row">
+  <div class="col-sm-12">
+    <div class="tabbable">
+      <ul class="nav nav-tabs" id="myTab">
+        <li class="active">
+          <a data-toggle="tab" href="#base-info-tab">基本信息</a>
+        </li>
+
+        <li>
+          <a data-toggle="tab" href="#sellers-tab">绑定经销商</a>
+        </li>
+        <li>
+          <a data-toggle="tab" href="#logistics-tab">绑定物流商</a>
+        </li>
+      </ul>
+
+      <div class="tab-content">
+        <!-- base info -->
+        <div id="base-info-tab" class="tab-pane in active">
+          <%= render("base_info") %>
+        </div>
+        <!-- base info -->
+
+        <div id="sellers-tab" class="tab-pane">
+          <%= link_to("添加经销商", new_core_seller_area_path(area_id: @core_area.id, from: "area"), class: "btn btn-xs btn-primary", remote: true) %>
+          <div id="seller_area_list">
+            <%= render("core/seller_areas/list_for_areas") %>
+          </div>
+        </div>
+        <div id="logistics-tab" class="tab-pane">
+          <%= link_to("添加物流商", new_core_logistic_area_path(area_id: @core_area.id, from: "area"), class: "btn btn-xs btn-primary", remote: true) %>
+          <div id="logistic_area_list">
+            <%= render("core/logistic_areas/list_for_areas") %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div><!-- /span -->
+</div>
+
+<div id="logistic_area_form" class="modal phecda-dialog-form" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content" id="logistic_area_form_content">
+      
+    </div>
+  </div>
+</div>
+
+<div id="seller_area_form" class="modal phecda-dialog-form" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content" id="seller_area_form_content">
+      
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  jQuery(function($) {
+    $(".chosen-select").chosen();
+    $('#modal-form').on('shown.bs.modal', function () {
+      $(this).find('.chosen-container').each(function(){
+        $(this).find('a:first-child').css('width' , '210px');
+        $(this).find('.chosen-drop').css('width' , '210px');
+        $(this).find('.chosen-search input').css('width' , '200px');
+      });
+    })
+  })
+</script>

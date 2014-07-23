@@ -10,17 +10,21 @@
 #   t.datetime "created_at"
 #   t.datetime "updated_at"
 #   t.datetime "deleted_at"
-#   t.integer  "user_id",                                         default: 0
+#   t.integer  "updater_id",                                      default: 0
+#   t.integer  "deleter_id",                                      default: 0
 # end
 # add_index "sys_products", ["category_id"], name: "idx_by_account_id_and_category_id", using: :btree
 class Sys::Product < ActiveRecord::Base
-  belongs_to    :user
-	belongs_to		:account
-	belongs_to		:category,		class_name: "Sys::Category"
-	has_many			:skus,					class_name: "Sys::Sku", conditions: "deleted_at IS NULL"
-
   scope :account_scope, -> {where(account_id: Account.current.id)}
   scope :actived, -> {where(deleted_at: nil)}
+
+  belongs_to    :updater,     class_name: "User"
+  belongs_to    :deleter,     class_name: "User"
+	belongs_to		:account
+	belongs_to		:category,		class_name: "Sys::Category"
+	has_many			:skus,				class_name: "Sys::Sku", dependent: :destroy
+
+  
 
   STATES = [["有效", "activted"], ["隐藏", "hidden"]]
 
@@ -44,11 +48,11 @@ class Sys::Product < ActiveRecord::Base
   end
 
   def self.list_shown_attributes
-    %w(title price num state_name user_name)
+    %w(title price num state_name updater_name)
   end
 
   def self.detail_shown_attributes
-    %w(title category_name num state_name price created_at updated_at)
+    %w(title category_name num state_name price updater_name created_at updated_at)
   end
 
   def state_name
@@ -64,11 +68,11 @@ class Sys::Product < ActiveRecord::Base
     self.category.try(:name)
   end
 
-  def user_name
-    self.user.name
+  def updater_name
+    updater.name
   end
 
   def destroy
-    update_attributes(deleted_at: Time.now)
+    update_attributes(deleted_at: Time.now, deleter_id: User.current)
   end
 end

@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Account:</strong>
+  <%= @core_account_permission.account_id %>
+</p>
+
+<p>
+  <strong>Permission:</strong>
+  <%= @core_account_permission.permission_id %>
+</p>
+
+<%= link_to 'Edit', edit_core_account_permission_path(@core_account_permission) %> |
+<%= link_to 'Back', core_account_permissions_path %>

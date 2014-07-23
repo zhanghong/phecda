@@ -71,6 +71,6 @@ private
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def sys_property_params
-    params.require(:sys_property).permit(:name, :status, :values_name).merge({account_id: current_account.id, user_id: current_user.id})
+    params.require(:sys_property).permit(:name, :status, :values_name).merge({account_id: current_account.id, updater_id: current_user.id})
   end
 end

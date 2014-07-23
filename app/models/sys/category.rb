@@ -19,10 +19,13 @@
 #   t.integer  "user_id",                      default: 0
 # end
 class Sys::Category < ActiveRecord::Base
-  has_and_belongs_to_many :properties, join_table: "sys_categories_properties", class_name: "Sys::Property"
-  belongs_to  :account
   scope :account_scope, -> {where(account_id: Account.current.id)}
   scope :actived, -> {where(deleted_at: nil)}
+
+  has_and_belongs_to_many :properties, join_table: "sys_categories_properties", class_name: "Sys::Property"
+  belongs_to  :account
+  belongs_to  :updater, class_name: "User"
+  belongs_to  :deleter, class_name: "User"
 
   acts_as_nested_set :counter_cache => :children_count
 
@@ -109,8 +112,12 @@ class Sys::Category < ActiveRecord::Base
     self.properties = new_properties
   end
 
+  def updater_name
+    updater.name
+  end
+
   def destroy
     self.properties = []
-    update_attributes(deleted_at: Time.now)
+    update_attributes(deleted_at: Time.now, deleter_id: User.current_id)
   end
 end

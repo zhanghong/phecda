@@ -1,0 +1,9 @@
+<%- unless @core_logistic_area.new_record? -%>
+  <%- case params[:from] -%>
+  <%- when "area" -%>
+    $("#logistic_area_list").html("<%=escape_javascript(render(partial: "core/logistic_areas/list_for_areas"))%>")
+  <%- when "logistic" -%>
+    
+  <%- end -%>
+<%- end -%>
+$('#logistic_area_form').modal('hide')

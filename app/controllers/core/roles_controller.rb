@@ -10,15 +10,21 @@ class Core::RolesController < ApplicationController
   # GET /core/roles/1
   # GET /core/roles/1.json
   def show
+    find_permissions
+    @role_permission_ids = @core_role.role_permissions.map(&:permission_id)
   end
 
   # GET /core/roles/new
   def new
     @core_role = Core::Role.new
+    find_permissions
+    @role_permission_ids = []
   end
 
   # GET /core/roles/1/edit
   def edit
+    find_permissions
+    @role_permission_ids = @core_role.role_permissions.map(&:permission_id)
   end
 
   # POST /core/roles
@@ -34,6 +40,7 @@ class Core::RolesController < ApplicationController
         format.html { redirect_to @core_role, notice: 'Role was successfully created.' }
         format.json { render action: 'show', status: :created, location: @core_role }
       else
+        find_permissions
         format.html { render action: 'new' }
         format.json { render json: @core_role.errors, status: :unprocessable_entity }
       end
@@ -51,6 +58,7 @@ class Core::RolesController < ApplicationController
         format.html { redirect_to @core_role, notice: 'Role was successfully updated.' }
         format.json { head :no_content }
       else
+        find_permissions
         format.html { render action: 'edit' }
         format.json { render json: @core_role.errors, status: :unprocessable_entity }
       end
@@ -74,8 +82,17 @@ private
     redirect_to(action: "index") and redirect_to if @core_role.blank?
   end
 
+  def find_permissions
+    @permissions = Admin::Permission.account_all_permissions(@core_role.account_id)
+  end
+
   # Never trust parameters from the scary internet, only allow the white list through.
   def core_role_params
-    params.require(:core_role).permit(:name).merge({account_id: current_account.id, updater_id: current_user.id})
+    if params[:permission_ids].is_a?(Array)
+      @role_permission_ids = params[:permission_ids].collect{|p| p.to_i}
+    else
+      @role_permission_ids = []
+    end
+    params.require(:core_role).permit(:name).merge({account_id: current_account.id, updater_id: current_user.id, permisson_ids: @role_permission_ids})
   end
 end

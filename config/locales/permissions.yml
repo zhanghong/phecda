@@ -1,0 +1,19 @@
+#encoding: utf-8
+zh-CN:
+  core_seller_read: 查看经销商
+  core_seller_create: 创建经销商
+  core_seller_update: 编辑经销商
+  core_seller_destroy: 删除经销商
+  core_seller_binding_area: 绑定区域
+  core_logistic_read: 查看物流商
+  core_logistic_create: 创建物流商
+  core_logistic_update: 编辑物流商
+  core_logistic_destroy: 删除物流商
+  core_logistic_binding_area: 绑定区域
+  core_area_create: 创建区域
+  core_area_update: 编辑区域
+  core_area_destroy: 删除区域
+  core_role_read: 查看角色
+  core_role_create: 创建角色
+  core_role_update: 编辑角色
+  core_role_destroy: 删除角色

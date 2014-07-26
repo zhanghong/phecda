@@ -11,8 +11,7 @@ module ApplicationHelper
     number_to_currency(price, unit: "", precision: precision)
   end
 
-  def l_or_humanize(s, options={})
-    k = "#{options[:prefix]}#{s}".to_sym
-    ::I18n.t(k, :default => s.to_s.humanize)
+  def l_or_humanize(s)
+    ::I18n.t(s.to_sym, :default => s.to_s.humanize)
   end 
 end

@@ -1,0 +1,62 @@
+<div class="page-header">
+  <h1>
+    <%= @admin_permission.name %>
+  </h1>
+</div>
+
+<div class="row">
+  <div class="col-sm-12">
+    <div class="tabbable">
+      <ul class="nav nav-tabs" id="myTab">
+        <li class="active">
+          <a data-toggle="tab" href="#base-info">基本信息</a>
+        </li>
+
+        <li>
+          <a data-toggle="tab" href="#role-list">所属角色</a>
+        </li>
+        <li>
+          <a data-toggle="tab" href="#account-list">关联店铺</a>
+        </li>
+      </ul>
+
+      <div class="tab-content">
+        <!-- base info -->
+        <div id="base-info" class="tab-pane in active">
+          <%= render("base_info") %>
+        </div>
+        <!-- base info -->
+
+        <div id="role-list" class="tab-pane">
+          
+        </div>
+        <div id="account-list" class="tab-pane">
+          
+        </div>
+      </div>
+    </div>
+  </div><!-- /span -->
+</div>
+
+
+<div id="sku_form" class="modal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content" id="sku_form_content">
+      
+    </div>
+  </div>
+</div><!-- PAGE CONTENT ENDS -->
+<div id="sku_show" class="modal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content" id="sku_show_content">
+      
+    </div>
+  </div><!-- PAGE CONTENT ENDS -->
+</div>
+<div id="edit_sku_bindings" class="modal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content" id="edit_sku_bindings_content">
+      
+    </div>
+  </div><!-- PAGE CONTENT ENDS -->
+</div>

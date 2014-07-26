@@ -1,0 +1,61 @@
+<div class="row">
+  <div class="col-xs-12">
+    <div class="tab-pane active" id="stock_check">
+      <%= form_tag admin_permissions_path, method: "GET", class: "well well-small form-horizontal font12" do %>
+        <fieldset class="form-inline mar_t5">
+          <div class="controls pull-left padding-right-5">
+            <label for="search_title"><%= Admin::Permission.human_attribute_name(:full_name) %>：</label>
+            <input type="text" class="input-medium radius_no_tl" name="full_name" value='<%= params[:full_name] %>' placeholder="关键字...">
+          </div>
+          <div class="controls pull-left padding-right-5">
+            <%= submit_tag "搜索", class: "btn btn-xs btn-primary pull-right" %>
+          </div>
+        </fieldset>
+      <%- end -%>
+    </div>
+  </div>
+  <div class="col-xs-12">
+    <%= link_to("添加权限", new_admin_permission_path, class: "btn btn-xs btn-warning") %>
+  </div>
+  <div class="col-xs-12">
+    <div class="table-responsive">
+      <table id="sample-table-1" class="table table-striped table-bordered table-hover">
+        <thead>
+          <tr>
+            <% Admin::Permission.list_shown_attributes.each do |attr_name| %>
+              <th>
+                <%= Admin::Permission.human_attribute_name(attr_name) %>
+              </th>
+            <%- end -%>
+            <th class="center">
+              
+            </th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% @admin_permissions.each do |admin_permission| %>
+            <tr>
+              <% Admin::Permission.list_shown_attributes.each do |attr_name| %>
+                <td>
+                  <% case attr_name
+                    when "full_name" %>
+                    <%= link_to(admin_permission.send(attr_name), admin_permission) %>
+                  <%- else -%>
+                    <%= admin_permission.send(attr_name) %>
+                  <%- end -%>
+                </td>
+              <%- end -%>
+              <td>
+                <%= link_to "查看", admin_permission, class: "btn btn-xs btn-success" %>
+                <%= link_to "编辑", edit_admin_permission_path(admin_permission), class: "btn btn-xs btn-primary" %>
+                <%= link_to "删除 ", admin_permission, class: "btn btn-xs btn-danger", method: :delete, data: { confirm: '您确定要删除吗？'} %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <%= will_paginate @admin_permissions, renderer: BootstrapPagination::Rails %>
+    </div>
+  </div>
+</div>

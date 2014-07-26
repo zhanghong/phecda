@@ -1,0 +1,57 @@
+<div class="page-header">
+  <h1>
+    <%= @admin_permission.full_name %>
+  </h1>
+</div>
+
+<div class="row">
+  <div class="col-sm-12">
+    <div class="tabbable">
+      <ul class="nav nav-tabs" id="myTab">
+        <li class="active">
+          <a data-toggle="tab" href="#base-info-tab">基本信息</a>
+        </li>
+
+        <li>
+          <a data-toggle="tab" href="#accounts-tab">授权店铺</a>
+        </li>
+      </ul>
+
+      <div class="tab-content">
+        <!-- base info -->
+        <div id="base-info-tab" class="tab-pane in active">
+          <%= render("base_info") %>
+        </div>
+        <!-- base info -->
+
+        <div id="accounts-tab" class="tab-pane">
+          <div id="seller_area_list">
+            <table class="table table-striped table-bordered table-hover">
+              <thead>
+                <tr>
+                  <% Admin::AccountPermission.inner_shown_attributes_for_admin_permission.each do |attr_name| %>
+                    <th>
+                      <%= Admin::AccountPermission.human_attribute_name(attr_name) %>
+                    </th>
+                  <%- end -%>
+                </tr> 
+              </thead>
+
+              <tbody>
+                <%- @admin_account_permissions.each do |account_permission| -%>
+                  <tr id="account_permission_<%= account_permission.id%>">
+                    <% Admin::AccountPermission.inner_shown_attributes_for_admin_permission.each do |attr_name| %>
+                      <th>
+                        <%= account_permission.send(attr_name) %>
+                      </th>
+                    <%- end -%>
+                  </tr>
+                <%- end -%>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div><!-- /span -->
+</div>

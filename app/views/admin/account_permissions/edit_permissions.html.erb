@@ -1,0 +1,28 @@
+<div class="row">
+  <div class="col-xs-12">
+    <%= form_tag update_permissions_admin_account_permissions_path(account_id: @account.id), class: 'simple_form form-horizontal', role: 'form' do |f| %>
+      <div class="form-group string optional role_permissions">
+        <label class="string optional col-sm-2 control-label" for="role_permissions">
+          店铺名
+        </label>
+        <div class="col-sm-10" id="permission_list">
+          <%= @account.name %>
+        </div>
+      </div>
+      <div class="form-group string optional role_permissions">
+        <label class="string optional col-sm-2 control-label" for="role_permissions">
+          店铺权限
+        </label>
+        <div class="col-sm-10" id="permission_list">
+          <%= render("permission_list") %>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+          <%= submit_tag "取消", name: "btn_cancel", class: "btn" %>
+          <%= submit_tag "保存", class: "btn btn-primary" %>
+        </div>
+      </div>
+    <%- end -%>
+  </div>
+</div>

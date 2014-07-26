@@ -103,7 +103,7 @@ private
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def sys_sku_params
-    params.require(:sys_sku).permit(:product_id, :name, :number, :price).merge({account_id: current_account.id, user_id: current_user.id, pro_values_ids: params_pro_values_ids})
+    params.require(:sys_sku).permit(:product_id, :name, :number, :price).merge({account_id: current_account.id, updater_id: current_user.id, pro_values_ids: params_pro_values_ids})
   end
 
   def params_pro_values_ids

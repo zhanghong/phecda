@@ -1,0 +1,22 @@
+<div class="page-header"></div>
+<div class="row">
+  <div class="col-xs-12">
+    <%= simple_form_for @core_logistic_area, html: {role: 'form'}, remote: true do |f| %>
+      <%= f.input :area_id do %>
+        <%= hidden_field_tag :from, "area" %>
+        <%= f.hidden_field :area_id %>
+        <%= @core_logistic_area.area.full_name %>
+      <%- end -%>
+      <%= f.input :logistic_id do %>
+        <%= f.select :logistic_id,  @core_logistics.collect{|sys_sku| [sys_sku.name, sys_sku.id]}, {include_blank: true}, class: "chosen-select" %>
+      <%- end -%>
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+          <%= f.submit "取消", name: "btn_cancel", class: "btn" %>
+          &nbsp; &nbsp; &nbsp;
+          <%= f.submit "保存", class: "btn btn-primary" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

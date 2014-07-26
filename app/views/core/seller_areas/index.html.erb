@@ -1,0 +1,29 @@
+<h1>Listing core_seller_areas</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Seller</th>
+      <th>Area</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @core_seller_areas.each do |core_seller_area| %>
+      <tr>
+        <td><%= core_seller_area.seller_id %></td>
+        <td><%= core_seller_area.area_id %></td>
+        <td><%= link_to 'Show', core_seller_area %></td>
+        <td><%= link_to 'Edit', edit_core_seller_area_path(core_seller_area) %></td>
+        <td><%= link_to 'Destroy', core_seller_area, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Seller area', new_core_seller_area_path %>

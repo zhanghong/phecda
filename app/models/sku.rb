@@ -9,15 +9,19 @@
 #   t.boolean  "is_hide",               default: false
 #   t.string   "type",                  default: "20"
 #   t.datetime "deleted_at"
-#   t.integer  "user_id",               default: 0
+#   t.integer  "updater_id",            default: 0
+#   t.integer  "shop_id",               default: 0
+#   t.integer  "deleter_id",            default: 0
 # end
 # add_index "skus", ["account_id", "product_id"], name: "idx_by_shop_id_and_product_id", using: :btree
 class Sku < ActiveRecord::Base
-  belongs_to  :shop,  class_name: "Tb::Shop"
-  belongs_to  :product, class_name: "Tb::Product"
-
-  scope :account_scope, -> {where(account_id: Account.current.id)}
+  scope :account_scope, -> {where(account_id: Account.current_id)}
   scope :actived, -> {where(deleted_at: nil)}
+
+  belongs_to  :account
+  belongs_to  :product, class_name: "Tb::Product"
+  belongs_to  :updater, class_name: "User"
+  belongs_to  :deleter, class_name: "User"
 
   def self.find_mine(params = {})
     conditions = [[]]
@@ -38,7 +42,11 @@ class Sku < ActiveRecord::Base
     account_scope.actived.where(conditions)
   end
 
+  def updater_name
+    updater.name
+  end
+
   def destroy
-    update_attributes(deleted_at: Time.now)
+    update_attributes(deleted_at: Time.now, deleter_id: User.current_id)
   end
 end

@@ -3,7 +3,7 @@
   <div class="col-xs-12">
     <%= simple_form_for @sku_binding, html: {role: 'form'}, remote: true do |f| %>
       <%= f.input :sku_id do %>
-        <%= hidden_field_tag :partial_type, params[:partial_type] %>
+        <%= hidden_field_tag :from, "tb_sku" %>
         <%= f.hidden_field :sku_id %>
         <%= @sku_binding.sku.full_name %>
       <%- end -%>

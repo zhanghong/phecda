@@ -16,6 +16,8 @@
 #= require bootstrap-datepicker.min
 #= require nprogress
 #= require nprogress-turbolinks
+#= require ztree/jquery.ztree.core-3.5.min
+#= require ztree/jquery.ztree.excheck-3.5.min
 
 NProgress.configure
   showSpinner: false

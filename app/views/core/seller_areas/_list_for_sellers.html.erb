@@ -1,0 +1,19 @@
+<table class="table table-striped table-bordered table-hover">
+  <thead>
+    <tr>
+      <% Core::SellerArea.inner_shown_attributes_for_core_seller.each do |attr_name| %>
+        <th>
+          <%= Core::SellerArea.human_attribute_name(attr_name) %>
+        </th>
+      <%- end -%>
+      <th class="center">
+          
+      </th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <%= render(partial: "core/seller_areas/item_for_seller", collection: @core_seller_areas, as: :core_seller_area) %>
+  </tbody>
+</table>
+<%= will_paginate @core_seller_areas, renderer: BootstrapPagination::Rails %>

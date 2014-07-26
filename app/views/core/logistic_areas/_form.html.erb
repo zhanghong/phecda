@@ -1,0 +1,25 @@
+<%= form_for(@core_logistic_area) do |f| %>
+  <% if @core_logistic_area.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@core_logistic_area.errors.count, "error") %> prohibited this core_logistic_area from being saved:</h2>
+
+      <ul>
+      <% @core_logistic_area.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :logistic_id %><br>
+    <%= f.text_field :logistic_id %>
+  </div>
+  <div class="field">
+    <%= f.label :area_id %><br>
+    <%= f.text_field :area_id %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

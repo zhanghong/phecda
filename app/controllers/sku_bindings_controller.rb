@@ -1,6 +1,6 @@
 class SkuBindingsController < ApplicationController
   before_action :set_sku_binding, only: [:show, :edit, :update, :destroy]
-  before_action :find_parital_objects,  only: [:new, :edit]
+  before_action :find_from_objects,  only: [:new, :edit]
 
   # GET /sku_bindings
   # GET /sku_bindings.json
@@ -50,7 +50,7 @@ class SkuBindingsController < ApplicationController
         format.json { render action: 'show', status: :created, location: @sku_binding }
         format.js {}
       else
-        find_parital_objects
+        find_from_objects
         format.html { render action: 'new' }
         format.json { render json: @sku_binding.errors, status: :unprocessable_entity }
         format.js {render action: 'new' }
@@ -71,7 +71,7 @@ class SkuBindingsController < ApplicationController
         format.json { head :no_content }
         format.js {}
       else
-        find_parital_objects
+        find_from_objects
         format.html { render action: 'edit' }
         format.json { render json: @sku_binding.errors, status: :unprocessable_entity }
         format.js { render action: 'edit'}
@@ -82,7 +82,7 @@ class SkuBindingsController < ApplicationController
   # DELETE /sku_bindings/1
   # DELETE /sku_bindings/1.json
   def destroy
-    case params[:partial_type]
+    case params[:from]
     when "sys_sku"
       @sys_sku = @sku_binding.sys_sku
     when "tb_sku"
@@ -104,11 +104,11 @@ private
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def sku_binding_params
-    params.require(:sku_binding).permit(:sku_id, :sys_sku_id, :sys_sku_number).merge({account_id: current_account.id, user_id: current_user.id})
+    params.require(:sku_binding).permit(:sku_id, :sys_sku_id, :sys_sku_number).merge({account_id: current_account.id, updater_id: current_user.id})
   end
 
-  def find_parital_objects
-    case params[:partial_type]
+  def find_from_objects
+    case params[:from]
     when "sys_sku"
       @skus = Sku.find_mine
       @form_name = "sys_sku_form"

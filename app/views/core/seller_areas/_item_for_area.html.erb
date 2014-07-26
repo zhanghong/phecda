@@ -1,0 +1,10 @@
+<tr id="core_seller_area_<%= core_seller_area.id%>">
+  <% Core::SellerArea.inner_shown_attributes_for_core_area.each do |attr_name| %>
+    <th>
+      <%= core_seller_area.send(attr_name) %>
+    </th>
+  <%- end -%>
+  <td>
+    <%= link_to "删除", core_seller_area_path(core_seller_area, from:"area"), class: "btn btn-xs btn-danger", method: :delete, data: { confirm: '您确定要删除吗？'}, remote: true %>
+  </td>
+</tr>

@@ -71,12 +71,12 @@ class Sys::ProductsController < ApplicationController
 private
   # Use callbacks to share common setup or constraints between actions.
   def set_sys_product
-    @sys_product = Sys::Product.find(params[:id])
-    redirect_to(sys_products) and return if @sys_product.blank?
+    @sys_product = Sys::Product.account_scope.actived.find_by_id(params[:id])
+    redirect_to(sys_products) and return if @sys_product.nil?
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def sys_product_params
-    params.require(:sys_product).permit(:title, :category_id, :price, :num, :description).merge({account_id: current_account.id, user_id: current_user.id})
+    params.require(:sys_product).permit(:title, :category_id, :price, :num, :description).merge({account_id: current_account.id, updater_id: current_user.id})
   end
 end

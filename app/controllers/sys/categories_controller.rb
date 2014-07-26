@@ -71,6 +71,6 @@ private
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def sys_category_params
-    params.require(:sys_category).permit(:name, :status, :parent_id).merge({account_id: current_account.id, user_id: current_user.id})
+    params.require(:sys_category).permit(:name, :status, :parent_id).merge({account_id: current_account.id, updater_id: current_user.id})
   end
 end

@@ -5,7 +5,7 @@
       <%= f.input :sys_sku_id do %>
         <%= @sku_binding.sys_sku.name %>
         <%= f.hidden_field :sys_sku_id %>
-        <%= hidden_field_tag :partial_type, "sys_sku" %>
+        <%= hidden_field_tag :from, "sys_sku" %>
       <%- end -%>
       <%= f.input :sku_id do %>
         <%= f.select :sku_id,  @skus.collect{|sku| [sku.full_name, sku.id]}, {include_blank: true}, class: "chosen-select" %>

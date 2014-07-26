@@ -1,0 +1,51 @@
+<div class="page-header">
+  <h1>
+    <%= @core_logistic.name %>
+  </h1>
+</div>
+
+<div class="row">
+  <div class="col-sm-12">
+    <div class="tabbable">
+      <ul class="nav nav-tabs" id="myTab">
+        <li class="active">
+          <a data-toggle="tab" href="#base-info-tab">基本信息</a>
+        </li>
+
+        <li>
+          <a data-toggle="tab" href="#areas-tab">销售区域</a>
+        </li>
+      </ul>
+
+      <div class="tab-content">
+        <!-- base info -->
+        <div id="base-info-tab" class="tab-pane in active">
+          <%= render("base_info") %>
+        </div>
+        <!-- base info -->
+
+        <div id="areas-tab" class="tab-pane">
+          <div class="row">
+            <div class="col-sm-6">
+              <div id="logistic_area_list">
+                <%= render(partial: "core/logistic_areas/list_for_logistics") %>
+              </div>
+            </div>    
+            <div class="col-sm-6 form-horizontal">
+              <div id="treeDemo" class="ztree"></div>
+            </div>
+          </div>    
+        </div>
+      </div>
+    </div>
+  </div><!-- /span -->
+</div>
+
+
+<div id="logistic_area_form" class="modal phecda-dialog-form" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content" id="logistic_area_form_content">
+      
+    </div>
+  </div>
+</div>

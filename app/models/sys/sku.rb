@@ -8,12 +8,15 @@
 #   t.datetime "deleted_at"
 #   t.integer  "number",                                        default: 0
 #   t.decimal  "price",                 precision: 8, scale: 2, default: 0.0
-#   t.integer  "user_id",                                       default: 0
+#   t.integer  "updater_id",                                    default: 0
+#   t.integer  "deleter_id",                                    default: 0
 # end
 # add_index "sys_skus", ["account_id", "product_id"], name: "idx_by_account_id_and_product_id", using: :btree
 class Sys::Sku < ActiveRecord::Base
 	belongs_to		:account
 	belongs_to		:product,		class_name: "Sys::Product"
+  belongs_to    :updater,   class_name: "User"
+  belongs_to    :deleter,   class_name: "User"
   has_many      :sku_bindings,  foreign_key: "sys_sku_id"
   has_many      :skus,      through: :sku_bindings
   has_and_belongs_to_many :property_values, join_table: "sys_sku_property_values", class_name: "Sys::PropertyValue" #, foreign_key: "account_id"
@@ -74,6 +77,10 @@ class Sys::Sku < ActiveRecord::Base
     property_values.map(&:value_name)
   end
 
+  def updater_name
+    updater.name
+  end
+
   def save_property_values
     property_values = if self.pro_values_ids.blank?
                         []
@@ -81,5 +88,9 @@ class Sys::Sku < ActiveRecord::Base
                         Sys::PropertyValue.account_scope.where(id: self.pro_values_ids)
                       end
     self.property_values = property_values
+  end
+
+  def destroy
+    update_attributes(deleted_at: Time.now, deleter_id: User.current_id)
   end
 end

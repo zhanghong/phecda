@@ -9,6 +9,7 @@
 class Account < ActiveRecord::Base
   has_and_belongs_to_many :users, join_table: "users_accounts"#, foreign_key: "account_id"
   has_many  :shops, dependent: :destroy
+  has_many  :sellers, dependent: :destroy
 
   def self.current=(account)
     Thread.current[:current_account] = account
@@ -16,6 +17,14 @@ class Account < ActiveRecord::Base
 
   def self.current
     Thread.current[:current_account]
+  end
+
+  def self.current_id
+    if self.current.nil?
+      -1
+    else
+      self.current.id
+    end
   end
 private
   def add_to_superadmin

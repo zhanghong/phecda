@@ -1,0 +1,13 @@
+<div class="row">
+  <div class="col-sm-12">
+    <%= simple_form_for @core_stock, html: {role: 'form'} do |f| %>
+      <%= f.input :name, input_html: {autocomplete: "off"} %>
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+          <%= f.submit "取消", name: "btn_cancel", class: "btn" %>
+          <%= f.submit "保存", class: "btn btn-primary" %>
+        </div>
+      </div>
+    <%- end -%>
+  </div>
+</div>

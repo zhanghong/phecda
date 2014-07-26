@@ -1,0 +1,37 @@
+<%= form_for(@core_stock_product) do |f| %>
+  <% if @core_stock_product.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@core_stock_product.errors.count, "error") %> prohibited this core_stock_product from being saved:</h2>
+
+      <ul>
+      <% @core_stock_product.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :stock_id %><br>
+    <%= f.text_field :stock_id %>
+  </div>
+  <div class="field">
+    <%= f.label :sys_product_id %><br>
+    <%= f.text_field :sys_product_id %>
+  </div>
+  <div class="field">
+    <%= f.label :sys_sku_id %><br>
+    <%= f.text_field :sys_sku_id %>
+  </div>
+  <div class="field">
+    <%= f.label :activite_num %><br>
+    <%= f.text_field :activite_num %>
+  </div>
+  <div class="field">
+    <%= f.label :actual_num %><br>
+    <%= f.text_field :actual_num %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

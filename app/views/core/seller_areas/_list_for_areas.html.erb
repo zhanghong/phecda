@@ -1,0 +1,19 @@
+<table class="table table-striped table-bordered table-hover">
+  <thead>
+    <tr>
+      <% Core::SellerArea.inner_shown_attributes_for_core_area.each do |attr_name| %>
+        <th>
+          <%= Core::SellerArea.human_attribute_name(attr_name) %>
+        </th>
+      <%- end -%>
+      <th class="center">
+          
+      </th>
+    </tr> 
+  </thead>
+
+  <tbody>
+    <%= render(partial: "core/seller_areas/item_for_area", collection: @core_seller_areas, as: :core_seller_area) %>
+  </tbody>
+</table>
+<%= ajax_will_paginate(@core_seller_areas, remote: true, params: {controller: "core/seller_areas", action: "index", from: "area", area_id: (params[:area_id] || params[:id]), format: "js"}) %>

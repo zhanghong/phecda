@@ -1,0 +1,67 @@
+<div class="page-header">
+  <h1>
+    <%= @core_seller.name %>
+  </h1>
+  <div id="seller_id" class="hide"><%= @core_seller.id %></div>
+</div>
+
+<div class="row">
+  <div class="col-sm-12">
+    <div class="tabbable">
+      <ul class="nav nav-tabs" id="myTab">
+        <li class="active">
+          <a data-toggle="tab" href="#base-info-tab">基本信息</a>
+        </li>
+
+        <li>
+          <a data-toggle="tab" href="#areas-tab">销售区域</a>
+        </li>
+      </ul>
+
+      <div class="tab-content">
+        <!-- base info -->
+        <div id="base-info-tab" class="tab-pane in active">
+          <%= render("base_info") %>
+        </div>
+        <!-- base info -->
+
+        <div id="areas-tab" class="tab-pane">
+          <div class="row">
+            <div class="col-sm-6">
+              <div id="seller_area_list">
+                <%= render(partial: "core/seller_areas/list_for_sellers") %>
+              </div>
+            </div>    
+            <div class="col-sm-6 form-horizontal">
+              <div id="treeDemo" class="ztree"></div>
+            </div>
+          </div>    
+        </div>
+      </div>
+    </div>
+  </div><!-- /span -->
+</div>
+
+
+<div id="sku_form" class="modal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content" id="sku_form_content">
+      
+    </div>
+  </div>
+</div><!-- PAGE CONTENT ENDS -->
+<div id="sku_show" class="modal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content" id="sku_show_content">
+      
+    </div>
+  </div><!-- PAGE CONTENT ENDS -->
+</div>
+<div id="edit_sku_bindings" class="modal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content" id="edit_sku_bindings_content">
+      
+    </div>
+  </div><!-- PAGE CONTENT ENDS -->
+</div>
+<%= javascript_include_tag "tree" %>

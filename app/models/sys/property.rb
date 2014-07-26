@@ -6,16 +6,21 @@
 #   t.datetime "created_at"
 #   t.datetime "updated_at"
 #   t.datetime "deleted_at"
-#   t.integer  "user_id",               default: 0
+#   t.integer  "updater_id",            default: 0
+#   t.integer  "deleter_id",            default: 0
 # end
 # add_index "sys_properties", ["account_id", "name"], name: "idx_by_account_id_and_name", using: :btree
 # add_index "sys_properties", ["account_id", "status"], name: "idx_by_account_id_and_status", using: :btree
 class Sys::Property < ActiveRecord::Base
+  scope :account_scope, -> {where(account_id: Account.current_id)}
+  scope :actived, -> {where(deleted_at: nil)}
+
   has_and_belongs_to_many :categories, join_table: "sys_categories_properties", class_name: "Sys::Category"
 	belongs_to		:account
+  belongs_to    :updater,   class_name: "User"
+  belongs_to    :deleter,   class_name: "User"
   has_many      :values,    class_name: "Sys::PropertyValue"
-  scope :account_scope, -> {where(account_id: Account.current.id)}
-  scope :actived, -> {where(deleted_at: nil)}
+  
 
   STATUS = [["启用", "actived"], ["隐藏", "hidden"]]
 
@@ -67,6 +72,9 @@ class Sys::Property < ActiveRecord::Base
     end
   end
 
+  def updater_name
+    updater.name
+  end
 
   def save_property_values(values_name)
     current_name= []
@@ -85,6 +93,6 @@ class Sys::Property < ActiveRecord::Base
 
   def destroy
     self.categories = []
-    update_attributes(deleted_at: Time.now)
+    update_attributes(deleted_at: Time.now, deleter_id: User.current_id)
   end
 end

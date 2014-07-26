@@ -6,6 +6,7 @@ Phecda::Application.routes.draw do
   devise_for :users
   resources :trades
   resources :sku_bindings
+  resources :sellers
 
   namespace :tb do
     resources :products,  only: [:index, :show, :edit, :update]
@@ -19,6 +20,29 @@ Phecda::Application.routes.draw do
     resources :skus
   end
 
+  namespace :core do
+    resources :account_permissions
+    resources :areas
+    resources :logistics
+    resources :logistic_areas,  only: [:index, :new, :create, :destroy] do
+      collection do
+        get   :area_nodes
+        post  :node_click
+      end
+    end
+    resources :permissions
+    resources :roles
+    resources :sellers
+    resources :seller_areas,  only: [:index, :new, :create, :destroy] do
+      collection do
+        get   :area_nodes
+        post  :node_click
+      end
+    end
+    resources :stocks
+    resources :stock_products
+    resources :user_roles
+  end
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

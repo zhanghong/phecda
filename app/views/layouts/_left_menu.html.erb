@@ -34,78 +34,18 @@
   </div><!-- #sidebar-shortcuts -->
 
   <ul class="nav nav-list">
-    <li>
-      <%= link_to tb_products_path do %>
-        <i class="icon-text-width"></i>
-        <span class="menu-text">淘宝商品</span>
-      <%- end -%>
-    </li>
-    <li>
-      <%= link_to sys_products_path do %>
-        <i class="icon-text-width"></i>
-        <span class="menu-text">本地商品</span>
-      <%- end -%>
-    </li>
-    <li>
-      <%= link_to sys_properties_path do %>
-        <i class="icon-text-width"></i>
-        <span class="menu-text">商品属性</span>
-      <%- end -%>
-    </li>
-    <li>
-      <%= link_to sys_categories_path do %>
-        <i class="icon-text-width"></i>
-        <span class="menu-text">商品分类</span>
-      <%- end -%>
-    </li>
-    <li>
-      <%= link_to core_areas_path do %>
-        <i class="icon-text-width"></i>
-        <span class="menu-text">区域管理</span>
-      <%- end -%>
-    </li>
-    <li>
-      <%= link_to core_logistics_path do %>
-        <i class="icon-text-width"></i>
-        <span class="menu-text">物流商管理</span>
-      <%- end -%>
-    </li>
-    <li>
-      <%= link_to admin_permissions_path do %>
-        <i class="icon-text-width"></i>
-        <span class="menu-text">权限管理</span>
-      <%- end -%>
-    </li>
-    <li>
-      <%= link_to admin_account_permissions_path do %>
-        <i class="icon-text-width"></i>
-        <span class="menu-text">店铺权限管理</span>
-      <%- end -%>
-    </li>
-    <li>
-      <%= link_to core_roles_path do %>
-        <i class="icon-text-width"></i>
-        <span class="menu-text">角色管理</span>
-      <%- end -%>
-    </li>
-    <li>
-      <%= link_to core_sellers_path do %>
-        <i class="icon-text-width"></i>
-        <span class="menu-text">经销商管理</span>
-      <%- end -%>
-    </li>
-    <li>
-      <%= link_to core_stocks_path do %>
-        <i class="icon-text-width"></i>
-        <span class="menu-text">仓库管理</span>
-      <%- end -%>
-    </li>
-    <li>
-      <%= link_to core_stock_products_path do %>
-        <i class="icon-text-width"></i>
-        <span class="menu-text">库存管理</span>
-      <%- end -%>
-    </li>
+    <%=raw(left_menu_link_unless(params[:controller] == "tb/products", "淘宝商品", tb_products_path, icon: "fa-tumblr")) if can?(:read, Tb::Product) %>
+    <%=raw(left_menu_link_unless(params[:controller] == "sys/products", "本地商品", sys_products_path, icon: "fa-archive")) if can?(:read, Core::Area) %>
+    <%=raw(left_menu_link_unless(params[:controller] == "sys/properties", "商品属性", sys_properties_path, icon: "fa-magic")) if can?(:read, Core::Area) %>
+    <%=raw(left_menu_link_unless(params[:controller] == "sys/categories", "商品分类", sys_categories_path, icon: "fa-cogs")) if can?(:read, Core::Area) %>
+    <%=raw(left_menu_link_unless(params[:controller] == "core/areas", "区域管理", core_areas_path, icon: "fa-archive")) if can?(:read, Core::Area) %>
+    <%=raw(left_menu_link_unless(params[:controller] == "core/logistics", "物流商管理", core_logistics_path, icon: "fa-truck")) if can?(:read, Core::Logistic) %>
+    <%=raw(left_menu_link_unless(params[:controller] == "admin/permissions", "权限管理", admin_permissions_path, icon: "fa-archive")) if can?(:read, Admin::Permission) %>
+    <%=raw(left_menu_link_unless(params[:controller] == "admin/account_permissions", "店铺权限管理", admin_account_permissions_path, icon: "fa-archive")) if can?(:read, Admin::AccountPermission) %>
+    <%=raw(left_menu_link_unless(params[:controller] == "core/roles", "角色管理", core_roles_path, icon: "fa-group")) if can?(:read, Core::Role) %>
+    <%=raw(left_menu_link_unless(params[:controller] == "core/sellers", "经销商管理", core_sellers_path, icon: "fa-archive")) if can?(:read, Core::Seller) %>
+    <%=raw(left_menu_link_unless(params[:controller] == "core/stocks", "仓库管理", core_stocks_path, icon: "fa-archive")) if can?(:read, Core::Area) %>
+    <%=raw(left_menu_link_unless(params[:controller] == "core/stock_products", "库存管理", core_stock_products_path, icon: "fa-archive")) if can?(:read, Core::Area) %>
     
     <!-- 
     <li>

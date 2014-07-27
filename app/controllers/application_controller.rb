@@ -8,7 +8,7 @@ class ApplicationController < ActionController::Base
   before_filter :set_current_user
   before_filter :current_account
   layout :layout_by_resource
-  # authorize_resource :unless => :is_skip_controller?
+  authorize_resource :unless => :is_skip_controller?
 
 protected
 
@@ -23,6 +23,7 @@ protected
     else
       %w(
          oauths
+         home
          ).include?(params[:controller])
     end
   end
@@ -42,5 +43,9 @@ protected
     else
       "application"
     end
+  end
+
+  rescue_from CanCan::AccessDenied do |exception|
+    redirect_to("/", :alert => exception.message)
   end
 end

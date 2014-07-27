@@ -17,7 +17,7 @@
 </table>
 <div class="form-group">
   <div class="col-sm-offset-2 col-sm-10">
-    <%= link_to "返回列表", sys_categories_path, class: "btn" %>&nbsp; &nbsp; &nbsp;
-    <%= link_to "编辑", edit_sys_category_path(@sys_category), class: "btn btn-primary" %>
+    <%= link_to("返回列表", sys_categories_path, class: "btn" )%>&nbsp; &nbsp; &nbsp;
+    <%= link_to("编辑", edit_sys_category_path(@sys_category), class: "btn btn-primary") if can?(:update, @sys_category) %>
   </div>
 </div>

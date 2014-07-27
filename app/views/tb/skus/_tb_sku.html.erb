@@ -4,11 +4,11 @@
       <%- case attr_name 
           when "sku_bindings" -%>
         <%- tb_sku.sku_bindings.each do |sku_binding| -%>
-          <%= link_to sku_binding.for_sku_name, edit_sku_binding_path(sku_binding, from: "tb_sku"), remote: true %>
-          <%= link_to raw(%Q(<i class="icon-remove red"></i>)), sku_binding_path(sku_binding, from: "tb_sku"), method: :delete, remote: true, data: { confirm: '您确定要删除吗？'} %>
+          <%= link_to(sku_binding.for_sku_name, edit_sku_binding_path(sku_binding, from: "tb_sku"), remote: true) if can?(:update, sku_binding) %>
+          <%= link_to(raw(%Q(<i class="icon-remove red"></i>)), sku_binding_path(sku_binding, from: "tb_sku"), method: :delete, remote: true, data: { confirm: '您确定要删除吗？'}) if can?(:destroy, sku_binding) %>
           <br/>
         <%- end -%>
-        <%= link_to "+绑定商品", new_sku_binding_path(sku_id: tb_sku.id, from: "tb_sku"), class: "btn btn-xs btn-warning", remote: true %>
+        <%= link_to("+绑定商品", new_sku_binding_path(sku_id: tb_sku.id, from: "tb_sku"), class: "btn btn-xs btn-warning", remote: true) if can?(:create, SkuBinding) %>
       <%- else -%>
         <%= tb_sku.send(attr_name) %>
       <%- end -%>

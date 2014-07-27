@@ -1,5 +1,6 @@
 class Core::AreasController < ApplicationController
   before_action :set_core_area, only: [:show, :edit, :update, :destroy]
+  authorize_resource  :class => Core::Area
 
   # GET /core/areas
   # GET /core/areas.json

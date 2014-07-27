@@ -1,5 +1,6 @@
 class Core::RolesController < ApplicationController
   before_action :set_core_role, only: [:show, :edit, :update, :destroy]
+  authorize_resource  :class => Core::Role
 
   # GET /core/roles
   # GET /core/roles.json

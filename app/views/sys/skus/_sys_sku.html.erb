@@ -8,11 +8,11 @@
         <%= sys_sku.send(attr_name).join("<br/>").html_safe %>
       <%- when "sku_bindings" -%>
         <%- sys_sku.sku_bindings.each do |sku_binding| -%>
-          <%= link_to sku_binding.for_sys_sku_name, edit_sku_binding_path(sku_binding, from: "sys_sku"), remote: true %>
-          <%= link_to raw(%Q(<i class="icon-remove red"></i>)), sku_binding_path(sku_binding, from: "sys_sku"), method: :delete, remote: true, data: { confirm: '您确定要删除吗？'} %>
+          <%= link_to(sku_binding.for_sys_sku_name, edit_sku_binding_path(sku_binding, from: "sys_sku"), remote: true) if can?(:update, sku_binding) %>
+          <%= link_to(raw(%Q(<i class="icon-remove red"></i>)), sku_binding_path(sku_binding, from: "sys_sku"), method: :delete, remote: true, data: { confirm: '您确定要删除吗？'}) if can?(:destroy, sku_binding) %>
           <br/>
         <%- end -%>
-        <%= link_to "+绑定商品", new_sku_binding_path(sys_sku_id: sys_sku.id, from: "sys_sku"), class: "btn btn-xs btn-warning", remote: true %>
+        <%= link_to("+绑定商品", new_sku_binding_path(sys_sku_id: sys_sku.id, from: "sys_sku"), class: "btn btn-xs btn-warning", remote: true) if can?(:create, SkuBinding) %>
       <%- when "created_and_updated" -%>
         <%= sys_sku.created_at %><br/>
         <%= sys_sku.updated_at %>
@@ -22,8 +22,8 @@
     </td>
   <%- end -%>
   <td>
-    <%= link_to "查看", sys_sku, class: "btn btn-xs btn-success", remote: true %>
-    <%= link_to "编辑", edit_sys_sku_path(sys_sku), class: "btn btn-xs btn-primary", remote: true %>
-    <%= link_to "删除 ", sys_sku_path(sys_sku), class: "btn btn-xs btn-danger", method: :delete, remote: true, data: { confirm: '您确定要删除吗？'} %>
+    <%= link_to("查看", sys_sku, class: "btn btn-xs btn-success", remote: true) %>
+    <%= link_to("编辑", edit_sys_sku_path(sys_sku), class: "btn btn-xs btn-primary", remote: true) if can?(:update, sys_sku) %>
+    <%= link_to("删除 ", sys_sku_path(sys_sku), class: "btn btn-xs btn-danger", method: :delete, remote: true, data: { confirm: '您确定要删除吗？'}) if can?(:destroy, sys_sku) %>
   </td>
 </tr>

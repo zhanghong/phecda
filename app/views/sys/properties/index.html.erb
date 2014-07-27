@@ -15,7 +15,7 @@
     </div>
   </div>
   <div class="col-xs-12">
-    <%= link_to("添加", new_sys_property_path, class: "btn btn-xs btn-primary") %>
+    <%= link_to("添加", new_sys_property_path, class: "btn btn-xs btn-primary") if can?(:create, Sys::Property) %>
   </div>
   <div class="col-xs-12">
     <div class="table-responsive">
@@ -47,9 +47,9 @@
                 </td>
               <%- end -%>
               <td>
-                <%= link_to "查看", sys_property_path(sys_property), class: "btn btn-xs btn-success" %>
-                <%= link_to "编辑", edit_sys_property_path(sys_property), class: "btn btn-xs btn-primary" %>
-                <%= link_to "删除 ", sys_property_path(sys_property), class: "btn btn-xs btn-danger", method: :delete, data: { confirm: '您确定要删除吗？'} %>
+                <%= link_to("查看", sys_property_path(sys_property), class: "btn btn-xs btn-success") %>
+                <%= link_to("编辑", edit_sys_property_path(sys_property), class: "btn btn-xs btn-primary") if can?(:update, sys_property) %>
+                <%= link_to("删除 ", sys_property_path(sys_property), class: "btn btn-xs btn-danger", method: :delete, data: { confirm: '您确定要删除吗？'}) if can?(:destroy, sys_property) %>
               </td>
             </tr>
           <% end %>

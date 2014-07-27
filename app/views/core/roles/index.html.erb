@@ -15,7 +15,7 @@
     </div>
   </div>
   <div class="col-xs-12">
-    <%= link_to("添加角色", new_core_role_path, class: "btn btn-xs btn-warning") %>
+    <%= link_to("添加角色", new_core_role_path, class: "btn btn-xs btn-warning") if can?(:create, Core::Role) %>
   </div>
   <div class="col-xs-12">
     <div class="table-responsive">
@@ -47,9 +47,9 @@
                 </td>
               <%- end -%>
               <td>
-                <%= link_to "查看", core_role, class: "btn btn-xs btn-success" %>
-                <%= link_to "编辑", edit_core_role_path(core_role), class: "btn btn-xs btn-primary" %>
-                <%= link_to "删除 ", core_role, class: "btn btn-xs btn-danger", method: :delete, data: { confirm: '您确定要删除吗？'} %>
+                <%= link_to("查看", core_role, class: "btn btn-xs btn-success") %>
+                <%= link_to("编辑", edit_core_role_path(core_role), class: "btn btn-xs btn-primary") if can?(:update, core_role) %>
+                <%= link_to("删除 ", core_role, class: "btn btn-xs btn-danger", method: :delete, data: { confirm: '您确定要删除吗？'}) if can?(:destroy, core_role) %>
               </td>
             </tr>
           <% end %>

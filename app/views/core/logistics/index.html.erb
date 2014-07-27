@@ -15,7 +15,7 @@
     </div>
   </div>
   <div class="col-xs-12">
-    <%= link_to("添加经销商", new_core_logistic_path, class: "btn btn-xs btn-warning") %>
+    <%= link_to("添加经销商", new_core_logistic_path, class: "btn btn-xs btn-warning") if can?(:create, Core::Logistic) %>
   </div>
   <div class="col-xs-12">
     <div class="table-responsive">
@@ -47,9 +47,9 @@
                 </td>
               <%- end -%>
               <td>
-                <%= link_to "查看", core_logistic, class: "btn btn-xs btn-success" %>
-                <%= link_to "编辑", edit_core_logistic_path(core_logistic), class: "btn btn-xs btn-primary" %>
-                <%= link_to "删除 ", core_logistic, class: "btn btn-xs btn-danger", method: :delete, data: { confirm: '您确定要删除吗？'} %>
+                <%= link_to("查看", core_logistic, class: "btn btn-xs btn-success") %>
+                <%= link_to("编辑", edit_core_logistic_path(core_logistic), class: "btn btn-xs btn-primary") if can?(:edit, core_logistic) %>
+                <%= link_to("删除 ", core_logistic, class: "btn btn-xs btn-danger", method: :delete, data: { confirm: '您确定要删除吗？'}) if can?(:destroy, core_logistic) %>
               </td>
             </tr>
           <% end %>

@@ -1,5 +1,6 @@
 class Core::StocksController < ApplicationController
   before_action :set_core_stock, only: [:show, :edit, :update, :destroy]
+  authorize_resource  :class => Core::Stock
 
   # GET /core/stocks
   # GET /core/stocks.json

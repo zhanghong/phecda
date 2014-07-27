@@ -5,6 +5,28 @@ zh-CN:
       shop: "店铺"
       trade: "订单"
     attributes:
+      admin/account_permission:
+        permission_name: 权限名
+        account_name: 店铺名
+        name: 权限名
+        updater_name: 更新用户
+        granted_at: 授权时间
+        joined_at: 入驻时间
+        created_at: 创建时间
+        updated_at: 更新时间
+      admin/permission:
+        module_name: 模块名
+        group_name: 组
+        full_name: 权限名
+        tag_name: 权限名
+        name: 标签名
+        subject_class: 类名
+        action_name: 方法名
+        ability_method: 验证方法
+        sort_num: 排序号
+        updater_name: 更新用户
+        created_at: 创建时间
+        updated_at: 更新时间
       user:
         name: 登录名
       tb/product:
@@ -80,11 +102,6 @@ zh-CN:
         created_at: 创建时间
         updated_at: 更新时间
         created_and_updated: 操作时间
-      core/account_permission:
-        permission_name: 权限名
-        updater_name: 更新用户
-        created_at: 创建时间
-        updated_at: 更新时间
       core/area:
         name: 名称
         zipcode: 邮编
@@ -111,19 +128,10 @@ zh-CN:
         updater_name: 更新用户
         created_at: 创建时间
         updated_at: 更新时间
-      core/permission:
-        module_name: 模块名
-        group_name: 组
-        name: 权限名
-        subject_class: 类名
-        action: 方法名
-        ability_method: 验证方法
-        sort_num: 排序号
-        updater_name: 更新用户
-        created_at: 创建时间
-        updated_at: 更新时间
       core/role:
         name: 权限名
+        user_count: 用户数
+        permission_ids: 访问权限
         updater_name: 更新用户
         created_at: 创建时间
         updated_at: 更新时间

@@ -21,7 +21,6 @@ Phecda::Application.routes.draw do
   end
 
   namespace :core do
-    resources :account_permissions
     resources :areas
     resources :logistics
     resources :logistic_areas,  only: [:index, :new, :create, :destroy] do
@@ -30,7 +29,6 @@ Phecda::Application.routes.draw do
         post  :node_click
       end
     end
-    resources :permissions
     resources :roles
     resources :sellers
     resources :seller_areas,  only: [:index, :new, :create, :destroy] do
@@ -42,6 +40,16 @@ Phecda::Application.routes.draw do
     resources :stocks
     resources :stock_products
     resources :user_roles
+  end
+
+  namespace :admin do
+    resources :permissions
+    resources :account_permissions do
+      collection do
+        get   :edit_permissions
+        post  :update_permissions
+      end
+    end
   end
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

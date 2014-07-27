@@ -1,11 +1,11 @@
 # encoding : utf-8 -*-
 # create_table "core_user_roles", force: true do |t|
-#   t.integer  "account_id",  default: 0
-#   t.integer  "user_id",     default: 0
-#   t.integer  "role_id",     default: 0
+#   t.integer  "account_id", default: 0
+#   t.integer  "user_id",    default: 0
+#   t.integer  "role_id",    default: 0
 #   t.integer  "updater_id"
-#   t.integer  "deleter_id",  default: 0
-#   t.datetime "delete_time"
+#   t.integer  "deleter_id", default: 0
+#   t.datetime "deleted_at"
 #   t.datetime "created_at"
 #   t.datetime "updated_at"
 # end
@@ -15,6 +15,9 @@ class Core::UserRoles < ActiveRecord::Base
   belongs_to  :role,    class_name: "Core::Role"
   belongs_to  :user
 
+  validates :role_id,  presence: true, uniqueness: {scope: [:user_id], conditions: -> { where(deleter_id: 0)}}
+  validates :user_id,  presence: true, uniqueness: {scope: [:role_id], conditions: -> { where(deleter_id: 0)}}
+
   def self.list_shown_attributes
     []
   end
@@ -23,7 +26,7 @@ class Core::UserRoles < ActiveRecord::Base
     []
   end
 
-    def self.find_mine(params)
+  def self.find_mine(params)
     find_scope = self
 
     conditions = [[]]

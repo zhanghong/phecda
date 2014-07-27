@@ -1,9 +1,42 @@
-<p id="notice"><%= notice %></p>
+<div class="page-header">
+  <h1>
+    <%= @core_role.name %>
+  </h1>
+</div>
 
-<p>
-  <strong>Name:</strong>
-  <%= @core_role.name %>
-</p>
+<div class="row">
+  <div class="col-sm-12">
+    <div class="tabbable">
+      <ul class="nav nav-tabs" id="myTab">
+        <li class="active">
+          <a data-toggle="tab" href="#permissions-tab">角色权限</a>
+        </li>
 
-<%= link_to 'Edit', edit_core_role_path(@core_role) %> |
-<%= link_to 'Back', core_roles_path %>
+        <li>
+          <a data-toggle="tab" href="#users-tab">关联用户</a>
+        </li>
+      </ul>
+
+      <div class="tab-content">
+        <!-- base info -->
+        <div id="permissions-tab" class="tab-pane in active">
+          <div class="row">
+            <div class="col-sm-12">
+              <%= render("permission_list") %>
+            </div>
+          </div>
+        </div>
+        <!-- base info -->
+
+        <div id="users-tab" class="tab-pane">
+          <div class="row">
+            <div class="col-sm-12">
+              <div id="user_role_list">
+              </div>
+            </div>
+          </div>    
+        </div>
+      </div>
+    </div>
+  </div><!-- /span -->
+</div>

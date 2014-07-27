@@ -2,6 +2,9 @@
   <div class="col-sm-12">
     <%= simple_form_for @core_role, html: {role: 'form'} do |f| %>
       <%= f.input :name, input_html: {autocomplete: "off"} %>
+      <%= f.input :permission_ids do %>
+        <%= render("permission_form") %>
+      <% end %>
       <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
           <%= f.submit "取消", name: "btn_cancel", class: "btn" %>

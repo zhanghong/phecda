@@ -1,0 +1,21 @@
+<table class="table-striped table-bordered table-hover col-sm-10">
+  <% @permissions.group_by{|p| p.module_name}.each do |module_name, mod_pms|
+  -%>
+    <% group_pms = mod_pms.group_by{|p| p.group_name } %>
+    <%- group_pms.each_with_index do |(group_name, pms), idx| -%>
+      <tr>
+        <%- if idx == 0 -%>
+          <td rowspan="<%= group_pms.size %>"><%= module_name %></td>
+        <%- end -%>
+        <td>
+          <strong><%= group_name%></strong><br/>
+          <%- pms.each do |pm| -%>
+            <label class="checkbox inline">
+              <%= check_box_tag "permission_ids[]", pm.id, @account_permission_ids.include?(pm.id), id: "pmt_#{pm.id}" %><%= pm.name %>
+            </label>
+          <%- end -%>
+        </td>
+      </tr>
+    <%- end -%>
+  <%- end -%>
+</table>

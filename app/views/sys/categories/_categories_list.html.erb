@@ -11,9 +11,9 @@
       </td>
     <%- end -%>
     <td>
-      <%= link_to "查看", sys_category_path(sys_category), class: "btn btn-xs btn-success" %>
-      <%= link_to "编辑", edit_sys_category_path(sys_category), class: "btn btn-xs btn-primary" %>
-      <%= link_to "删除 ", sys_category_path(sys_category), class: "btn btn-xs btn-danger", method: :delete, data: { confirm: '您确定要删除吗？'} %>
+      <%= link_to("查看", sys_category_path(sys_category), class: "btn btn-xs btn-success") %>
+      <%= link_to("编辑", edit_sys_category_path(sys_category), class: "btn btn-xs btn-primary") if can?(:update, sys_category) %>
+      <%= link_to("删除 ", sys_category_path(sys_category), class: "btn btn-xs btn-danger", method: :delete, data: { confirm: '您确定要删除吗？'}) if can?(:destroy, sys_category) %>
     </td>
   </tr>
   <%- if sys_category.children_count > 0 -%>

@@ -30,12 +30,6 @@
       <% end %>
       <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
-          <%- if @sys_sku.new_record? -%>
-            <%= link_to "取消", sys_products_path, name: "btn_cancel", class: "btn" %>
-          <%- else -%>
-            <%= link_to "取消", sys_sku_path(@sys_sku), name: "btn_cancel", class: "btn" %>
-          <%- end -%>
-          &nbsp; &nbsp; &nbsp;
           <%= f.submit "保存", class: "btn btn-primary" %>
         </div>
       </div>

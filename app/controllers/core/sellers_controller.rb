@@ -1,5 +1,6 @@
 class Core::SellersController < ApplicationController
   before_action :set_core_seller, only: [:show, :edit, :update, :destroy]
+  authorize_resource  :class => Core::Seller
 
   # GET /core/sellers
   # GET /core/sellers.json

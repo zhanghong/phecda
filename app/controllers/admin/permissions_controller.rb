@@ -1,5 +1,6 @@
 class Admin::PermissionsController < ApplicationController
   before_action :set_admin_permission, only: [:show, :edit, :update, :destroy]
+  authorize_resource  :class => Admin::Permission
 
   # GET /admin/permissions
   # GET /admin/permissions.json

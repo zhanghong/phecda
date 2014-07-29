@@ -5,6 +5,6 @@
     </th>
   <%- end -%>
   <td>
-    <%= link_to "删除", core_seller_area_path(core_seller_area, from:"area"), class: "btn btn-xs btn-danger", method: :delete, data: { confirm: '您确定要删除吗？'}, remote: true %>
+    <%= link_to("删除", core_seller_area_path(core_seller_area, from:"area"), class: "btn btn-xs btn-danger", method: :delete, data: { confirm: '您确定要删除吗？'}, remote: true) if can?(:destroy, core_seller_area) %>
   </td>
 </tr>

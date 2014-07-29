@@ -2,6 +2,7 @@
 class Admin::AccountPermissionsController < ApplicationController
   before_action :set_admin_account_permission, only: [:show, :edit, :update, :destroy]
   before_action :set_account, only: [:edit_permissions, :update_permissions]
+  authorize_resource  :class => Admin::Permission
 
   # GET /admin/account_permissions
   # GET /admin/account_permissions.json

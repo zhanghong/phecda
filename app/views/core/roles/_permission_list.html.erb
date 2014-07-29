@@ -21,5 +21,5 @@
 </table>
 
 <div class="center">
-  <%= link_to "编辑", edit_core_role_path(@core_role), class: "btn btn-primary" %>
+  <%= link_to("编辑", edit_core_role_path(@core_role), class: "btn btn-primary") if can?(:update, @core_role) %>
 </div>

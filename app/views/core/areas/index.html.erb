@@ -44,9 +44,9 @@
                 </td>
               <%- end -%>
               <td>
-                <%= link_to "查看", core_area, class: "btn btn-xs btn-success" %>
-                <%= link_to "编辑", edit_core_area_path(core_area), class: "btn btn-xs btn-primary" %>
-                <%= link_to "删除 ", core_area, class: "btn btn-xs btn-danger", method: :delete, data: { confirm: '您确定要删除吗？'} %>
+                <%= link_to("查看", core_area, class: "btn btn-xs btn-success") %>
+                <%= link_to("编辑", edit_core_area_path(core_area), class: "btn btn-xs btn-primary") if can?(:update, core_area) %>
+                <%= link_to("删除 ", core_area, class: "btn btn-xs btn-danger", method: :delete, data: { confirm: '您确定要删除吗？'}) if can?(:destroy, core_area) %>
               </td>
             </tr>
           <% end %>

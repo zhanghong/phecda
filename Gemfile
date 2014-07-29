@@ -35,7 +35,10 @@ gem "date_validator", "~> 0.7.0"
 gem "sidekiq", "~> 2.13.0"
 gem "sidekiq-unique-jobs", "~> 2.6.7"
 gem "remotipart", "~> 1.2"
-gem "spreadsheet", "0.9.6"
+#http://fontawesome.io/icons/
+gem "therubyracer"
+gem "less-rails"
+gem "font-awesome-less"
 require "yaml"
 
 group :doc do

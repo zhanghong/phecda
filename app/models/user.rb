@@ -71,6 +71,15 @@ class User < ActiveRecord::Base
   def is_superadmin?
     is_superadmin == true
   end
+
+  def permissions
+    join_str = <<-JOIN_SQL
+      INNER JOIN core_role_permissions ON core_role_permissions.permission_id=admin_permissions.id AND core_role_permissions.deleter_id=0
+      INNER JOIN core_user_roles ON core_user_roles.role_id=core_role_permissions.role_id AND core_user_roles.deleter_id=0
+    JOIN_SQL
+
+    Admin::Permission.joins(join_str).where(["core_user_roles.user_id = ?", self.id]).group("admin_permissions.id").all
+  end
 private
 
 end

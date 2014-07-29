@@ -1,6 +1,7 @@
 class Core::SellerAreasController < ApplicationController
   before_action :set_core_seller_area, only: [:show, :edit, :update, :destroy]
   before_action :find_from_objects,  only: [:new, :edit]
+  authorize_resource  :class => Core::SellerArea
 
   # GET /core/seller_areas
   # GET /core/seller_areas.json

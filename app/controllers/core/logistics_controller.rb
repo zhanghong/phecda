@@ -1,5 +1,6 @@
 class Core::LogisticsController < ApplicationController
   before_action :set_core_logistic, only: [:show, :edit, :update, :destroy]
+  authorize_resource  :class => Core::Logistic
 
   # GET /core/logistics
   # GET /core/logistics.json

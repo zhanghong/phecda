@@ -18,6 +18,8 @@
 # end
 # add_index "admin_permissions", ["sort_num"], name: "idx_by_sort_num", using: :btree
 class Admin::Permission < ActiveRecord::Base
+  default_scope -> { where(deleter_id: 0)}
+
   belongs_to  :updater,   class_name: "User"
   belongs_to  :deleter,   class_name: "User"
   has_many    :account_permissions,   class_name: "Admin::AccountPermission",  dependent: :destroy

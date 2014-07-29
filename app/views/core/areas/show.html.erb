@@ -28,13 +28,13 @@
         <!-- base info -->
 
         <div id="sellers-tab" class="tab-pane">
-          <%= link_to("添加经销商", new_core_seller_area_path(area_id: @core_area.id, from: "area"), class: "btn btn-xs btn-primary", remote: true) %>
+          <%= link_to("添加经销商", new_core_seller_area_path(area_id: @core_area.id, from: "area"), class: "btn btn-xs btn-primary", remote: true) if can?(:create, Core::SellerArea) %>
           <div id="seller_area_list">
             <%= render("core/seller_areas/list_for_areas") %>
           </div>
         </div>
         <div id="logistics-tab" class="tab-pane">
-          <%= link_to("添加物流商", new_core_logistic_area_path(area_id: @core_area.id, from: "area"), class: "btn btn-xs btn-primary", remote: true) %>
+          <%= link_to("添加物流商", new_core_logistic_area_path(area_id: @core_area.id, from: "area"), class: "btn btn-xs btn-primary", remote: true) if can?(:create, Core::LogisticArea) %>
           <div id="logistic_area_list">
             <%= render("core/logistic_areas/list_for_areas") %>
           </div>

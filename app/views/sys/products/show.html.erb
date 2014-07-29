@@ -25,7 +25,7 @@
         <!-- base info -->
 
         <div id="sku-list" class="tab-pane">
-          <%= link_to("添加SKU", new_sys_sku_path(product_id: 1), class: "btn btn-xs btn-primary", remote: true) %>
+          <%= link_to("添加SKU", new_sys_sku_path(product_id: 1), class: "btn btn-xs btn-primary", remote: true) if can?(:create, Sys::Sku) %>
 
           <table id="sample-table-1" class="table table-striped table-bordered table-hover">  
             <thead>

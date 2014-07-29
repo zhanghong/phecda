@@ -39,7 +39,7 @@
                 </td>
               <%- end -%>
               <td>
-                <%= link_to "编辑", edit_permissions_admin_account_permissions_path(account_id: admin_account_permission.account_id), class: "btn btn-xs btn-primary" %>
+                <%= link_to("编辑", edit_permissions_admin_account_permissions_path(account_id: admin_account_permission.account_id), class: "btn btn-xs btn-primary") if can?(:update_permissions, Admin::AccountPermission) %>
               </td>
             </tr>
           <% end %>

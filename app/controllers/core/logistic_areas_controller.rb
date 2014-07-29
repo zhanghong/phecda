@@ -1,6 +1,7 @@
 class Core::LogisticAreasController < ApplicationController
   before_action :set_core_logistic_area, only: [:show, :edit, :update, :destroy]
   before_action :find_from_objects,  only: [:new, :edit]
+  authorize_resource  :class => Core::LogisticArea
 
   # # GET /core/logistic_areas
   # # GET /core/logistic_areas.json

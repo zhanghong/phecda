@@ -15,7 +15,7 @@
     </div>
   </div>
   <div class="col-xs-12">
-    <%= link_to("添加权限", new_admin_permission_path, class: "btn btn-xs btn-warning") %>
+    <%= link_to("添加权限", new_admin_permission_path, class: "btn btn-xs btn-warning") if can?(:create, Admin::Permission) %>
   </div>
   <div class="col-xs-12">
     <div class="table-responsive">
@@ -47,9 +47,9 @@
                 </td>
               <%- end -%>
               <td>
-                <%= link_to "查看", admin_permission, class: "btn btn-xs btn-success" %>
-                <%= link_to "编辑", edit_admin_permission_path(admin_permission), class: "btn btn-xs btn-primary" %>
-                <%= link_to "删除 ", admin_permission, class: "btn btn-xs btn-danger", method: :delete, data: { confirm: '您确定要删除吗？'} %>
+                <%= link_to("查看", admin_permission, class: "btn btn-xs btn-success") %>
+                <%= link_to("编辑", edit_admin_permission_path(admin_permission), class: "btn btn-xs btn-primary") if can?(:update, admin_permission) %>
+                <%= link_to("删除 ", admin_permission, class: "btn btn-xs btn-danger", method: :delete, data: { confirm: '您确定要删除吗？'}) if can?(:destroy, admin_permission) %>
               </td>
             </tr>
           <% end %>

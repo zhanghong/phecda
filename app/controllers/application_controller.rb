@@ -45,6 +45,10 @@ protected
     end
   end
 
+  def find_core_stock
+    @core_stock = Core::Stock.find_by_id(params[:stock_id])
+  end
+
   rescue_from CanCan::AccessDenied do |exception|
     redirect_to("/", :alert => exception.message)
   end

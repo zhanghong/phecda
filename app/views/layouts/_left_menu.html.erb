@@ -44,8 +44,7 @@
     <%=raw(left_menu_link_unless(params[:controller] == "admin/account_permissions", "店铺权限管理", admin_account_permissions_path, icon: "fa-archive")) if can?(:read, Admin::AccountPermission) %>
     <%=raw(left_menu_link_unless(params[:controller] == "core/roles", "角色管理", core_roles_path, icon: "fa-group")) if can?(:read, Core::Role) %>
     <%=raw(left_menu_link_unless(params[:controller] == "core/sellers", "经销商管理", core_sellers_path, icon: "fa-archive")) if can?(:read, Core::Seller) %>
-    <%=raw(left_menu_link_unless(params[:controller] == "core/stocks", "仓库管理", core_stocks_path, icon: "fa-archive")) if can?(:read, Core::Area) %>
-    <%=raw(left_menu_link_unless(params[:controller] == "core/stock_products", "库存管理", core_stock_products_path, icon: "fa-archive")) if can?(:read, Core::Area) %>
+    <%=raw(left_menu_link_unless(params[:controller] == "core/stocks", "仓库管理", core_stocks_path, icon: "fa-archive")) if can?(:read, Core::Stock) %>
     
     <!-- 
     <li>

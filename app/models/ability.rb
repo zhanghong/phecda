@@ -9,6 +9,7 @@ class Ability
     alias_action  [:area_nodes],  to: :read
 
     can :read,  Core::Area
+    can :manage, [Core::Stock, Core::StockProduct, Core::StockBill, Core::StockInBill, Core::StockOutBill]
     
     user.permissions.each do |permission|
       if permission.ability_method.present?

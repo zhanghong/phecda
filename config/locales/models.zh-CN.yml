@@ -161,7 +161,82 @@ zh-CN:
       core/stock:
         name: 仓库名
         seller_count: 经销商数量
+        sellers_name: 关联经销商
         product_count: 商品数量
+        updater_name: 更新用户
+        created_at: 创建时间
+        updated_at: 更新时间
+      core/stock_bill:
+        identifier: 编号
+        type_name: 类型
+        stock_id: 仓库名
+        trade_id: 订单ID
+        logistic_name: 物流商名
+        cat_name: "入/出库类型"
+        cat_name_zh: "入/出库类型"
+        state: "状态"
+        state_name: "状态"
+        customer_name: "联系人"
+        area_id: "市/区"
+        address: "地址"
+        mobile: "电话"
+        phone: "手机"
+        remark: "备注"
+        product_count: 商品数量
+        updater_name: 更新用户
+        created_at: 创建时间
+        updated_at: 更新时间  
+      core/stock_in_bill:
+        identifier: "编号"
+        stock_id: 仓库名
+        trade_id: 订单ID
+        logistic_name: 物流商名
+        cat_name: "入库类型"
+        cat_name_zh: "入库类型"
+        state: "状态"
+        state_name: "状态"
+        customer_name: "联系人"
+        area_id: "市/区"
+        address: "地址"
+        mobile: "电话"
+        phone: "手机"
+        remark: "备注"
+        product_count: 商品数量
+        updater_name: 更新用户
+        created_at: 创建时间
+        updated_at: 更新时间
+      core/stock_out_bill:
+        identifier: "编号"
+        stock_id: 仓库名
+        trade_id: 订单ID
+        logistic_name: 物流商名
+        cat_name: "出库类型"
+        cat_name_zh: "出库类型"
+        state: "状态"
+        state_name: "状态"
+        customer_name: "联系人"
+        area_id: "市/区"
+        address: "地址"
+        mobile: "电话"
+        phone: "手机"
+        remark: "备注"
+        product_count: 商品数量
+        updater_name: 更新用户
+        created_at: 创建时间
+        updated_at: 更新时间
+      core/stock_bill_log:
+        bill_identifier: "入/出库单号"
+        state: 状态
+        updater_name: 更新用户
+        created_at: 操作时间
+        updated_at: 更新时间   
+      core/bill_product:
+        bill_identifier: "入/出库单号"
+        sys_sku_id: SKU名
+        sku_name: SKU名
+        number: 数量
+        unit_price: 单价
+        sum_price: 小计
         updater_name: 更新用户
         created_at: 创建时间
         updated_at: 更新时间

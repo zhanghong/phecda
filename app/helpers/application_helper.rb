@@ -35,4 +35,20 @@ module ApplicationHelper
       %Q(<li>#{left_menu_link_item(name, options, html_options)}</li>)
     end
   end
+
+  def tab_link_item(name, option = {}, html_options = {})
+    link_to(name, option, html_options)
+  end
+
+  def tab_link_unless(condition, name, options = {}, html_options = {}, &block)
+    if condition
+      if block_given?
+        block.arity <= 1 ? capture(name, &block) : capture(name, options, html_options, &block)
+      else
+        %Q(<li class="active">#{tab_link_item(name, options, html_options)}</li>)
+      end
+    else
+      %Q(<li>#{tab_link_item(name, options, html_options)}</li>)
+    end
+  end
 end

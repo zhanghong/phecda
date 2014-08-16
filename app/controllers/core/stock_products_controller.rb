@@ -1,4 +1,6 @@
+# encoding : utf-8 -*-
 class Core::StockProductsController < ApplicationController
+  before_action :find_core_stock
   before_action :set_core_stock_product, only: [:show, :edit, :update, :destroy]
   authorize_resource  :class => Core::StockProduct
 
@@ -15,7 +17,7 @@ class Core::StockProductsController < ApplicationController
 
   # GET /core/stock_products/new
   def new
-    @core_stock_product = Core::StockProduct.new
+    @core_stock_product = @core_stock.stock_products.build
   end
 
   # GET /core/stock_products/1/edit
@@ -25,14 +27,14 @@ class Core::StockProductsController < ApplicationController
   # POST /core/stock_products
   # POST /core/stock_products.json
   def create
-    @core_stock_product = Core::StockProduct.new(core_stock_product_params)
+    @core_stock_product = @core_stock.stock_in_bills.build(core_stock_product_params)
 
     respond_to do |format|
       if params[:btn_cancel].present?
-        format.html { redirect_to(action: "index")}
+        format.html { redirect_to core_stock_stock_products_path(@core_stock)}
         format.json { render json: {}}
       elsif @core_stock_product.save
-        format.html { redirect_to @core_stock_product, notice: 'Stock product was successfully created.' }
+        format.html { redirect_to core_stock_stock_product_path(@core_stock, @core_stock_product), notice: '创建成功' }
         format.json { render action: 'show', status: :created, location: @core_stock_product }
       else
         format.html { render action: 'new' }
@@ -46,10 +48,10 @@ class Core::StockProductsController < ApplicationController
   def update
     respond_to do |format|
       if params[:btn_cancel].present?
-        format.html { redirect_to(@core_stock_product)}
+        format.html { redirect_to core_stock_stock_product_path(@core_stock, @core_stock_product)}
         format.json { head :no_content }
       elsif @core_stock_product.update(core_stock_product_params)
-        format.html { redirect_to @core_stock_product, notice: 'Stock product was successfully updated.' }
+        format.html { redirect_to core_stock_stock_product_path(@core_stock, @core_stock_product), notice: '更新成功' }
         format.json { head :no_content }
       else
         format.html { render action: 'edit' }
@@ -61,17 +63,17 @@ class Core::StockProductsController < ApplicationController
   # DELETE /core/stock_products/1
   # DELETE /core/stock_products/1.json
   def destroy
-    @core_stock_product.destroy
-    respond_to do |format|
-      format.html { redirect_to core_stock_products_url }
-      format.json { head :no_content }
-    end
+    # @core_stock_product.destroy
+    # respond_to do |format|
+    #   format.html { redirect_to core_stock_products_url }
+    #   format.json { head :no_content }
+    # end
   end
 
 private
   # Use callbacks to share common setup or constraints between actions.
   def set_core_stock_product
-    @core_stock_product = Core::StockProduct.account_scope.actived.find_by_id(params[:id])
+    @core_stock_product = Core::StockProduct.where(stock_id: params[:stock_id], id: params[:id]).first
     redirect_to(action: "index") and return if @core_stock_product.blank?
   end
 

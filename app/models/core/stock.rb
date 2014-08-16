@@ -13,15 +13,18 @@ class Core::Stock < ActiveRecord::Base
   scope :actived, -> {where(deleted_at: nil)}
   has_many  :stock_products, class_name: "Core::StockProduct", dependent: :destroy
   has_many  :sellers, class_name: "Core::Seller", dependent: :destroy
+  has_many  :stock_bills, class_name: "Core::StockBill", dependent: :destroy
+  has_many  :stock_in_bills,  class_name: "Core::StockInBill", dependent: :destroy
+  has_many  :stock_out_bills, class_name: "Core::StockOutBill", dependent: :destroy
   belongs_to  :updater, class_name: "User"
   belongs_to  :deleter, class_name: "User"
 
   def self.list_shown_attributes
-    %w(name seller_count product_count)
+    %w(name sellers_name product_count)
   end
 
   def self.detail_shown_attributes
-    %w(name seller_count product_count updater_name)
+    %w(name product_count updater_name created_at updated_at sellers_name)
   end
 
   def self.find_mine(params)

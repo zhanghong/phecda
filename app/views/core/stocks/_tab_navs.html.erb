@@ -1,0 +1,10 @@
+<%= raw(tab_link_unless(params[:controller] == "core/stocks", "仓库概况", core_stock_path(@core_stock))) if can?(:read, Core::Stock) %>
+<%= raw(tab_link_unless((params[:controller] == "core/stock_in_bills" && params[:action] == "index"), "入库单", core_stock_stock_in_bills_path(@core_stock))) if can?(:read, Core::StockInBill) %>
+<%= raw(tab_link_unless(params[:controller] == "core/stock_out_bills", "出库单", core_stock_stock_out_bills_path(@core_stock))) if can?(:read, Core::StockOutBill) %>
+<%= raw(tab_link_unless(params[:controller] == "core/stock_bills", "所有进销", core_stock_stock_bills_path(@core_stock))) if can?(:read, Core::StockBill) %>
+<%= raw(tab_link_unless(params[:controller] == "core/stock_products", "库存商品", core_stock_stock_products_path(@core_stock))) if can?(:read, Core::StockProduct) %>
+<%- if @core_stock_in_bill.present? -%>
+  <li class="active"><a>入库单<%= @core_stock_in_bill.identifier %></a></li>
+<%- elsif @core_stock_out_bill.present? -%>
+  <li class="active"><a>出库单<%= @core_stock_in_bill.identifier %></a></li>
+<%- end -%>

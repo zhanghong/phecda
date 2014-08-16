@@ -37,8 +37,13 @@ Phecda::Application.routes.draw do
         post  :node_click
       end
     end
-    resources :stocks
-    resources :stock_products
+
+    resources :stocks do
+      resources   :stock_bills
+      resources   :stock_in_bills
+      resources   :stock_out_bills
+      resources   :stock_products
+    end
     resources :user_roles
   end
 

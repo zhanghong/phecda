@@ -1,0 +1,53 @@
+<%= form_for(@core_stock_bill) do |f| %>
+  <% if @core_stock_bill.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@core_stock_bill.errors.count, "error") %> prohibited this core_stock_bill from being saved:</h2>
+
+      <ul>
+      <% @core_stock_bill.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :stock_id %><br>
+    <%= f.text_field :stock_id %>
+  </div>
+  <div class="field">
+    <%= f.label :cat_name %><br>
+    <%= f.text_field :cat_name %>
+  </div>
+  <div class="field">
+    <%= f.label :status %><br>
+    <%= f.text_field :status %>
+  </div>
+  <div class="field">
+    <%= f.label :customer_name %><br>
+    <%= f.text_field :customer_name %>
+  </div>
+  <div class="field">
+    <%= f.label :area_id %><br>
+    <%= f.text_field :area_id %>
+  </div>
+  <div class="field">
+    <%= f.label :address %><br>
+    <%= f.text_field :address %>
+  </div>
+  <div class="field">
+    <%= f.label :mobile %><br>
+    <%= f.text_field :mobile %>
+  </div>
+  <div class="field">
+    <%= f.label :phone %><br>
+    <%= f.text_field :phone %>
+  </div>
+  <div class="field">
+    <%= f.label :remark %><br>
+    <%= f.text_field :remark %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

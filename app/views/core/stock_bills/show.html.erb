@@ -1,0 +1,49 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Stock:</strong>
+  <%= @core_stock_bill.stock_id %>
+</p>
+
+<p>
+  <strong>Cat name:</strong>
+  <%= @core_stock_bill.cat_name %>
+</p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @core_stock_bill.status %>
+</p>
+
+<p>
+  <strong>Customer name:</strong>
+  <%= @core_stock_bill.customer_name %>
+</p>
+
+<p>
+  <strong>Area:</strong>
+  <%= @core_stock_bill.area_id %>
+</p>
+
+<p>
+  <strong>Address:</strong>
+  <%= @core_stock_bill.address %>
+</p>
+
+<p>
+  <strong>Mobile:</strong>
+  <%= @core_stock_bill.mobile %>
+</p>
+
+<p>
+  <strong>Phone:</strong>
+  <%= @core_stock_bill.phone %>
+</p>
+
+<p>
+  <strong>Remark:</strong>
+  <%= @core_stock_bill.remark %>
+</p>
+
+<%= link_to 'Edit', edit_core_stock_bill_path(@core_stock_bill) %> |
+<%= link_to 'Back', core_stock_bills_path %>

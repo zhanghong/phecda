@@ -41,6 +41,8 @@
                   <% case attr_name
                     when "name" %>
                     <%= link_to(core_stock.send(attr_name), core_stock) %>
+                  <%- when "sellers_name" -%>
+                  <%= raw core_stock.sellers.map(&:name).join("<br/>") %>
                   <%- else -%>
                     <%= core_stock.send(attr_name) %>
                   <%- end -%>

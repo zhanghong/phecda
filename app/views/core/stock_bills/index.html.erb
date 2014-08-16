@@ -1,0 +1,83 @@
+<div class="row">
+  <div class="col-sm-12">
+    <div class="tabbable">
+      <ul class="nav nav-tabs" id="myTab">
+        <%= render("core/stocks/tab_navs") %>
+      </ul>
+
+      <div class="tab-content">
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="tab-pane active" id="stock_check">
+              <%= form_tag core_stock_stock_bills_path(@core_stock), method: "GET", class: "well well-small form-horizontal font12" do %>
+                <fieldset class="form-inline mar_t5">
+                  <div class="controls pull-left padding-right-5">
+          <!--           <label for="search_title"><%#= Core::Seller.human_attribute_name(:name) %>：</label>
+                    <input type="text" class="input-medium radius_no_tl" name="name" value='<%= params[:name] %>' placeholder="关键字..."> -->
+                  </div>
+                  <div class="controls pull-left padding-right-5">
+                    <%= submit_tag "搜索", class: "btn btn-xs btn-primary pull-right" %>
+                  </div>
+                </fieldset>
+              <%- end -%>
+            </div>
+          </div>
+          <div class="col-xs-12">
+            <div class="table-responsive">
+              <table id="sample-table-1" class="table table-striped table-bordered table-hover">
+                <thead>
+                  <tr>
+                    <% Core::StockBill.list_shown_attributes.each do |attr_name| %>
+                      <th>
+                        <%= Core::StockBill.human_attribute_name(attr_name) %>
+                      </th>
+                    <%- end -%>
+                    <th class="center">
+                      
+                    </th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <% @core_stock_bills.each do |bill| %>
+                    <% class_name = bill.class.name %>
+                    <tr>
+                      <% Core::StockBill.list_shown_attributes.each do |attr_name| %>
+                        <td>
+                          <% case attr_name
+                            when "identifier" %>
+                            <% case class_name 
+                              when "Core::StockInBill" -%>
+                              <%= link_to(bill.send(attr_name), core_stock_stock_in_bill_path(@core_stock, bill)) %>
+                            <%- when "Core::StockOutBill" -%>
+                              <%= link_to(bill.send(attr_name), core_stock_stock_out_bill_path(@core_stock, bill)) %>
+                            <%- else -%>
+                              <%= bill.identifier %>
+                            <%- end -%>
+                          <%- else -%>
+                            <%= bill.send(attr_name) %>
+                          <%- end -%>
+                        </td>
+                      <%- end -%>
+                      <td>
+                        <% case class_name 
+                          when "Core::StockInBill" -%>
+                          <%= link_to("查看", core_stock_stock_in_bill_path(@core_stock, bill), class: "btn btn-xs btn-success") %>
+                          <%= link_to("编辑", edit_core_stock_stock_in_bill_path(@core_stock, bill), class: "btn btn-xs btn-primary") if can?(:update, bill) %>
+                        <%- when "Core::StockOutBill" -%>
+                          <%= link_to("查看", core_stock_stock_out_bill_path(@core_stock, bill), class: "btn btn-xs btn-success") %>
+                          <%= link_to("编辑", edit_core_stock_stock_out_bill_path(@core_stock, bill), class: "btn btn-xs btn-primary") if can?(:update, bill) %>
+                        <%- end -%>
+                      </td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+              <%= will_paginate @core_stock_bills, renderer: BootstrapPagination::Rails %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

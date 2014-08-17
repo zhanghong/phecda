@@ -14,6 +14,8 @@ class Account < ActiveRecord::Base
   has_many  :shops, dependent: :destroy
   has_many  :sellers, dependent: :destroy
 
+  after_create  :refresh
+
   def self.current=(account)
     Thread.current[:current_account] = account
   end
@@ -30,12 +32,19 @@ class Account < ActiveRecord::Base
     end
   end
 
+  def refresh
+    add_to_superadmin
+    grant_base_to_account
+    create_default_roles
+  end
+
+private
   #给店铺开启base访问权限
   def grant_base_to_account
     all_base_ids = Admin::Permission.where(level: "base").map(&:id)
-    granted_ids = Admin::AccountPermission.where(account_id: account_id).map(&:permission_id)
+    granted_ids = Admin::AccountPermission.where(account_id: self.id).map(&:permission_id)
     (all_base_ids - granted_ids).each do |pmt_id|
-      Admin::AccountPermission.create(account_id: account_id, permission_id: pmt_id)
+      Admin::AccountPermission.create(account_id: self.id, permission_id: pmt_id)
     end
   end
 
@@ -45,14 +54,14 @@ class Account < ActiveRecord::Base
     super_admin = User.where(is_superadmin: true).first
 
     admin_role = Core::Role.unscoped.find_or_initialize_by(account_id: self.id, name: "管理员")
-    admin_role.update(updater_id: super_admin.id, permisson_ids: all_pmt_ids) if admin_role.new_record?
+    admin_role.update(updater_id: super_admin.id, permisson_ids: all_pmt_ids)
     User.where(is_superadmin: true).each do |user|
       user_role = Core::UserRoles.find_or_initialize_by(account_id: self.id, role_id: admin_role.id, user_id: user.id)
       user_role.update(updater_id: super_admin.id) if user_role.new_record?
-    end unless admin_role.new_record?
+    end
   end
-private
+
   def add_to_superadmin
-    User.add_shop_to_superadmins(self)
+    User.add_account_to_superadmins(self)
   end
 end

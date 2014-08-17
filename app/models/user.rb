@@ -56,9 +56,9 @@ class User < ActiveRecord::Base
     end
   end
 
-  def self.add_shop_to_superadmins(shop)
+  def self.add_account_to_superadmins(account)
     where(is_superadmin: true).all.each do |user|
-      user.shops << shop
+      user.accounts << account unless user.accounts.include?(account)
     end
   end
 

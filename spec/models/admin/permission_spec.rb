@@ -153,24 +153,51 @@ describe Admin::Permission do
     end
   end
 
-  it "return permission updater name" do
-    user = create(:user)
-    read_trade = create(:trade_read_permission, updater: user)
-    expect(read_trade.updater_name).to eq(user.name)
+  context "return permission updater name" do
+    it "updater id is present" do
+      user = create(:user)
+      read_trade = create(:trade_read_permission, updater: user)
+      expect(read_trade.updater_name).to eq(user.name)
+    end
+
+    it "updater id is empty" do
+      read_trade = create(:trade_read_permission, updater: nil)
+      expect(read_trade.updater_name).to eq(nil)
+    end
   end
 
-  it "return permission deleter name" do
-    user = create(:user)
-    deleted_permission = create(:deleted_permission, updater: user, deleter: user)
-    expect(deleted_permission.updater_name).to eq(user.name)
+  context "return permission deleter name" do
+    it "deleter id is present" do
+      user = create(:user)
+      deleted_permission = create(:deleted_permission, updater: user, deleter: user)
+      expect(deleted_permission.updater_name).to eq(user.name)
+    end
+
+    it "deleter id is empty" do
+      user = create(:user)
+      User.current = nil
+      deleted_permission = create(:deleted_permission, updater: user, deleter: nil)
+      expect(deleted_permission.deleter_name).to eq(nil)
+    end
   end
 
-  it "destroy permission" do
-    user = create(:user)
-    User.current = user
-    read_trade = create(:trade_read_permission, updater: user)
-    read_trade.destroy
-    expect(read_trade.deleter_id).to eq(user.id)
-    expect(read_trade.deleted_at.present?).to eq(true)
+  context "destroy permission" do
+    it "destroy when current user is persent" do
+      user = create(:user)
+      User.current = user
+      read_trade = create(:trade_read_permission, updater: user)
+      read_trade.destroy
+      expect(read_trade.deleter_id).to eq(user.id)
+      expect(read_trade.deleted_at.present?).to eq(true)
+    end
+
+    it "destroy when current user is empty" do
+      user = create(:user)
+      User.current = nil
+      read_trade = create(:trade_read_permission, updater: user)
+      read_trade.destroy
+      expect(read_trade.deleter_id).to eq(-1)
+      expect(read_trade.deleted_at.present?).to eq(true)
+    end
   end
 end

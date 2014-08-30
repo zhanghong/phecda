@@ -57,8 +57,8 @@ class User < ActiveRecord::Base
   end
 
   def self.add_account_to_superadmins(account)
-    where(is_superadmin: true).all.each do |user|
-      user.accounts << account unless user.accounts.include?(account)
+    where(is_superadmin: true).each do |user|
+      user.accounts << account if user.accounts.where(id: account.id).blank?
     end
   end
 

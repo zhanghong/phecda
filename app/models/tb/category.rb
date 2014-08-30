@@ -18,6 +18,11 @@
 # end
 # add_index "tb_categories", ["shop_id", "name"], name: "idx_by_shop_id_and_name", using: :btree
 class Tb::Category < ActiveRecord::Base
-	belongs_to	:shop,		class_name: "Tb::Shop"
-	has_many	  :products,	class_name: "Tb::Product", dependent: :destroy
+	belongs_to	  :shop,		class_name: "Tb::Shop"
+	has_many	    :products,	class_name: "Tb::Product", dependent: :destroy
+  after_create  :clone_to_sys
+
+  def clone_to_sys
+    
+  end
 end

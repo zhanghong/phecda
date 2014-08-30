@@ -18,7 +18,7 @@
 # end
 # add_index "admin_permissions", ["sort_num"], name: "idx_by_sort_num", using: :btree
 class Admin::Permission < ActiveRecord::Base
-  default_scope -> { where(deleter_id: 0)}
+  default_scope -> { where(deleter_id: 0).order("sort_num")}
 
   belongs_to  :updater,   class_name: "User"
   belongs_to  :deleter,   class_name: "User"
@@ -69,7 +69,7 @@ class Admin::Permission < ActiveRecord::Base
         next
       else
         conditions[0] << "#{attr} = ?"
-        conditions << "%#{params[attr]}%"
+        conditions << params[attr]
       end
     end
 

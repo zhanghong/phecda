@@ -13,12 +13,11 @@
 class Admin::AccountPermission < ActiveRecord::Base
   default_scope -> { where(deleter_id: 0)}
   belongs_to  :account
+  belongs_to  :permission,  class_name: "Admin::Permission"
   belongs_to  :updater,   class_name: "User"
   belongs_to  :deleter,   class_name: "User"
 
   validates :account_id,  presence: true
-  belongs_to    :permission,  class_name: "Admin::Permission"
-  belongs_to    :account
 
   def self.list_shown_attributes
     %w(account_name joined_at granted_at)
@@ -33,9 +32,9 @@ class Admin::AccountPermission < ActiveRecord::Base
   end
 
   def self.find_mine(params)
-    find_scope = self.eager_load(:permission, :account)
+    find_scope = self.joins(:permission, :account)
 
-    conditions = [[]]
+    conditions = [["admin_permissions.deleter_id = ?"], 0]
 
     [:permission_name, :account_name].each do |attr|
       if params[attr].blank?
@@ -54,12 +53,12 @@ class Admin::AccountPermission < ActiveRecord::Base
         next
       else
         conditions[0] << "admin_account_permissions.#{attr} = ?"
-        conditions << "%#{params[attr]}%"
+        conditions << params[attr]
       end
     end
 
     conditions[0] = conditions[0].join(" AND ")
-    find_scope.where(conditions)
+    find_scope.where(conditions).order("admin_permissions.sort_num")
   end
 
   def self.account_group_find(params)

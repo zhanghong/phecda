@@ -23,23 +23,27 @@ describe Admin::Permission do
   end
 
   [
-    {name: :module_name, maximum: 20, uniqueness: false},
-    {name: :group_name, maximum: 20, uniqueness: false},
-    {name: :level, maximum: 20, uniqueness: false},
-    {name: :name, maximum: 20, uniqueness: false},
+    {name: :module_name, maximum: 20},
+    {name: :group_name, maximum: 20},
+    {name: :level, maximum: 20},
+    {name: :name, maximum: 20},
     {name: :tag_name, maximum: 40, uniqueness: true},
     {name: :full_name, maximum: 30, uniqueness: true},
-    {name: :subject_class, maximum: 20, uniqueness: false},
-    {name: :action_name, maximum: 20, uniqueness: false}
+    {name: :subject_class, maximum: 20},
+    {name: :action_name, maximum: 20}
   ].each do |valid_object|
-    context "valid permission #{valid_object[:name]}" do
-      name = valid_object[:name]
-      maximum = valid_object[:maximum]
-      it { should validate_presence_of(name).with_message("不能为空")}
-      it { should ensure_length_of(name).is_at_most(maximum).with_message("过长（最长为 #{maximum} 个字符）")}
-      if valid_object[:uniqueness]
-        it { should validate_uniqueness_of(name).with_message("已经被使用")}
-      end
+    shoulda_validate_text_field(valid_object)
+  end
+
+  context "check shown attributes" do
+    it "check list page view attributs" do
+      arr = %w(full_name module_name group_name)
+      expect(Admin::Permission.list_shown_attributes).to eq(arr)
+    end
+
+    it "check show page view attributes" do
+      arr = %w(full_name name tag_name module_name group_name subject_class action_name ability_method sort_num updater_name created_at updated_at)
+      expect(Admin::Permission.detail_shown_attributes).to eq(arr)
     end
   end
 
@@ -170,7 +174,7 @@ describe Admin::Permission do
     it "deleter id is present" do
       user = create(:user)
       deleted_permission = create(:deleted_permission, updater: user, deleter: user)
-      expect(deleted_permission.updater_name).to eq(user.name)
+      expect(deleted_permission.deleter_name).to eq(user.name)
     end
 
     it "deleter id is empty" do

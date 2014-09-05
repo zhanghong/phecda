@@ -1,7 +1,6 @@
 # encoding : utf-8 -*-
-# create_table "core_areas", id: false, force: true do |t|
-#   t.integer  "id"
-#   t.string   "name",           limit: 20, default: ""
+# create_table "core_areas", force: true do |t|
+#   t.string   "taobao_name",    limit: 20, default: ""
 #   t.integer  "parent_id"
 #   t.boolean  "active",                    default: true
 #   t.string   "pinyin",         limit: 50, default: ""
@@ -12,6 +11,11 @@
 #   t.string   "zip",            limit: 6,  default: ""
 #   t.datetime "created_at"
 #   t.datetime "updated_at"
+#   t.integer  "updater_id",                default: 0
+#   t.integer  "level_id"
+#   t.integer  "taobao_id",                 default: 0
+#   t.integer  "jingdong_id",               default: 0
+#   t.string   "jingdong_name",  limit: 20, default: ""
 # end
 class Core::Area < ActiveRecord::Base
   acts_as_nested_set counter_cache: :children_count
@@ -33,27 +37,14 @@ class Core::Area < ActiveRecord::Base
     #conditions = [["level_id = ?"], 3]
     conditions = [[]]
 
-    [:name].each do |attr|
-      if params[attr].blank?
-        next
-      else
-        conditions[0] << "#{attr} LIKE ?"
-        conditions << "%#{params[attr]}%"
-      end
-    end
-
-    [:parent_id].each do |attr|
-      if attr == :parent_id
-        if params[attr].blank?
-          conditions[0] << "parent_id IS NULL"
-        else
-          conditions[0] << "parent_id = #{params[attr].to_i}"
-        end
-      elsif params[attr].blank?
-        next
-      else
-        conditions[0] << "#{attr} = ?"
-        conditions << params[attr]
+    params.each do |attr_name, value|
+      next if value.blank?
+      case attr_name
+      when :name
+        conditions[0] << "(taobao_name LIKE ? OR jingdong_name LIKE ?)"
+        conditions << "%#{value}%" << "%#{value}%"
+      when :parent_id
+        conditions[0] << "parent_id = #{value.to_i}"
       end
     end
 
@@ -61,8 +52,9 @@ class Core::Area < ActiveRecord::Base
     find_scope.where(conditions)
   end
 
+  #更新Core::Area的级别
   def self.reset_levels
-    self.roots.each do |area|
+    self.roots.to_a.each do |area|
       set_level_id(area, 1)
     end
   end
@@ -76,8 +68,14 @@ class Core::Area < ActiveRecord::Base
     items
   end
 
-  def zipcode
-    self.id
+  def name
+    if self.taobao_name.present?
+      self.taobao_name
+    elsif self.jingdong_name.present?
+      self.jingdong_name
+    else
+      ""
+    end
   end
 
   def province_name
@@ -124,13 +122,13 @@ class Core::Area < ActiveRecord::Base
   end
   
   def is_leaf
-    self.children_count > 0
+    children.count == 0
   end
 private
   def self.set_level_id(area, level_id)
+    area.update(level_id: level_id)
     area.children.each do |child|
       set_level_id(child, level_id + 1)
     end
-    area.update(level_id: level_id)
   end
 end

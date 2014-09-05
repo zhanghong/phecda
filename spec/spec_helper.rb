@@ -1,3 +1,4 @@
+# encoding: utf-8
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path("../../config/environment", __FILE__)
@@ -81,4 +82,21 @@ end
 def sub_time
   now = Time.now.beginning_of_day
   Time.stub(:now) { now }
+end
+
+def shoulda_validate_text_field(valid_object)
+  context "valid object #{valid_object[:name]}" do
+    name = valid_object[:name]
+
+    it { should validate_presence_of(name).with_message("不能为空")}
+
+    if valid_object[:maximum].present?
+      maximum = valid_object[:maximum]
+      it { should ensure_length_of(name).is_at_most(maximum).with_message("过长（最长为 #{maximum} 个字符）")}
+    end
+
+    if valid_object[:uniqueness]
+      it { should validate_uniqueness_of(name).with_message("已经被使用")}
+    end
+  end
 end

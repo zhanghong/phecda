@@ -214,7 +214,7 @@ describe Core::Seller do
     end
   end
 
-  context "filter find mine method" do
+  context "Core::Seller instance object methods" do
     before :each do
       @account = create(:brandy_account)
       @jos = create(:user, name: "jos")

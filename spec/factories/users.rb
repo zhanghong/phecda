@@ -4,7 +4,7 @@ FactoryGirl.define do
 	factory :user do
 		name { "test" + Faker::Name.first_name }
 		mobile "13212345678"
-		email { Faker::Internet.email }
+    sequence(:email) { |n| "user_#{n}@phecda.com"}
 		password "123456"
 		sign_in_count 0
 

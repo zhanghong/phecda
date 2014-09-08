@@ -12,47 +12,57 @@
 # add_index "sys_properties", ["account_id", "name"], name: "idx_by_account_id_and_name", using: :btree
 # add_index "sys_properties", ["account_id", "status"], name: "idx_by_account_id_and_status", using: :btree
 class Sys::Property < ActiveRecord::Base
-  scope :account_scope, -> {where(account_id: Account.current_id)}
-  scope :actived, -> {where(deleted_at: nil)}
+  include ScopeHelper
 
   has_and_belongs_to_many :categories, join_table: "sys_categories_properties", class_name: "Sys::Category"
-	belongs_to		:account
-  belongs_to    :updater,   class_name: "User"
-  belongs_to    :deleter,   class_name: "User"
-  has_many      :values,    class_name: "Sys::PropertyValue"
-  
+  has_many      :values,    class_name: "Sys::PropertyValue", dependent: :destroy
 
-  STATUS = [["启用", "actived"], ["隐藏", "hidden"]]
+  validates :name, presence: true, uniqueness: {scope: [:account_id], conditions: -> { where(deleter_id: 0)}},
+            length: {maximum: 20}
+  validates :state, presence: true
+
+  STATES = [["启用", "actived"], ["隐藏", "hidden"]]
 
   def self.find_mine(params)
+    find_scope = self
+
     conditions = [[]]
 
-    [:name].each do |attr|
-      next if params[attr].blank?
-      conditions[0] << "#{attr} LIKE ?"
-      conditions << "%#{params[attr]}%"
-    end
-
-    [:state].each do |attr|
-      next if params[attr].blank?
-      conditions[0] << "#{attr} = ?"
-      conditions << params[attr]
+    params.each do |attr_name, value|
+      next if value.blank?
+      case attr_name
+      when :name
+        conditions[0] << "#{attr_name} LIKE ?"
+        conditions << "%#{value}%"
+      when :state
+        conditions[0] << "#{attr_name} = ?"
+        conditions << value
+      end
     end
 
     conditions[0] = conditions[0].join(" AND ")
-    account_scope.actived.where(conditions)
+    find_scope.where(conditions)
   end
 
   def self.list_shown_attributes
-    %w(name status_name values_count created_at updated_at)
+    %w(name state_name values_count created_at updated_at)
   end
 
   def self.detail_shown_attributes
-    %w(name status_name created_at updated_at values_name)
+    %w(name state_name created_at updated_at values_name)
   end
 
-  def self.account_properties
-    account_scope.actived
+  # def self.account_properties
+  #   account_scope.actived
+  # end
+  state_machine :state, :initial => :actived do
+    event :active do
+      transition :hidden => :actived
+    end
+
+    event :hide do
+      transition :actived => :hidden
+    end
   end
 
   def values_name
@@ -63,17 +73,13 @@ class Sys::Property < ActiveRecord::Base
     values.count
   end
 
-  def status_name
-    status_item = STATUS.find{|s| s.last == self.status}
-    if status_item
-      status_item.first
+  def state_name
+    state_item = STATES.find{|s| s.last == self.state}
+    if state_item
+      state_item.first
     else
-      self.status
+      self.state
     end
-  end
-
-  def updater_name
-    updater.name
   end
 
   def save_property_values(values_name)
@@ -89,10 +95,5 @@ class Sys::Property < ActiveRecord::Base
     else
       self.values.destroy_all
     end
-  end
-
-  def destroy
-    self.categories = []
-    update_attributes(deleted_at: Time.now, deleter_id: User.current_id)
   end
 end

@@ -16,6 +16,9 @@ class Sys::PropertyValue < ActiveRecord::Base
 	belongs_to	:property,		class_name: "Sys::Property"
   has_and_belongs_to_many :skus, join_table: "sys_sku_property_values"
 
+  validates :name, presence: true, uniqueness: {scope: [:property_id], conditions: -> { where(deleter_id: 0)}},
+            length: {maximum: 20}
+
   def value_name
     "#{property.name}:#{self.name}"
   end

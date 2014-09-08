@@ -18,31 +18,42 @@ class Core::SellerArea < ActiveRecord::Base
   validates :seller_id,  presence: true, uniqueness: {scope: [:area_id], conditions: -> { where(deleter_id: 0)}}
   validates :area_id,  presence: true, uniqueness: {scope: [:seller_id], conditions: -> { where(deleter_id: 0)}}
 
+  def self.inner_shown_attributes_for_core_seller
+    %w(area_zipcode area_province_name area_city_name area_state_name)
+  end
+
+  def self.inner_shown_attributes_for_core_area
+    %w(seller_name)
+  end
+
   def self.find_mine(params)
     find_scope = self.eager_load(:seller, :area)
 
     conditions = [[]]
 
-    [:seller_name].each do |attr|
-      if params[attr].blank?
-        next
-      elsif attr == :seller_name
-        conditions[0] << "core_sellers.name LIKE ?"
-        conditions << "%#{params[attr]}%"
-      end
-    end
-
-    [:parent_id, :area_id, :seller_id, :updater_id].each do |attr|
-      if params[attr].blank?
-        next
-      elsif attr == :parent_id
-        area_ids = [params[attr].to_i]
-        area_ids += Core::Area.where(parent_id: params[:parent_id]).map(&:id)
-        conditions[0] << "area_id IN (?)"
+    params.each do |attr_name, value|
+      next if value.blank?
+      case attr_name
+      when :seller_name
+        conditions[0] << "(core_sellers.name LIKE ? OR core_sellers.fullname LIKE ?)"
+        conditions << "%#{value}%" << "%#{value}%"
+      when :parent_id
+        parent_id = value.to_i
+        area_ids = [parent_id]
+        area_ids += Core::Area.where(parent_id: parent_id).map(&:id)
+        conditions[0] << "core_seller_areas.area_id IN (?)"
         conditions << area_ids
-      else
-        conditions[0] << "#{attr}=?"
-        conditions << params[attr]
+      when :area_id, :seller_id
+        if value.is_a?(Array)
+          conditions[0] << "core_seller_areas.#{attr_name} IN (?)"
+          conditions << value
+        else
+          conditions[0] << "core_seller_areas.#{attr_name}=?"
+          conditions << value.to_i
+        end
+      when :updater_id
+        conditions[0] << "core_seller_areas.#{attr_name}=?"
+        conditions << value.to_i
       end
     end
 
@@ -65,20 +76,12 @@ class Core::SellerArea < ActiveRecord::Base
     end
   end
 
-  def self.inner_shown_attributes_for_core_seller
-    %w(area_zipcode area_province_name area_city_name area_state_name)
-  end
-
-  def self.inner_shown_attributes_for_core_area
-    %w(seller_name)
-  end
-
   def seller_name
     seller.name
   end
 
   def area_zipcode
-    self.area_id
+    area.zipcode
   end
 
   def area_province_name

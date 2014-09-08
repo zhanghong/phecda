@@ -11,13 +11,12 @@
 # add_index "core_roles", ["account_id", "deleter_id"], name: "idx_by_account_id", using: :btree
 class Core::Role < ActiveRecord::Base
   include ScopeHelper
-  validates :account_id,  presence: true
   validates :name,  presence: true, uniqueness: {scope: [:account_id], conditions: -> { where(deleter_id: 0)}},
                     length: {maximum: 20}
 
-  has_many    :user_roles,   class_name: "Core::UserRoles",  dependent: :destroy
+  has_many    :user_roles,   class_name: "Core::UserRole",  dependent: :destroy
   has_many    :users,   through: :user_roles
-  has_many    :role_permissions,  class_name: "Core::RolePermission", dependent: :destroy
+  has_many    :role_permissions, -> {where(deleter_id: 0)},  class_name: "Core::RolePermission", dependent: :destroy
 
   attr_accessor :permisson_ids
 
@@ -36,21 +35,15 @@ class Core::Role < ActiveRecord::Base
 
     conditions = [[]]
 
-    [:name].each do |attr|
-      if params[attr].blank?
-        next
-      else
-        conditions[0] << "#{attr} LIKE ?"
-        conditions << "%#{params[attr]}%"
-      end
-    end
-
-    [:updater_id].each do |attr|
-      if params[attr].blank?
-        next
-      else
-        conditions[0] << "#{attr} = ?"
-        conditions << "%#{params[attr]}%"
+    params.each do |attr_name, value|
+      next if value.blank?
+      case attr_name
+      when :name
+        conditions[0] << "#{attr_name} LIKE ?"
+        conditions << "%#{value}%"
+      when :updater_id
+        conditions[0] << "#{attr_name} = ?"
+        conditions << value.to_i
       end
     end
 
@@ -64,12 +57,15 @@ class Core::Role < ActiveRecord::Base
 private
   def save_role_permissions
     if self.permisson_ids.is_a?(Array)
+      new_pmt_ids = permisson_ids.collect{|item| item.to_i}.select{|i| i > 0}
       old_pmt_ids = self.role_permissions.map(&:permission_id)
-      (self.permisson_ids - old_pmt_ids).each do |pmt_id|
-        role_permissions.create(account_id: self.account_id, permission_id: pmt_id, updater_id: User.current_id)
-      end
 
-      delete_pmt_ids = (old_pmt_ids - self.permisson_ids)
+      added_pmt_ids = new_pmt_ids - old_pmt_ids
+      Admin::Permission.where(id: added_pmt_ids).each do |permission|
+        role_permissions.create(account_id: self.account_id, permission_id: permission.id, updater_id: User.current_id)
+      end if added_pmt_ids.present?
+
+      delete_pmt_ids = old_pmt_ids - new_pmt_ids
       Core::RolePermission.destroy_all(role_id: self.id, permission_id: delete_pmt_ids) if delete_pmt_ids.present?
     end
   end

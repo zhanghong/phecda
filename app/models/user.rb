@@ -37,7 +37,7 @@ class User < ActiveRecord::Base
             :length => {:within => 3..16}
 
   has_and_belongs_to_many :accounts, join_table: "users_accounts"#,  association_foreign_key: "account_id"
-  has_many  :core_user_roles,   class_name: "Core::UserRoles",  dependent: :destroy
+  has_many  :core_user_roles,   class_name: "Core::UserRole",  dependent: :destroy
   has_many  :roles,   through: :core_user_roles
 
   def self.current=(user)

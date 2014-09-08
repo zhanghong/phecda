@@ -56,7 +56,7 @@ private
     admin_role = Core::Role.unscoped.find_or_initialize_by(account_id: self.id, name: "管理员")
     admin_role.update(permisson_ids: all_pmt_ids)
     User.where(is_superadmin: true).each do |user|
-      user_role = Core::UserRoles.find_or_create_by(account_id: self.id, role_id: admin_role.id, user_id: user.id)
+      user_role = Core::UserRole.find_or_create_by(account_id: self.id, role_id: admin_role.id, user_id: user.id)
     end
   end
 

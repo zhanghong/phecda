@@ -14,7 +14,7 @@ class Core::Logistic < ActiveRecord::Base
   has_many    :logistic_areas, -> {order("area_id")},  class_name: "Core::LogisticArea", dependent: :destroy
   has_many    :areas,   through: :logistic_areas
 
-  validates :name, presence: true, uniqueness: {scope: [:account_id, :deleted_at]},
+  validates :name,  presence: true, uniqueness: {scope: [:account_id], conditions: -> { where(deleter_id: 0)}},
             length: {maximum: 15}
 
   def self.find_mine(params)
@@ -22,24 +22,18 @@ class Core::Logistic < ActiveRecord::Base
 
     conditions = [[]]
 
-    [:name].each do |attr|
-      if params[attr].blank?
-        next
-      else
-        conditions[0] << "#{attr} LIKE ?"
-        conditions << "%#{params[attr]}%"
+    params.each do |attr_name, value|
+      next if value.blank?
+      case attr_name
+      when :name
+        conditions[0] << "#{attr_name} LIKE ?"
+        conditions << "%#{value}%"
+      when :updater_id
+        conditions[0] << "#{attr_name} = ?"
+        conditions << value.to_i
       end
     end
-
-    [:updater_id].each do |attr|
-      if params[attr].blank?
-        next
-      else
-        conditions[0] << "#{attr} = ?"
-        conditions << "%#{params[attr]}%"
-      end
-    end
-
+    
     conditions[0] = conditions[0].join(" AND ")
     find_scope.where(conditions)
   end

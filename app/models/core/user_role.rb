@@ -10,7 +10,7 @@
 #   t.datetime "updated_at"
 # end
 # add_index "core_user_roles", ["account_id", "deleter_id", "user_id"], name: "idx_by_account_and_deleter_and_user_id", using: :btree
-class Core::UserRoles < ActiveRecord::Base
+class Core::UserRole < ActiveRecord::Base
   include ScopeHelper
   belongs_to  :role,    class_name: "Core::Role"
   belongs_to  :user
@@ -31,15 +31,15 @@ class Core::UserRoles < ActiveRecord::Base
 
     conditions = [[]]
 
-    [:updater_id, :user_id, :role_id].each do |attr|
-      if params[attr].blank?
-        next
-      else
-        conditions[0] << "#{attr} = ?"
-        conditions << "%#{params[attr]}%"
+    params.each do |attr_name, value|
+      next if value.blank?
+      case attr_name
+      when :updater_id, :user_id, :role_id
+        conditions[0] << "#{attr_name} = ?"
+        conditions << value.to_i
       end
     end
-
+    
     conditions[0] = conditions[0].join(" AND ")
     find_scope.where(conditions)
   end

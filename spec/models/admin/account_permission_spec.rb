@@ -9,7 +9,7 @@ describe Admin::AccountPermission do
   end
 
   [
-    {name: :account_id, uniqueness: false},
+    {name: :account_id}
   ].each do |valid_object|
     shoulda_validate_text_field(valid_object)
   end

@@ -11,7 +11,6 @@
 # end
 class Core::RolePermission < ActiveRecord::Base
   include ScopeHelper
-  belongs_to  :account
   belongs_to  :role,    class_name: "Core::Role"
   belongs_to  :permission,  class_name: "Admin::Permission"
 end

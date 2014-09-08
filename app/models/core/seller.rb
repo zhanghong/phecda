@@ -20,13 +20,18 @@
 #   t.integer  "deleter_id",                default: 0
 # end
 class Core::Seller < ActiveRecord::Base
+  acts_as_nested_set counter_cache: :children_count
   include ScopeHelper
   has_many  :seller_areas, class_name: "Core::SellerArea", dependent: :destroy
   belongs_to  :stock,       class_name: "Core::Stock"
 
-  validates :name, presence: true, uniqueness: {scope: [:account_id, :deleted_at]},
+  # validates :name, presence: true, uniqueness: {scope: [:account_id, :deleted_at]},
+  #           length: {maximum: 20}
+  # validates :fullname, presence: true, uniqueness: {scope: [:account_id, :deleted_at]},
+  #           length: {maximum: 50}
+  validates :name, presence: true, uniqueness: {scope: [:account_id], conditions: -> { where(deleter_id: 0)}},
             length: {maximum: 20}
-  validates :fullname, presence: true, uniqueness: {scope: [:account_id, :deleted_at]},
+  validates :fullname, presence: true, uniqueness: {scope: [:account_id], conditions: -> { where(deleter_id: 0)}},
             length: {maximum: 50}
   validates :mobile, presence: true
   validates :email, presence: true
@@ -45,29 +50,30 @@ class Core::Seller < ActiveRecord::Base
 
     conditions = [[]]
 
-    [:name, :mobile, :phone, :email, :stock_name].each do |attr|
-      if params[attr].blank?
-        next
-      elsif attr == :name
-        conditions[0] << "core_sellers.name LIKE ?" << "core_sellers.fullname LIKE ?"
-        conditions << "%#{params[attr]}%" << "%#{params[attr]}%"
-      elsif attr == :stock_name
+    params.each do |attr_name, value|
+      next if value.blank?
+      case attr_name
+      when :name
+        conditions[0] << "core_sellers.name LIKE ? OR core_sellers.fullname LIKE ?"
+        conditions << "%#{value}%" << "%#{value}%"
+      when :mobile, :phone, :email
+        conditions[0] << "core_sellers.#{attr_name} LIKE ?"
+        conditions << "%#{value}%"
+      when :stock_name
         conditions[0] << "core_stocks.name LIKE ?"
-        conditions << "%#{params[attr]}%"
+        conditions << "%#{value}%"
         find_scope = find_scope.eager_load(:stock)
-      end
-    end
-
-    [:parent_id, :updater_id].each do |attr|
-      if attr == :parent_id
-        if params[attr].blank?
-          conditions[0] << "core_sellers.parent_id IS NULL"
+      when :updater_id
+        conditions[0] << "core_sellers.#{attr_name} = ?"
+        conditions << value.to_i
+      when :parent_id
+        val = value.to_i
+        if val > 0
+          conditions[0] << "core_sellers.parent_id = ?"
+          conditions << val
         else
-          conditions[0] << "core_sellers.parent_id = #{params[attr].to_i}"
+          conditions[0] << "core_sellers.parent_id IS NULL"
         end
-      elsif params[attr].present?
-        conditions[0] << "#{attr} = ?"
-        conditions << "%#{params[attr]}%"
       end
     end
 
@@ -76,11 +82,7 @@ class Core::Seller < ActiveRecord::Base
   end
 
   def stock_name
-    stock.name
-  end
-
-  def updater_name
-    updater.name
+    stock.try(:name)
   end
 
   def parent_name

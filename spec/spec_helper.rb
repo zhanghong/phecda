@@ -95,8 +95,11 @@ def shoulda_validate_text_field(valid_object)
       it { should ensure_length_of(name).is_at_most(maximum).with_message("过长（最长为 #{maximum} 个字符）")}
     end
 
-    if valid_object[:uniqueness]
+    if valid_object[:uniqueness] == true
       it { should validate_uniqueness_of(name).with_message("已经被使用")}
+    elsif valid_object[:uniqueness].is_a?(Hash)
+      h = valid_object[:uniqueness]
+      it { should validate_uniqueness_of(name).scoped_to(h[:scoped]).with_message("已经被使用")}
     end
   end
 end

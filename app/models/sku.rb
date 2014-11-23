@@ -16,7 +16,7 @@
 # add_index "skus", ["account_id", "product_id"], name: "idx_by_shop_id_and_product_id", using: :btree
 class Sku < ActiveRecord::Base
   scope :account_scope, -> {where(account_id: Account.current_id)}
-  scope :actived, -> {where(deleted_at: nil)}
+  scope :activted, -> {where(deleted_at: nil)}
 
   belongs_to  :account
   belongs_to  :product, class_name: "Tb::Product"
@@ -39,7 +39,7 @@ class Sku < ActiveRecord::Base
     end
 
     conditions[0] = conditions[0].join(" AND ")
-    account_scope.actived.where(conditions)
+    account_scope.activted.where(conditions)
   end
 
   def updater_name

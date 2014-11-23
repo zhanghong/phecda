@@ -6,6 +6,6 @@ FactoryGirl.define do
     association :updater
     association :deleter
     name       "sys 属性名"
-    # state "actived"
+    # state "activted"
   end
 end

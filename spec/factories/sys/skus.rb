@@ -7,7 +7,7 @@ FactoryGirl.define do
     association :updater
     association :deleter
     name       "Sys 商品SKU"
-    num 10
+    number 10
     price   99.90
   end
 end

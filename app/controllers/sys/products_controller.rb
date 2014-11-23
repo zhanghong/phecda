@@ -71,7 +71,7 @@ class Sys::ProductsController < ApplicationController
 private
   # Use callbacks to share common setup or constraints between actions.
   def set_sys_product
-    @sys_product = Sys::Product.account_scope.actived.find_by_id(params[:id])
+    @sys_product = Sys::Product.account_scope.activted.find_by_id(params[:id])
     redirect_to(sys_products) and return if @sys_product.nil?
   end
 

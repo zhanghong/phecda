@@ -81,7 +81,7 @@ describe Sys::Category do
 
   context "has many through" do
     it "have many properties through category_properties" do
-      it {should have_many(:properties).through(:category_properties)}
+      should have_many(:properties).through(:category_properties)
     end
   end
 
@@ -99,7 +99,7 @@ describe Sys::Category do
       @alex = create(:user, name: "alex")
       @deleted_category = create(:sys_category, name: "color", account: @account, updater: @jos, deleter: @jos)
       @category_color = create(:sys_category, name: "color", account: @account, updater: @jos, deleter_id: 0)
-      @category_CL755 = create(:sys_category, name: "color_755", account: @account, updater: @jos, deleter_id: 0)
+      @category_CL755 = create(:sys_category, name: "color_755", parent_id: @category_color.id, account: @account, updater: @jos, deleter_id: 0)
       Account.current = @account
     end
 
@@ -128,14 +128,30 @@ describe Sys::Category do
     end
 
     context "find by category state" do
-      it "matching by state activted" do
-        conds = {state: "actived"}
-        expect(Sys::Category.find_mine(conds)).to eq([@category_color])
+      context "matching by state activted" do
+        it "matching @category_color and @category_CL755 when category_CL755 not hide" do
+          conds = {state: "activted"}
+          expect(Sys::Category.find_mine(conds)).to eq([@category_color, @category_CL755])
+        end
+
+        it "only matching @category_color when category_CL755 hide" do
+          @category_CL755.update(state: "hidden")
+          conds = {state: "activted"}
+          expect(Sys::Category.find_mine(conds)).to eq([@category_color])
+        end
       end
 
-      it "non-matching by state hidden" do
-        conds = {state: "hidden"}
-        expect(Sys::Category.find_mine(conds)).to eq([])
+      context "matching by state hidden" do
+        it "non-matching when category_CL755 not hide" do
+          conds = {state: "hidden"}
+          expect(Sys::Category.find_mine(conds)).to eq([])
+        end
+
+        it "matching @category_CL755 when it hide" do
+          @category_CL755.update(state: "hidden")
+          conds = {state: "hidden"}
+          expect(Sys::Category.find_mine(conds)).to eq([@category_CL755])
+        end
       end
     end
   end
@@ -152,18 +168,22 @@ describe Sys::Category do
     end
   end
 
-  context "Core::Seller instance object methods" do
+  context "Sys::Category instance object methods" do
     before :each do
       @account = create(:brandy_account)
       @jos = create(:user, name: "jos")
       @category_color = create(:sys_category, name: "color", account: @account, updater: @jos, deleter_id: 0)
-      @category_CL755 = create(:sys_category, name: "color_755", account: @account, updater: @jos, deleter_id: 0)
+      @category_CL755 = create(:sys_category, name: "color_755", parent_id: @category_color.id, account: @account, updater: @jos, deleter_id: 0)
+      @property_color_1 = create(:sys_property, name: "color_1", account: @account, updater: @jos, deleter_id: 0)
+      @property_color_2 = create(:sys_property, name: "color_2", account: @account, updater: @jos, deleter_id: 0)
+      @category_color.properties = [@property_color_1]
+      @category_color.save
       Account.current = @account
     end
 
     [
-      {event_name: :active, froms: %w(hidden), target: "actived"},
-      {event_name: :hide, froms: %w(actived), target: "hidden"}
+      {event_name: :active, froms: %w(hidden), target: "activted"},
+      {event_name: :hide, froms: %w(activted), target: "hidden"}
     ].each do |state_item|
       event_name = state_item[:event_name]
       from_states = state_item[:froms]
@@ -193,6 +213,7 @@ describe Sys::Category do
 
     context "return instance parent name" do
       it "@category_CL755's parent name is @category_color.name " do
+        @category_CL755.parent_id = @category_color.id
         expect(@category_CL755.parent_name).to eq(@category_color.name)
       end
 
@@ -211,29 +232,38 @@ describe Sys::Category do
       end
     end
 
+    context "return instance associations sys properties name" do
+      it "return sys properties joined string when has" do
+        @property_color = create(:sys_property, name: "color", account: @account, updater: @jos, deleter_id: 0)
+        @cat_color_pro_color = create(:sys_categories_properties, category: @category_color, property: @property_color, account: @account, updater: @jos, deleter_id: 0)
+        expect(@category_color.properties_name).to eq([@property_color.name])
+        expect(@category_CL755.properties_name).to eq([])
+      end
+    end
+
     context "save self category values" do
       it "save new value with skip old and empty item" do
-        values_name = "red \r\n red \r\n yellow"
-        @category_color.save_category_values(values_name)
-        expect(@category_color.values_count).to eq(2)
-        new_value = @category_color.values.last
-        expect(new_value.name).to eq("yellow")
-        expect(new_value.account_id).to eq(@category_color.account_id)
+        property_ids = [@property_color_1.id, @property_color_2.id, nil, 0]
+        @category_color.save_related_properties(property_ids)
+        expect(@category_color.category_properties.count).to eq(2)
+        new_category_property = @category_color.category_properties.last
+        expect(new_category_property.property_id).to eq(@property_color_2.id)
+        expect(new_category_property.account_id).to eq(@category_color.account_id)
       end
 
       it "save new value and delete old item" do
-        values_name = " yellow "
-        @category_color.save_category_values(values_name)
-        expect(@category_color.values_count).to eq(1)
-        new_value = @category_color.values.last
-        expect(new_value.name).to eq("yellow")
-        expect(new_value.account_id).to eq(@category_color.account_id)
+        property_ids = [@property_color_2.id]
+        @category_color.save_related_properties(property_ids)
+        expect(@category_color.category_properties.count).to eq(1)
+        new_category_property = @category_color.category_properties.last
+        expect(new_category_property.property_id).to eq(@property_color_2.id)
+        expect(new_category_property.account_id).to eq(@category_color.account_id)
       end
 
-      it "delete all old values when parameter is empty" do
-        values_name = nil
-        @category_color.save_category_values(values_name)
-        expect(@category_color.values_count).to eq(0)
+      it "delete all old values when parameter is a empty array" do
+        property_ids = []
+        @category_color.save_related_properties(property_ids)
+        expect(@category_color.category_properties.count).to eq(0)
       end
     end
   end

@@ -20,6 +20,7 @@ class Sys::PropertyValue < ActiveRecord::Base
             length: {maximum: 20}
 
   def value_name
-    "#{property.name}:#{self.name}"
+    property_name = property.name rescue "未知"
+    "#{property_name}:#{self.name}"
   end
 end

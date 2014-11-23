@@ -14,7 +14,7 @@
 # end
 class Core::StockProduct < ActiveRecord::Base
   scope :account_scope, -> {where(account_id: Account.current_id)}
-  scope :actived, -> {where(deleted_at: nil)}
+  scope :activted, -> {where(deleted_at: nil)}
 
   belongs_to  :stock, class_name: "Core::Stock"
   belongs_to  :product, class_name: "Sys::Product", foreign_key: "sys_product_id"
@@ -31,7 +31,7 @@ class Core::StockProduct < ActiveRecord::Base
   end
 
   def self.find_mine(params)
-    find_scope = account_scope.actived
+    find_scope = account_scope.activted
     conditions = [[]]
 
     [:product_name].each do |attr|

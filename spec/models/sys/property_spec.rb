@@ -116,7 +116,7 @@ describe Sys::Property do
 
     context "find by property state" do
       it "matching by state activted" do
-        conds = {state: "actived"}
+        conds = {state: "activted"}
         expect(Sys::Property.find_mine(conds)).to eq([@property_color])
       end
 
@@ -139,7 +139,7 @@ describe Sys::Property do
     end
   end
 
-  context "Core::Seller instance object methods" do
+  context "Sys::Property instance object methods" do
     before :each do
       @account = create(:brandy_account)
       @jos = create(:user, name: "jos")
@@ -149,24 +149,24 @@ describe Sys::Property do
       Account.current = @account
     end
 
-      [
-        {event_name: :active, froms: %w(hidden), target: "actived"},
-        {event_name: :hide, froms: %w(actived), target: "hidden"}
-      ].each do |state_item|
-        event_name = state_item[:event_name]
-        from_states = state_item[:froms]
-        target_state = state_item[:target]
-        column_name = state_item[:column_name] || "state"
-        context "return #{@property_color.class.name} #{event_name} to state #{target_state}" do
-          from_states.each do |current_state|
-            it "event: #{event_name} from #{current_state} to #{target_state}" do
-              @property_color.update({column_name => current_state})
-              expect(@property_color.send(event_name.to_s)).to eq(true)
-              expect(@property_color.send("#{target_state}?")).to eq(true)
-            end
+    [
+      {event_name: :active, froms: %w(hidden), target: "activted"},
+      {event_name: :hide, froms: %w(activted), target: "hidden"}
+    ].each do |state_item|
+      event_name = state_item[:event_name]
+      from_states = state_item[:froms]
+      target_state = state_item[:target]
+      column_name = state_item[:column_name] || "state"
+      context "return #{@property_color.class.name} #{event_name} to state #{target_state}" do
+        from_states.each do |current_state|
+          it "event: #{event_name} from #{current_state} to #{target_state}" do
+            @property_color.update({column_name => current_state})
+            expect(@property_color.send(event_name.to_s)).to eq(true)
+            expect(@property_color.send("#{target_state}?")).to eq(true)
           end
         end
       end
+    end
 
     context "return instance related property_value instances name" do
       it "return red in a array" do

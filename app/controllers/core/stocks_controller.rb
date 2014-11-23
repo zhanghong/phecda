@@ -71,7 +71,7 @@ class Core::StocksController < ApplicationController
 private
   # Use callbacks to share common setup or constraints between actions.
   def set_core_stock
-    @core_stock = Core::Stock.account_scope.actived.find_by_id(params[:id])
+    @core_stock = Core::Stock.account_scope.activted.find_by_id(params[:id])
     redirect_to(action: "index") and return if @core_stock.blank?
   end
 

@@ -22,7 +22,7 @@ class Sys::Property < ActiveRecord::Base
             length: {maximum: 20}
   validates :state, presence: true
 
-  STATES = [["启用", "actived"], ["隐藏", "hidden"]]
+  STATES = [["启用", "activted"], ["隐藏", "hidden"]]
 
   def self.find_mine(params)
     find_scope = self
@@ -52,16 +52,13 @@ class Sys::Property < ActiveRecord::Base
     %w(name state_name created_at updated_at values_name)
   end
 
-  # def self.account_properties
-  #   account_scope.actived
-  # end
-  state_machine :state, :initial => :actived do
+  state_machine :state, :initial => :activted do
     event :active do
-      transition :hidden => :actived
+      transition :hidden => :activted
     end
 
     event :hide do
-      transition :actived => :hidden
+      transition :activted => :hidden
     end
   end
 

@@ -17,7 +17,7 @@ describe Sys::PropertyValue do
       let(:account) {create(:brandy_account)}
       let(:user) {create(:user)}
       let(:sys_property) {create(:sys_property, account: account, updater: user, deleter_id: 0)}
-      let(:delete_pro_value) {create(:sys_property_values, property: sys_property, account: account, updater: user, deleter: user)}
+      let(:delete_property_value) {create(:sys_property_values, property: sys_property, account: account, updater: user, deleter: user)}
       let(:property_value) {create(:sys_property_values, property: sys_property, account: account, updater: user, deleter_id: 0)}
 
       context "return updater user name" do
@@ -92,7 +92,7 @@ describe Sys::PropertyValue do
     shoulda_validate_text_field(valid_object)
   end
 
-  context "Core::Seller instance object methods" do
+  context "Sys::PropertyValue instance object methods" do
     before :each do
       @account = create(:brandy_account)
       @jos = create(:user, name: "jos")
@@ -101,9 +101,21 @@ describe Sys::PropertyValue do
       Account.current = @account
     end
 
-    context "return instance name that with related prooerty name" do
-      it "return name with property name" do
+    context "return instance name that with related property name" do
+      it "return name with property name when related property present" do
         name = "#{@property_color.name}:#{@pro_value_red.name}"
+        expect(@pro_value_red.value_name).to eq(name)
+      end
+
+      it "return name with property name when related property destroy" do
+        @property_color.destroy
+        name = "#{@property_color.name}:#{@pro_value_red.name}"
+        expect(@pro_value_red.value_name).to eq(name)
+      end
+
+      it "catch expection and return self name when find related property failed" do
+        @pro_value_red.property = nil
+        name = "未知:#{@pro_value_red.name}"
         expect(@pro_value_red.value_name).to eq(name)
       end
     end

@@ -30,7 +30,7 @@ class Sys::Category < ActiveRecord::Base
 
   acts_as_nested_set :counter_cache => :children_count
 
-  STATES = [["启用", "actived"], ["隐藏", "hidden"]]
+  STATES = [["启用", "activted"], ["隐藏", "hidden"]]
 
   def self.find_mine(params)
     find_scope = self
@@ -70,7 +70,7 @@ class Sys::Category < ActiveRecord::Base
   end
 
   # def self.account_roots
-  #   account_scope.actived.roots
+  #   account_scope.activted.roots
   # end
 
   # def sync_to_taobao
@@ -85,13 +85,13 @@ class Sys::Category < ActiveRecord::Base
   #   end
   # end
 
-  state_machine :state, :initial => :actived do
+  state_machine :state, :initial => :activted do
     event :active do
-      transition :hidden => :actived
+      transition :hidden => :activted
     end
 
     event :hide do
-      transition :actived => :hidden
+      transition :activted => :hidden
     end
   end
 
@@ -121,7 +121,7 @@ class Sys::Category < ActiveRecord::Base
     new_properties =  if property_ids.blank?
                     []
                   else
-                    Sys::Property.account_properties.where(id: property_ids)
+                    Sys::Property.where(id: property_ids)
                   end
     self.properties = new_properties
 

@@ -24,18 +24,21 @@
 # add_index "core_stock_bills", ["account_id", "stock_id", "trade_id"], name: "idx_by_account_id_and_stock_id_and_trade_id", using: :btree
 class Core::StockBill < ActiveRecord::Base
   include ScopeHelper
+  belongs_to  :area,   class_name: "Core::Area"
   belongs_to  :stock,   class_name: "Core::Stock"
-  has_many    :bill_products, class_name: "Core::BillProduct"
+  belongs_to  :logistic,   class_name: "Core::Logistic"
+  belongs_to  :trade
+  has_many    :bill_products, class_name: "Core::BillProduct", dependent: :destroy
   has_many    :logs,  class_name: "Core::StockBillLog"
 
   validates :identifier, presence: true, length: {maximum: 30}
+  validates :customer_name, presence: true, length: {maximum: 30}
+  validates :address,   presence: true, length: {maximum: 100}
+  validates :area_id,   presence: true
   validates :stock_id,  presence: true
   validates :cat_name,  presence: true
-  validates :customer_name, presence: true, length: {maximum: 30}
-  validates :area_id,   presence: true
-  validates :address,   presence: true, length: {maximum: 100}  
 
-  STATES = [["待审核", "created"], ["已审核", "audited"], ["已入/出库", "stocked"], ["已取消", "cancled"]]
+  STATES = [["待审核", "created"], ["已审核", "audited"], ["已入/出库", "stocked"], ["已取消", "canceled"]]
 
   def self.find_mine(params)
     find_scope = self
@@ -51,7 +54,7 @@ class Core::StockBill < ActiveRecord::Base
       end
     end
 
-    [:trade_id, :tid, :cat_name, :status].each do |attr|
+    [:trade_id, :cat_name, :state].each do |attr|
       if params[attr].blank?
         next
       else
@@ -65,16 +68,16 @@ class Core::StockBill < ActiveRecord::Base
   end
 
   state_machine :state, :initial => :created do
-    event :audit do
+    event :do_audit do
       transition :created => :audited
     end
 
-    event :stock do
+    event :do_stock do
       transition :audited => :stocked
     end
 
-    event :cancle do
-      transition [:created, :audited] => :cancled
+    event :do_cancel do
+      transition [:created, :audited] => :canceled
     end
   end
 
@@ -91,6 +94,11 @@ class Core::StockBill < ActiveRecord::Base
   end
 
   def state_name
-
+    state_item = STATES.find{|s| s.last == state}
+    if state_item
+      state_item.first
+    else
+      state
+    end
   end
 end

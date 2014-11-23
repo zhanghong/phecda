@@ -101,5 +101,9 @@ def shoulda_validate_text_field(valid_object)
       h = valid_object[:uniqueness]
       it { should validate_uniqueness_of(name).scoped_to(h[:scoped]).with_message("已经被使用")}
     end
+
+    if valid_object[:numericality] == true
+      it { should validate_numericality_of(name).only_integer.with_message("只能是数字")}
+    end
   end
 end

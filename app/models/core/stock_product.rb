@@ -13,14 +13,17 @@
 #   t.integer  "deleter_id",     default: 0
 # end
 class Core::StockProduct < ActiveRecord::Base
-  scope :account_scope, -> {where(account_id: Account.current_id)}
-  scope :activted, -> {where(deleted_at: nil)}
+  include ScopeHelper
 
   belongs_to  :stock, class_name: "Core::Stock"
   belongs_to  :product, class_name: "Sys::Product", foreign_key: "sys_product_id"
   belongs_to  :sku,     class_name: "Sys::Sku", foreign_key: "sys_sku_id"
-  belongs_to  :updater, class_name: "User"
-  belongs_to  :deleter, class_name: "User"
+
+  validates :stock_id, presence: true, uniqueness: {scope: [:account_id, :sys_sku_id], conditions: -> { where(deleter_id: 0)}}
+  validates :sys_product_id, presence: true
+  validates :sys_sku_id, presence: true, uniqueness: {scope: [:account_id, :stock_id], conditions: -> { where(deleter_id: 0)}}
+  validates :activite_num, presence: true, numericality: {only_integer: true, message: "只能是数字"} #{message: "只能是数字"}
+  validates :actual_num, presence: true, numericality: {only_integer: true, message: "只能是数字"} #{message: "只能是数字"}
 
   def self.list_shown_attributes
     %w(product_name sku_name activite_num actual_num)
@@ -31,7 +34,7 @@ class Core::StockProduct < ActiveRecord::Base
   end
 
   def self.find_mine(params)
-    find_scope = account_scope.activted
+    find_scope = self
     conditions = [[]]
 
     [:product_name].each do |attr|
@@ -54,19 +57,11 @@ class Core::StockProduct < ActiveRecord::Base
     find_scope.where(conditions)
   end
 
-  def product_name
-    product.try(:name)
+  def product_title
+    product.try(:title)
   end
 
   def sku_name
-    sku.name
-  end
-
-  def updater_name
-    updater.name
-  end
-
-  def destroy
-    update_attributes(deleted_at: Time.now, deleter_id: User.current_id)
+    sku.try(:name)
   end
 end

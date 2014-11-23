@@ -51,7 +51,7 @@ class Core::Stock < ActiveRecord::Base
     sellers.count
   end
 
-  def product_count
+  def stock_product_count
     stock_products.count
   end
 end

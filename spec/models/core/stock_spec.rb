@@ -132,4 +132,35 @@ describe Core::Stock do
       end
     end
   end
+
+  context "Core::Stock instance object methods" do
+    before :each do
+      @account = create(:brandy_account)
+      @jos = create(:user, name: "jos")
+      @alex = create(:user, name: "alex")
+      @core_stock = create(:stock_default, account: @account, updater: @jos, deleter_id: 0)
+      @seller_bj = create(:seller_bj, stock: @core_stock, account: @account, updater: @jos, deleter_id: 0)
+      @sys_category = create(:sys_category, account: @account, updater: @jos, deleter_id: 0)
+      @sys_product = create(:sys_product, category: @sys_category, account: @account, updater: @jos, deleter_id: 0)
+      @sys_sku = create(:sys_sku, product: @sys_product, account: @account, updater: @jos, deleter_id: 0)
+      @core_stock_product = create(:core_stock_product, stock: @core_stock, product: @sys_product, sku: @sys_sku, account: @account, updater: @jos, deleter_id: 0)
+      Account.current = @account
+    end
+
+    context "return instance related Core::Seller instances count" do
+      it "change and check stock related seller count" do
+        expect(@core_stock.seller_count).to eq(1)
+        @seller_bj.destroy
+        expect(@core_stock.seller_count).to eq(0)
+      end
+    end
+
+    context "return instance related Core::StockProduct instances count" do
+      it "change and check stock related product count" do
+        expect(@core_stock.stock_product_count).to eq(1)
+        @core_stock_product.destroy
+        expect(@core_stock.stock_product_count).to eq(0)
+      end
+    end
+  end
 end

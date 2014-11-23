@@ -72,7 +72,10 @@ Phecda::Application.configure do
   # Send deprecation notices to registered listeners.
   config.active_support.deprecation = :notify
 
-  config.action_mailer.default_url_options = {host: 'localhost:3102'}
+  config.action_mailer.default_url_options = {host: 'www.phecda.com'}
+
+  config.action_mailer.smtp_settings = YAML.load_file("#{::Rails.root}/config/mailer.yml")[::Rails.env].symbolize_keys!
+  ActionMailer::Base.default :from => "edm@phecda.com"
 
   # Disable automatic flushing of the log to improve performance.
   # config.autoflush_log = false

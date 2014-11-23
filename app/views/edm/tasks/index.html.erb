@@ -1,0 +1,29 @@
+<h1>Listing edm_tasks</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Content</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @edm_tasks.each do |edm_task| %>
+      <tr>
+        <td><%= edm_task.title %></td>
+        <td><%= edm_task.content %></td>
+        <td><%= link_to 'Show', edm_task %></td>
+        <td><%= link_to 'Edit', edit_edm_task_path(edm_task) %></td>
+        <td><%= link_to 'Destroy', edm_task, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Task', new_edm_task_path %>

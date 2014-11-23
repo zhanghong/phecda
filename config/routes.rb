@@ -47,6 +47,10 @@ Phecda::Application.routes.draw do
     resources :user_roles
   end
 
+  namespace :edm do
+    resources :tasks
+  end
+
   namespace :admin do
     resources :permissions
     resources :account_permissions do

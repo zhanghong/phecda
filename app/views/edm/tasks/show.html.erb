@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Title:</strong>
+  <%= @edm_task.title %>
+</p>
+
+<p>
+  <strong>Content:</strong>
+  <%= @edm_task.content %>
+</p>
+
+<%= link_to 'Edit', edit_edm_task_path(@edm_task) %> |
+<%= link_to 'Back', edm_tasks_path %>

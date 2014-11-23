@@ -1,0 +1,27 @@
+<%= form_for(@edm_task) do |f| %>
+  <% if @edm_task.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@edm_task.errors.count, "error") %> prohibited this edm_task from being saved:</h2>
+
+      <ul>
+      <% @edm_task.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :title %><br>
+    <%= f.text_field :title %>
+  </div>
+  <div class="field">
+    <%= f.label :content %><br>
+      <textarea cols="100" rows="40" id="edm_task_content" name="edm_task[content]">
+        <%= @edm_task.content %>
+      </textarea>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

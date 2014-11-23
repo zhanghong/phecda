@@ -24,6 +24,7 @@ protected
       %w(
          oauths
          home
+         edm/tasks
          ).include?(params[:controller])
     end
   end
@@ -40,6 +41,8 @@ protected
   def layout_by_resource
     if devise_controller? && params[:controller] != "registrations"
       "login"
+    elsif "edm/tasks"
+      nil
     else
       "application"
     end

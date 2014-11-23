@@ -21,7 +21,7 @@ class Ability
       end
 
       super_admin_role if user.is_superadmin?
-    end
+    end if user
 
 
     # Define abilities for the passed in user here. For example:

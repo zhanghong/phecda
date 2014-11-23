@@ -16,7 +16,7 @@ describe Sys::Property do
     context "test scope helper methods" do
       let(:account) {create(:brandy_account)}
       let(:user) {create(:user)}
-      let(:delete_prooerty) {create(:sys_property, account: account, updater: user, deleter: user)}
+      let(:delete_property) {create(:sys_property, account: account, updater: user, deleter: user)}
       let(:sys_property) {create(:sys_property, account: account, updater: user, deleter_id: 0)}
 
       context "return updater user name" do
@@ -73,15 +73,15 @@ describe Sys::Property do
     end
   end
 
-  context "has many and belongs_to association" do
-    [:categories].each do |name|
-      it { should have_and_belong_to_many(name)}
+  context "has many association with dependent" do
+    [:category_properties, :values].each do |name|
+      it { should have_many(name).dependent(:destroy)}
     end
   end
 
-  context "has many association with dependent" do
-    [:values].each do |name|
-      it { should have_many(name).dependent(:destroy)}
+  context "has many through" do
+    it "have many categories through category_properties" do
+     should have_many(:categories).through(:category_properties)
     end
   end
 

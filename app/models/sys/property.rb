@@ -14,7 +14,8 @@
 class Sys::Property < ActiveRecord::Base
   include ScopeHelper
 
-  has_and_belongs_to_many :categories, join_table: "sys_categories_properties", class_name: "Sys::Category"
+  has_many  :category_properties, class_name: "Sys::CategoryProperty", dependent: :destroy
+  has_many  :categories,  through: :category_properties
   has_many      :values,    class_name: "Sys::PropertyValue", dependent: :destroy
 
   validates :name, presence: true, uniqueness: {scope: [:account_id], conditions: -> { where(deleter_id: 0)}},
@@ -25,7 +26,6 @@ class Sys::Property < ActiveRecord::Base
 
   def self.find_mine(params)
     find_scope = self
-
     conditions = [[]]
 
     params.each do |attr_name, value|

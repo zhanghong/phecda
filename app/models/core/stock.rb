@@ -9,15 +9,14 @@
 #   t.integer  "deleter_id",            default: 0
 # end
 class Core::Stock < ActiveRecord::Base
-  scope :account_scope, -> {where(account_id: Account.current_id)}
-  scope :actived, -> {where(deleted_at: nil)}
+  include ScopeHelper
+  validates :name,  presence: true, uniqueness: {scope: [:account_id], conditions: -> { where(deleter_id: 0)}},
+                    length: {maximum: 20}
   has_many  :stock_products, class_name: "Core::StockProduct", dependent: :destroy
   has_many  :sellers, class_name: "Core::Seller", dependent: :destroy
   has_many  :stock_bills, class_name: "Core::StockBill", dependent: :destroy
   has_many  :stock_in_bills,  class_name: "Core::StockInBill", dependent: :destroy
   has_many  :stock_out_bills, class_name: "Core::StockOutBill", dependent: :destroy
-  belongs_to  :updater, class_name: "User"
-  belongs_to  :deleter, class_name: "User"
 
   def self.list_shown_attributes
     %w(name sellers_name product_count)
@@ -28,28 +27,24 @@ class Core::Stock < ActiveRecord::Base
   end
 
   def self.find_mine(params)
+    find_scope = self
+
     conditions = [[]]
 
-    [:name].each do |attr|
-      if params[attr].blank?
-        next
-      else
-        conditions[0] << "#{attr} LIKE ?"
-        conditions << "%#{params[attr]}%"
-      end
-    end
-
-    [:updater_id].each do |attr|
-      if params[attr].blank?
-        next
-      else
-        conditions[0] << "#{attr} = ?"
-        conditions << "%#{params[attr]}%"
+    params.each do |attr_name, value|
+      next if value.blank?
+      case attr_name
+      when :name
+        conditions[0] << "#{attr_name} LIKE ?"
+        conditions << "%#{value}%"
+      when :updater_id
+        conditions[0] << "#{attr_name} = ?"
+        conditions << value.to_i
       end
     end
 
     conditions[0] = conditions[0].join(" AND ")
-    account_scope.actived.where(conditions)
+    find_scope.where(conditions)
   end
 
   def seller_count
@@ -58,13 +53,5 @@ class Core::Stock < ActiveRecord::Base
 
   def product_count
     stock_products.count
-  end
-
-  def updater_name
-    updater.name
-  end
-
-  def destroy
-    update_attributes(deleted_at: Time.now, deleter_id: User.current_id)
   end
 end
